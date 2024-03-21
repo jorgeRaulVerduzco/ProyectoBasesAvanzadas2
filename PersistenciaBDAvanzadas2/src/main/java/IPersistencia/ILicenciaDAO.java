@@ -4,11 +4,13 @@
  */
 package IPersistencia;
 
+import Dominio.Licencia;
+
 /**
  *
  * @author INEGI
  */
-public interface ILicencia {
+public interface ILicenciaDAO {
     
-    public void agregarLicencia();
+    public void agregarLicencia(Licencia licencia);
 }
