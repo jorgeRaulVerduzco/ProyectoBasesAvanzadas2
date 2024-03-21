@@ -117,10 +117,28 @@ public class PersonaDTO {
     public void setTramites(List<TramiteDTO> tramites) {
         this.tramites = tramites;
     }
-
-    @Override
-    public String toString() {
-        return "PersonaDTO{" + "idPersona=" + idPersona + ", nombres=" + nombres + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", curp=" + curp + ", rfc=" + rfc + ", telefono=" + telefono + ", fechaNacimiento=" + fechaNacimiento + ", automoviles=" + automoviles + ", tramites=" + tramites + '}';
+  public void agregarTramites(TramiteDTO tramite) {
+        this.tramites.add(tramite);
     }
+
+    public void agregarAutoMovil(AutomovilDTO automovil) {
+        this.automoviles.add(automovil);
+    }
+      @Override
+    public String toString() {
+        return "Persona{"
+                + "idPersona=" + idPersona
+                + ", nombres='" + nombres + '\''
+                + ", apellidoPaterno='" + apellidoPaterno + '\''
+                + ", apellidoMaterno='" + apellidoMaterno + '\''
+                + ", curp='" + curp + '\''
+                + ", rfc='" + rfc + '\''
+                + ", telefono='" + telefono + '\''
+                + ", fechaNacimiento=" + fechaNacimiento.getTime()
+                + ", automoviles=" + automoviles
+                + ", tramites=" + tramites
+                + '}';
+    }
+
 
 }
