@@ -1,6 +1,7 @@
 Prueba\prueba.class
 Dominio\TipoLicencia.class
 Dominio\Persona.class
+IPersistencia\ILicencia.class
 Persistencia\PersonaDAO.class
 Dominio\Automovil.class
 Dominio\Placa.class

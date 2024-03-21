@@ -1,10 +1,11 @@
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\Dominio\Licencia.java
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\Dominio\Persona.java
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\Dominio\Placa.java
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\Persistencia\PersonaDAO.java
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\IPersistencia\IPersonaDao.java
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\Dominio\Tramite.java
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\Excepciones\PersistenciaException.java
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\Dominio\TipoLicencia.java
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\Prueba\prueba.java
-C:\Users\INEGI\Downloads\proyect bases avanzadas 2\ProyectoBDAvanzadas2-main\PersistenciaBDAvanzadas2\src\main\java\Dominio\Automovil.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\IPersistencia\ILicencia.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\Dominio\Persona.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\Persistencia\PersonaDAO.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\Dominio\Placa.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\Dominio\Tramite.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\Excepciones\PersistenciaException.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\Dominio\TipoLicencia.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\Prueba\prueba.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\IPersistencia\IPersonaDao.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\Dominio\Licencia.java
+C:\Users\INEGI\Documents\NetBeansProjects\ProyectoBasesAvanzadas2\PersistenciaBDAvanzadas2\src\main\java\Dominio\Automovil.java
