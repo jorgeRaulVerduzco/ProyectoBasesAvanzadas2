@@ -7,10 +7,12 @@ package com.mycompany.presentacionbdavanzadas2;
 /**
  *
  * @author INEGI
+ * RUZZKY
  */
 public class PresentacionBDAvanzadas2 {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        frmInicio P = new frmInicio();
+        P.setVisible(true); 
     }
 }
