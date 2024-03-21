@@ -1,11 +1,13 @@
-Prueba\prueba.class
-Dominio\TipoLicencia.class
 Dominio\Persona.class
 IPersistencia\ILicencia.class
-Persistencia\PersonaDAO.class
 Dominio\Automovil.class
-Dominio\Placa.class
 Excepciones\PersistenciaException.class
+Persistencia\LicenciaDAO.class
+Dominio\TipoLicencia.class
+Persistencia\PersonaDAO.class
+Dominio\Placa.class
+Persistencia\TramiteDAO.class
 Dominio\Tramite.class
 IPersistencia\IPersonaDao.class
+IPersistencia\ITramite.class
 Dominio\Licencia.class
