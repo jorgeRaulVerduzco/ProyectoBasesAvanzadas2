@@ -1,0 +1,10 @@
+Prueba\prueba.class
+Dominio\TipoLicencia.class
+Dominio\Persona.class
+Persistencia\PersonaDAO.class
+Dominio\Automovil.class
+Dominio\Placa.class
+Excepciones\PersistenciaException.class
+Dominio\Tramite.class
+IPersistencia\IPersonaDao.class
+Dominio\Licencia.class
