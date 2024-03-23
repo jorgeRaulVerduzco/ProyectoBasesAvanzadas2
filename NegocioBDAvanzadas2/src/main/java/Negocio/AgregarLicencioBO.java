@@ -8,6 +8,12 @@ package Negocio;
  *
  * @author INEGI
  */
-public class PersonaNegocio {
+public class AgregarLicencioBO {
+
+    
+    public AgregarLicencioBO() {
+    }
+    
+    
     
 }

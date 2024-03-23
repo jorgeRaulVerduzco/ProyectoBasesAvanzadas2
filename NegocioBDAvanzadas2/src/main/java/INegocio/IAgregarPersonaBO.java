@@ -8,6 +8,6 @@ package INegocio;
  *
  * @author INEGI
  */
-public interface ILicenciaNegocio {
+public interface IAgregarPersonaBO {
     
 }

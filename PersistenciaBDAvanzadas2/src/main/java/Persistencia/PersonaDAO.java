@@ -7,9 +7,11 @@ package Persistencia;
 import Dominio.Persona;
 import Excepciones.PersistenciaException;
 import IPersistencia.IPersonaDao;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -33,6 +35,25 @@ public class PersonaDAO implements IPersonaDao {
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public void ListaPersonas() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Persona> query = em.createQuery("SELECT p FROM Persona p", Persona.class);
+
+            List<Persona> personas = query.getResultList();
+
+            System.out.println("Lista de personas:");
+            for (Persona persona : personas) {
+                System.out.println(persona);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             em.close();

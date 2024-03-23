@@ -15,4 +15,5 @@ public interface IPersonaDao {
     
     public void agregarPersona(Persona persona)throws PersistenciaException;
     
+    public void ListaPersonas();
 }
