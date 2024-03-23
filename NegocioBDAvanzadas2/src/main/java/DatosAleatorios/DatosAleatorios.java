@@ -12,8 +12,9 @@ import java.util.Random;
  * @author INEGI
  */
 public class DatosAleatorios {
-     private static final String[] NOMBRES = {"Juan", "María", "Carlos", "Laura", "Pedro", "Ana", "José", "Luis", "Sofía", "Diego"};
-    private static final String[] APELLIDOS = {"García", "Hernández", "López", "Martínez", "González", "Pérez", "Rodríguez", "Sánchez", "Ramírez", "Torres"};
+
+    private static final String[] NOMBRES = {"Juan", "Maria", "Carlos", "Laura", "Pedro", "Ana", "Jose", "Luis", "Sofia", "Diego"};
+    private static final String[] APELLIDOS = {"Garcia", "Hernandez", "Lopez", "Martinez", "Gonzalez", "Perez", "Rodriguez", "Sanchez", "Ramirez", "Torres"};
     private static final String LETRAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final Random RANDOM = new Random();
 
