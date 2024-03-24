@@ -172,7 +172,7 @@
                 <StringItem index="0" value="1 a&#xf1;o"/>
                 <StringItem index="1" value="2 a&#xf1;os"/>
                 <StringItem index="2" value="3 a&#xf1;os"/>
-                <StringItem index="3" value="4 a&#xf1;os"/>
+                <StringItem index="3" value=" "/>
               </StringArray>
             </Property>
           </Properties>

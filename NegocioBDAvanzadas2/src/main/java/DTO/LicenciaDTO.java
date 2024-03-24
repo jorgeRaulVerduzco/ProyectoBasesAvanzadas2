@@ -13,6 +13,10 @@ import java.util.Calendar;
  */
 public class LicenciaDTO extends TramiteDTO{
       private int añosVigencia;
+ public LicenciaDTO() {
+    }
+  
+ 
 
     public LicenciaDTO(int añosVigencia, float costo, Calendar fechaTramite, PersonaDTO persona, Calendar fechaVigencia) {
         super(costo, fechaTramite, persona, fechaVigencia);

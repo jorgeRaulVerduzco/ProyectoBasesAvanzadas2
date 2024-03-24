@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
  * @author INEGI
  */
 public class AgregarLicencioBO implements IAgregarLicenciaBO {
-    
+
     LicenciaDAO licenciaDAO;
     private final PersonaDAO personaDAO;
     
@@ -130,6 +130,6 @@ public class AgregarLicencioBO implements IAgregarLicenciaBO {
     }
     return costo;
 }
-    
-    
+
+ 
 }

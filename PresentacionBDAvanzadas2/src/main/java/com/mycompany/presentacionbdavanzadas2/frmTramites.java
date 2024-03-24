@@ -4,6 +4,8 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import DTO.PersonaDTO;
+import DatosAleatorios.PersonaSeleccionada;
 import Dominio.Persona;
 import INegocio.IAgregarLicenciaBO;
 import Negocio.AgregarLicencioBO;
@@ -284,32 +286,27 @@ public void llenarTabla() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblTramitesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTramitesMouseClicked
-     // Obtener el índice de la fila seleccionada
-    int selectedRow = tblTramites.getSelectedRow();
-    if (selectedRow != -1) { // Verificar si hay una fila seleccionada
-        // Mostrar un JOptionPane preguntando al usuario qué formulario desea abrir
-        int option = JOptionPane.showOptionDialog(this,
-                "¿Que tramite quieres Realizar?",
-                "Seleccionar Formulario",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                new String[]{"Licencia", "Placas"},
-                "frmLicencia");
+      int selectedRow = tblTramites.getSelectedRow();
+    if (selectedRow != -1) {
+        DefaultTableModel model = (DefaultTableModel) tblTramites.getModel();
+        PersonaDTO personaSeleccionada = new PersonaDTO();
 
-        if (option == JOptionPane.YES_OPTION) {
-            // Si el usuario elige ir a frmLicencia
-            frmLicencia frmLicencia = new frmLicencia();
-            frmLicencia.setVisible(true);
-            this.dispose();
-        } else if (option == JOptionPane.NO_OPTION) {
-            // Si el usuario elige ir a frmPlacas
-            FrmPlacas frmPlacas = new FrmPlacas();
-            frmPlacas.setVisible(true);
-            this.dispose();
-        }
+        // Obtener los datos de la fila seleccionada
+        personaSeleccionada.setNombres((String) model.getValueAt(selectedRow, 0));
+        personaSeleccionada.setApellidoPaterno((String) model.getValueAt(selectedRow, 1));
+        personaSeleccionada.setApellidoMaterno((String) model.getValueAt(selectedRow, 2));
+        personaSeleccionada.setCurp((String) model.getValueAt(selectedRow, 3));
+        personaSeleccionada.setRfc((String) model.getValueAt(selectedRow, 4));
+        // Aquí puedes setear los demás campos de la persona seleccionada si los tienes disponibles en la tabla
+
+        // Almacenar la persona seleccionada en la variable estática
+        PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
+
+        // Abrir el formulario frmLicencia
+        frmLicencia frmLicencia = new frmLicencia();
+        frmLicencia.setVisible(true);
+        this.dispose();
     } else {
-        // Mostrar un mensaje indicando que no se ha seleccionado ninguna persona
         JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
     }
     }//GEN-LAST:event_tblTramitesMouseClicked

@@ -26,6 +26,9 @@ public class PersonaDTO {
     private List<AutomovilDTO> automoviles;
     private List<TramiteDTO> tramites;
 
+    public PersonaDTO() {
+    }
+
     public PersonaDTO(String nombres, String apellidoPaterno, String apellidoMaterno, String curp, String rfc, String telefono, Calendar fechaNacimiento,String discapacidad) {
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;

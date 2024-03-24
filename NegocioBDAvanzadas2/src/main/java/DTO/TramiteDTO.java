@@ -17,6 +17,9 @@ public class TramiteDTO {
     private PersonaDTO persona;
     private Calendar fechaVigencia;
 
+    public TramiteDTO() {
+    }
+
     public TramiteDTO(float costo, Calendar fechaTramite, PersonaDTO persona, Calendar fechaVigencia) {
         this.costo = costo;
         this.fechaTramite = fechaTramite;

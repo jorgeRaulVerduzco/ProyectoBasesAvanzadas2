@@ -4,17 +4,26 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import DTO.LicenciaDTO;
+import DTO.PersonaDTO;
+import DatosAleatorios.PersonaSeleccionada;
+import Negocio.AgregarLicencioBO;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author INEGI
  */
 public class frmLicencia extends javax.swing.JFrame {
 
-    /**
-     * Creates new form frmLicencia
-     */
+    AgregarLicencioBO licenciaBO;
+
     public frmLicencia() {
+        licenciaBO = new AgregarLicencioBO();
         initComponents();
+
     }
 
     /**
@@ -74,7 +83,7 @@ public class frmLicencia extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel4.setText("COSTO:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 año", "2 años", "3 años", "4 años" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 año", "2 años", "3 años", " " }));
 
         btnCancelar.setBackground(new java.awt.Color(255, 102, 102));
         btnCancelar.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
@@ -163,14 +172,57 @@ public class frmLicencia extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCostoActionPerformed
 
+    public void costo() {
+
+    }
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-frmTramites tramite = new frmTramites();
-tramite.setVisible(true);
-this.dispose();
+        frmTramites tramite = new frmTramites();
+        tramite.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-        // TODO add your handling code here:
+        String seleccion = (String) jComboBox1.getSelectedItem();
+        int aniosVigencia = 0;
+
+        // Obtener el número de años de vigencia según la selección del combo box
+        switch (seleccion) {
+            case "1 año":
+                aniosVigencia = 1;
+                break;
+            case "2 años":
+                aniosVigencia = 2;
+                break;
+            case "3 años":
+                aniosVigencia = 3;
+                break;
+            default:
+                break;
+        }
+
+       PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
+if (personaSeleccionada != null) {
+    String rfcPersona = personaSeleccionada.getRfc();
+    
+    String discapacidadStr = personaSeleccionada.getDiscapacidad();
+    int discapacidad = 0; // Valor predeterminado si la discapacidad es nula
+    if (discapacidadStr != null) {
+        discapacidad = Integer.parseInt(discapacidadStr);
+    }
+    
+    int costo = licenciaBO.costo(aniosVigencia, discapacidad);
+
+    Calendar fechaTramite = Calendar.getInstance();
+    int ano = fechaTramite.get(Calendar.YEAR) + aniosVigencia;
+    Calendar fechaVigencia = new GregorianCalendar(ano, fechaTramite.get(Calendar.MONTH), fechaTramite.get(Calendar.DAY_OF_MONTH));
+    
+    LicenciaDTO licenciaDTO = new LicenciaDTO(aniosVigencia, costo, fechaTramite, personaSeleccionada, fechaVigencia);
+
+    licenciaBO.AgregarLicencia(licenciaDTO, rfcPersona);
+} else {
+    // Manejar el caso donde no se ha seleccionado ninguna persona
+    JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna persona.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+}
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     /**
