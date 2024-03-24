@@ -4,12 +4,20 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import Dominio.Persona;
 import INegocio.IAgregarLicenciaBO;
 import Negocio.AgregarLicencioBO;
 import com.mycompany.presentacionbdavanzadas2.frmInicio;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -17,20 +25,90 @@ import javax.swing.JOptionPane;
  */
 public class frmTramites extends javax.swing.JFrame {
 
+    int row, columna;
+
+    JButton btnLicencia = new JButton("Solicitar Licencia");
+    private IAgregarLicenciaBO personaNegocio;
+
     public frmTramites() {
+        personaNegocio = new AgregarLicencioBO();
         initComponents();
+        jPanel2.add(btnLicencia);
+        btnLicencia.setBounds(20, 400, 150, 30);
+        tabla();
+        llenarTabla();
+        btnLicencia.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Acción que se realiza cuando se hace clic en el botón btnLicencia
+                frmLicencia frmLicencia = new frmLicencia();
+                frmLicencia.setVisible(true);
+            }
+        });
     }
 
-    public void botonesDiseño() {
-
-    }
 
     public void tabla() {
+        // Configuración del renderizador de celdas
+        tblTramites.setDefaultRenderer(Object.class, new RenderTabla());
+
+        // Creación del modelo de tabla
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        tblTramites.setModel(modeloTabla);
+
+        // Configuración de la altura de las filas
+        tblTramites.setRowHeight(40);
+
+        // Definición de las columnas y sus encabezados
+        String[] encabezados = {"Nombre", "Curp", "RFC", "Fecha de nacimiento", "Telefono", "Licencia", "Automoviles"};
+        modeloTabla.setColumnIdentifiers(encabezados);
+
+        // Configuración del ancho preferido de las columnas
+        int[] anchos = {110, 100, 60, 50, 25};
+        for (int i = 0; i < anchos.length; i++) {
+            tblTramites.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
 
     }
 
+    private void btnLicenciaActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    // Obtener el índice de la fila seleccionada
+    int selectedRow = tblTramites.getSelectedRow();
+    if (selectedRow != -1) { // Verificar si hay una fila seleccionada
+        // Mostrar el formulario para emitir una licencia
+        frmLicencia frmLicencia = new frmLicencia();
+        frmLicencia.setVisible(true);
+    } else {
+        // Mostrar un mensaje indicando que no se ha seleccionado ninguna persona
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+    }
+}    
     public void llenarTabla() {
+        Persona persona = personaNegocio.obtenerPersonaPorRFC(txtBusqueda.getText());
 
+        // Verificar si se encontró una persona con el RFC especificado
+        if (persona != null) {
+            DefaultTableModel defa = (DefaultTableModel) tblTramites.getModel();
+            defa.setRowCount(0); // Limpia la tabla antes de agregar nuevos datos
+
+            // Crear un array de datos del tamaño de las columnas de la tabla
+            Object[] datos = new Object[defa.getColumnCount()];
+
+            // Agregar los datos de la persona a las columnas correspondientes
+            datos[0] = persona.getNombres();
+            datos[1] = persona.getCurp();
+            datos[2] = persona.getRfc();
+            datos[3] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
+                    + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
+                    + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
+            datos[4] = persona.getTelefono();
+            datos[5] = "Licencia"; // Aquí se coloca la información relacionada con la licencia
+
+            // Añadir la fila a la tabla
+            defa.addRow(datos);
+        } else {
+            // Mostrar un mensaje indicando que no se encontró ninguna persona con el RFC especificado
+            JOptionPane.showMessageDialog(null, "No se encontró ninguna persona con el RFC especificado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /**
@@ -167,7 +245,7 @@ public class frmTramites extends javax.swing.JFrame {
                         .addComponent(btnAgregar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 646, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(30, Short.MAX_VALUE))
@@ -183,9 +261,9 @@ public class frmTramites extends javax.swing.JFrame {
                     .addComponent(btnAgregar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -208,10 +286,36 @@ public class frmTramites extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblTramitesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTramitesMouseClicked
+     // Obtener el índice de la fila seleccionada
+    int selectedRow = tblTramites.getSelectedRow();
+    if (selectedRow != -1) { // Verificar si hay una fila seleccionada
+        // Mostrar un JOptionPane preguntando al usuario qué formulario desea abrir
+        int option = JOptionPane.showOptionDialog(this,
+                "¿Que tramite quieres Realizar?",
+                "Seleccionar Formulario",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new String[]{"Licencia", "Placas"},
+                "frmLicencia");
 
+        if (option == JOptionPane.YES_OPTION) {
+            // Si el usuario elige ir a frmLicencia
+            frmLicencia frmLicencia = new frmLicencia();
+            frmLicencia.setVisible(true);
+        } else if (option == JOptionPane.NO_OPTION) {
+            // Si el usuario elige ir a frmPlacas
+            FrmPlacas frmPlacas = new FrmPlacas();
+            frmPlacas.setVisible(true);
+        }
+    } else {
+        // Mostrar un mensaje indicando que no se ha seleccionado ninguna persona
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+    }
     }//GEN-LAST:event_tblTramitesMouseClicked
 
     private void txtBusquedaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyReleased
+        llenarTabla();
 
     }//GEN-LAST:event_txtBusquedaKeyReleased
 
@@ -226,7 +330,16 @@ public class frmTramites extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
+        int key = evt.getKeyChar();
 
+        boolean mayusculas = key >= 65 && key <= 90;
+        boolean minusculas = key >= 97 && key <= 122;
+        boolean numeros = key >= 48 && key <= 57;
+        boolean espacio = key == 32;
+
+        if (!(minusculas || mayusculas || espacio || numeros)) {
+            evt.consume();
+        }
     }//GEN-LAST:event_txtBusquedaKeyTyped
 
     private void btnAgregar20PersonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregar20PersonasActionPerformed
@@ -237,7 +350,7 @@ public class frmTramites extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnAgregar20PersonasActionPerformed
-
+ 
     /**
      * @param args the command line arguments
      */
