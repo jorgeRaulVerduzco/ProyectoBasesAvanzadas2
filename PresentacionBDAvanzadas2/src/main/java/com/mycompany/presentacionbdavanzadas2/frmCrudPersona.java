@@ -4,13 +4,15 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
-
+import INegocio.IAgregarLicenciaBO;
+import Negocio.AgregarLicencioBO;
 import java.awt.Color;
 import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -20,13 +22,12 @@ import javax.swing.table.TableColumn;
  */
 public class frmCrudPersona extends javax.swing.JFrame {
 
-   
-
     /**
      * Creates new form frmRegistroPersona
      */
     public frmCrudPersona() {
-      
+        initComponents();
+
     }
 
     /**
@@ -47,6 +48,7 @@ public class frmCrudPersona extends javax.swing.JFrame {
         txtBuscar = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         btnatras = new javax.swing.JButton();
+        BtnRegistar20Personas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -154,17 +156,22 @@ public class frmCrudPersona extends javax.swing.JFrame {
             }
         });
 
+        BtnRegistar20Personas.setBackground(new java.awt.Color(0, 0, 0));
+        BtnRegistar20Personas.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
+        BtnRegistar20Personas.setForeground(new java.awt.Color(255, 255, 255));
+        BtnRegistar20Personas.setText("Registrar 20");
+        BtnRegistar20Personas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnRegistar20PersonasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(btnatras, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(386, 386, 386)
-                        .addComponent(jButton1))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGap(21, 21, 21)
@@ -173,7 +180,14 @@ public class frmCrudPersona extends javax.swing.JFrame {
                             .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addContainerGap()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(btnatras, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(95, 95, 95)
+                        .addComponent(BtnRegistar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -188,8 +202,9 @@ public class frmCrudPersona extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnatras, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnRegistar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -218,7 +233,7 @@ public class frmCrudPersona extends javax.swing.JFrame {
     }//GEN-LAST:event_btnatrasActionPerformed
 
     private void tblRegistrosPersonasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRegistrosPersonasMouseClicked
-       
+
     }//GEN-LAST:event_tblRegistrosPersonasMouseClicked
 
     private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
@@ -226,31 +241,38 @@ public class frmCrudPersona extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-      
+
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
-     
+
     }//GEN-LAST:event_txtBuscarKeyTyped
 
     private void btnatrasMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnatrasMouseEntered
         // TODO add your handling code here:
-        
-        btnatras.setBackground(new Color (255,51,51));
+
+        btnatras.setBackground(new Color(255, 51, 51));
     }//GEN-LAST:event_btnatrasMouseEntered
 
     private void btnatrasMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnatrasMouseExited
         // TODO add your handling code here:
-        btnatras.setBackground(new Color (255,102,102));
+        btnatras.setBackground(new Color(255, 102, 102));
     }//GEN-LAST:event_btnatrasMouseExited
-    
+
+    private void BtnRegistar20PersonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRegistar20PersonasActionPerformed
+        IAgregarLicenciaBO agregarLicenciaBO = new AgregarLicencioBO();
+        agregarLicenciaBO.incersionMasiva();
+        JOptionPane.showMessageDialog(null, "Se han registrado 20 personas de forma masiva.", "Información", JOptionPane.INFORMATION_MESSAGE);
+
+    }//GEN-LAST:event_BtnRegistar20PersonasActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnRegistar20Personas;
     private javax.swing.JButton btnatras;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

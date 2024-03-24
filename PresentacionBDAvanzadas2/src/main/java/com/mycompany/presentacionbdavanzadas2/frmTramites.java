@@ -4,28 +4,33 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import INegocio.IAgregarLicenciaBO;
+import Negocio.AgregarLicencioBO;
 import com.mycompany.presentacionbdavanzadas2.frmInicio;
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author RUZZKY
  */
 public class frmTramites extends javax.swing.JFrame {
- 
-   
-    public void botoneDiseño() {
-      
+
+    public frmTramites() {
+        initComponents();
+    }
+
+    public void botonesDiseño() {
+
     }
 
     public void tabla() {
-        
+
     }
-    
+
     public void llenarTabla() {
-        
-        
+
     }
 
     /**
@@ -45,6 +50,7 @@ public class frmTramites extends javax.swing.JFrame {
         tblTramites = new javax.swing.JTable();
         txtBusqueda = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
+        btnAgregar20Personas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -134,17 +140,31 @@ public class frmTramites extends javax.swing.JFrame {
             }
         });
 
+        btnAgregar20Personas.setBackground(new java.awt.Color(255, 102, 102));
+        btnAgregar20Personas.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
+        btnAgregar20Personas.setForeground(new java.awt.Color(2, 2, 2));
+        btnAgregar20Personas.setText("agregar 20");
+        btnAgregar20Personas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnAgregar20Personas.setFocusPainted(false);
+        btnAgregar20Personas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregar20PersonasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAgregar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,14 +176,16 @@ public class frmTramites extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBusqueda))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBusqueda))
+                    .addComponent(btnAgregar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -186,11 +208,11 @@ public class frmTramites extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblTramitesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTramitesMouseClicked
-        
+
     }//GEN-LAST:event_tblTramitesMouseClicked
 
     private void txtBusquedaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyReleased
-      
+
     }//GEN-LAST:event_txtBusquedaKeyReleased
 
     private void txtBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaActionPerformed
@@ -204,8 +226,17 @@ public class frmTramites extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
-    
+
     }//GEN-LAST:event_txtBusquedaKeyTyped
+
+    private void btnAgregar20PersonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregar20PersonasActionPerformed
+
+        IAgregarLicenciaBO agregarLicenciaBO = new AgregarLicencioBO();
+        agregarLicenciaBO.incersionMasiva();
+        JOptionPane.showMessageDialog(null, "Se han registrado 20 personas de forma masiva.", "Información", JOptionPane.INFORMATION_MESSAGE);
+
+
+    }//GEN-LAST:event_btnAgregar20PersonasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,12 +268,13 @@ public class frmTramites extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-//                new frmTramites().setVisible(true);
+                new frmTramites().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar20Personas;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
