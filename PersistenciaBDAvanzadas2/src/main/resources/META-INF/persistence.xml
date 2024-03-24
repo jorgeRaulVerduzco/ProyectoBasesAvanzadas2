@@ -7,7 +7,6 @@
     <class>Dominio.Persona</class>
     <class>Dominio.Placa</class>
     <class>Dominio.Tramite</class>
-    <class>Persistencia.LicenciaDAO</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/SistemaAutomovilistico?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

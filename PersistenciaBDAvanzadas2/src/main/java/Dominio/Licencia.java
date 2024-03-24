@@ -34,18 +34,15 @@ public class Licencia extends Tramite implements Serializable {
     @Column(name = "añosVigencia", nullable = false)
     private int añosVigencia;
 
-    @Column(name = "TipoLicencia", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TipoLicencia tipoLicencia;
+
 
     public Licencia() {
 
     }
 
-    public Licencia(int añosVigencia, TipoLicencia tipoLicencia, float costo, Calendar fechaTramite, Persona persona, Calendar fechaVigencia) {
+    public Licencia(int añosVigencia,float costo, Calendar fechaTramite, Persona persona, Calendar fechaVigencia) {
         super(costo, fechaTramite, persona, fechaVigencia);
         this.añosVigencia = añosVigencia;
-        this.tipoLicencia = tipoLicencia;
     }
 
     public int getAñosVigencia() {
@@ -56,13 +53,7 @@ public class Licencia extends Tramite implements Serializable {
         this.añosVigencia = añosVigencia;
     }
 
-    public TipoLicencia getTipoLicencia() {
-        return tipoLicencia;
-    }
-
-    public void setTipoLicencia(TipoLicencia tipoLicencia) {
-        this.tipoLicencia = tipoLicencia;
-    }
+  
 
     @Override
     public float getCosto() {
@@ -87,7 +78,6 @@ public class Licencia extends Tramite implements Serializable {
     public String toString() {
         return "Licencia{"
                 + "añosVigencia=" + añosVigencia
-                + ", tipoLicencia=" + tipoLicencia
                 + ", costo=" + costo
                 + ", fechaTramite=" + fechaTramite.getTime()
                 + ", fechaVigencia=" + fechaVigencia.getTime()

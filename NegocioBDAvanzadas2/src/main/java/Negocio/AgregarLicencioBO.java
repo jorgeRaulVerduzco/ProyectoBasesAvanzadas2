@@ -115,4 +115,10 @@ public class AgregarLicencioBO implements IAgregarLicenciaBO {
         return personaDAO.obtenerPersonaPorRFC(rfc);
     }
 
+    public void costo()
+    {
+        
+    }
+
+
 }

@@ -53,17 +53,19 @@ public class Persona implements Serializable {
     @Temporal(TemporalType.DATE)
     Calendar fechaNacimiento;
 
-    
+@Column(name = "Discapacidad", nullable = false)
+private String discapacidad;
 
     @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL)
     private List<Automovil> automoviles;
 
     @OneToMany(mappedBy = "persona", cascade = CascadeType.PERSIST)
     private List<Tramite> tramites;
+
     public Persona() {
     }
 
-    public Persona(String nombres, String apellidoPaterno, String apellidoMaterno, String curp, String rfc, String telefono, Calendar fechaNacimiento) {
+    public Persona(String nombres, String apellidoPaterno, String apellidoMaterno, String curp, String rfc, String telefono, Calendar fechaNacimiento, String discapacidad) {
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
@@ -73,7 +75,7 @@ public class Persona implements Serializable {
         this.fechaNacimiento = fechaNacimiento;
         this.automoviles = new ArrayList<>();
         this.tramites = new ArrayList<>();
-
+        this.discapacidad = discapacidad;
     }
 
     public Long getIdPersona() {
@@ -156,17 +158,22 @@ public class Persona implements Serializable {
         this.tramites = tramites;
     }
 
-  
-
     public List<Automovil> getAutomoviles() {
         return automoviles;
+    }
+
+    public String getDiscapacidad() {
+        return discapacidad;
+    }
+
+    public void setDiscapacidad(String discapacidad) {
+        this.discapacidad = discapacidad;
     }
 
     public void setAutomoviles(List<Automovil> automoviles) {
         this.automoviles = automoviles;
     }
 
- 
     @Override
     public String toString() {
         return "Persona{"
@@ -180,6 +187,7 @@ public class Persona implements Serializable {
                 + ", fechaNacimiento=" + fechaNacimiento.getTime()
                 + ", automoviles=" + automoviles
                 + ", tramites=" + tramites
+                + ", discapacidad=" + discapacidad
                 + '}';
     }
 
