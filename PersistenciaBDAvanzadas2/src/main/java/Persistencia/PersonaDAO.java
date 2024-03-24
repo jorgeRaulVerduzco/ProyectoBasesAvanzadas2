@@ -42,22 +42,38 @@ public class PersonaDAO implements IPersonaDao {
     }
 
     @Override
-    public void ListaPersonas() {
+    public List<Persona> ListaPersonas() {
         EntityManager em = emf.createEntityManager();
+        List<Persona> personas = null;
         try {
             TypedQuery<Persona> query = em.createQuery("SELECT p FROM Persona p", Persona.class);
-
-            List<Persona> personas = query.getResultList();
-
-            System.out.println("Lista de personas:");
-            for (Persona persona : personas) {
-                System.out.println(persona);
-            }
+            personas = query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             em.close();
         }
+        return personas;
     }
 
+@Override
+public Persona obtenerPersonaPorRFC(String rfc) {
+    EntityManager em = emf.createEntityManager();
+    Persona persona = null;
+    try {
+        TypedQuery<Persona> query = em.createQuery("SELECT p FROM Persona p WHERE p.rfc = :rfc", Persona.class);
+        query.setParameter("rfc", rfc);
+        // Obtenemos el resultado de la consulta, si existe
+        List<Persona> personas = query.getResultList();
+        // Si la lista no está vacía, tomamos la primera persona encontrada
+        if (!personas.isEmpty()) {
+            persona = personas.get(0);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+    return persona;
+}
 }

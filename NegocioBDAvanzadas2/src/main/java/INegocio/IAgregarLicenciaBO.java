@@ -4,12 +4,25 @@
  */
 package INegocio;
 
+import DTO.LicenciaDTO;
+import DTO.PersonaDTO;
+import Dominio.Persona;
+import java.util.List;
+
 /**
  *
  * @author INEGI
  */
 public interface IAgregarLicenciaBO {
-   public void AgregarPersona();
-   
-   public void AgregarLicencia();
+
+    public void AgregarLicencia(LicenciaDTO licenciaDTO, String rfcPersona);
+
+    public void agregarPersona(PersonaDTO personaDTO);
+
+    public void incersionMasiva();
+
+    public List<Persona> ListaPersonas();
+
+public Persona obtenerPersonaPorRFC(String rfc);
+
 }

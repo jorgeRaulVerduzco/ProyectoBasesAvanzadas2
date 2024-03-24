@@ -6,6 +6,7 @@ package IPersistencia;
 
 import Dominio.Persona;
 import Excepciones.PersistenciaException;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,7 @@ public interface IPersonaDao {
     
     public void agregarPersona(Persona persona)throws PersistenciaException;
     
-    public void ListaPersonas();
+    public List<Persona> ListaPersonas();
+    
+    public Persona obtenerPersonaPorRFC(String rfc);
 }
