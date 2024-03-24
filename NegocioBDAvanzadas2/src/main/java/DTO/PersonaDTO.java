@@ -22,10 +22,11 @@ public class PersonaDTO {
     private String rfc;
     private String telefono;
     private Calendar fechaNacimiento;
+    private String discapacidad;
     private List<AutomovilDTO> automoviles;
     private List<TramiteDTO> tramites;
 
-    public PersonaDTO(String nombres, String apellidoPaterno, String apellidoMaterno, String curp, String rfc, String telefono, Calendar fechaNacimiento) {
+    public PersonaDTO(String nombres, String apellidoPaterno, String apellidoMaterno, String curp, String rfc, String telefono, Calendar fechaNacimiento,String discapacidad) {
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
@@ -33,6 +34,7 @@ public class PersonaDTO {
         this.rfc = rfc;
         this.telefono = telefono;
         this.fechaNacimiento = fechaNacimiento;
+        this.discapacidad=discapacidad;
         this.automoviles = new ArrayList<>();
         this.tramites = new ArrayList<>();
 
@@ -124,6 +126,16 @@ public class PersonaDTO {
     public void agregarAutoMovil(AutomovilDTO automovil) {
         this.automoviles.add(automovil);
     }
+
+    public String getDiscapacidad() {
+        return discapacidad;
+    }
+
+    public void setDiscapacidad(String discapacidad) {
+        this.discapacidad = discapacidad;
+    }
+    
+    
       @Override
     public String toString() {
         return "Persona{"
@@ -135,6 +147,7 @@ public class PersonaDTO {
                 + ", rfc='" + rfc + '\''
                 + ", telefono='" + telefono + '\''
                 + ", fechaNacimiento=" + fechaNacimiento.getTime()
+                +", discapacidad= "+ discapacidad
                 + ", automoviles=" + automoviles
                 + ", tramites=" + tramites
                 + '}';

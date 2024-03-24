@@ -39,7 +39,6 @@ public class frmTramites extends javax.swing.JFrame {
         llenarTabla();
         btnLicencia.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Acción que se realiza cuando se hace clic en el botón btnLicencia
                 frmLicencia frmLicencia = new frmLicencia();
                 frmLicencia.setVisible(true);
             }
@@ -47,30 +46,26 @@ public class frmTramites extends javax.swing.JFrame {
     }
 
 
-    public void tabla() {
-        // Configuración del renderizador de celdas
-        tblTramites.setDefaultRenderer(Object.class, new RenderTabla());
+public void tabla() {
+    tblTramites.setDefaultRenderer(Object.class, new RenderTabla());
 
-        // Creación del modelo de tabla
-        DefaultTableModel modeloTabla = new DefaultTableModel();
-        tblTramites.setModel(modeloTabla);
+    DefaultTableModel modeloTabla = new DefaultTableModel();
+    tblTramites.setModel(modeloTabla);
 
-        // Configuración de la altura de las filas
-        tblTramites.setRowHeight(40);
+    tblTramites.setRowHeight(40);
 
-        // Definición de las columnas y sus encabezados
-        String[] encabezados = {"Nombre", "Curp", "RFC", "Fecha de nacimiento", "Telefono", "Licencia", "Automoviles"};
-        modeloTabla.setColumnIdentifiers(encabezados);
+    // Definición de las columnas y sus encabezados
+    String[] encabezados = {"Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC", "Fecha de Nacimiento", "Teléfono", "Discapacidad"};
+    modeloTabla.setColumnIdentifiers(encabezados);
 
-        // Configuración del ancho preferido de las columnas
-        int[] anchos = {110, 100, 60, 50, 25};
-        for (int i = 0; i < anchos.length; i++) {
-            tblTramites.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-        }
-
+    // Configuración del ancho preferido de las columnas
+    int[] anchos = {100, 100, 100, 100, 100, 100, 100, 100};
+    for (int i = 0; i < anchos.length; i++) {
+        tblTramites.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
     }
+}
 
-    private void btnLicenciaActionPerformed(java.awt.event.ActionEvent evt) {                                            
+private void btnLicenciaActionPerformed(java.awt.event.ActionEvent evt) {                                            
     // Obtener el índice de la fila seleccionada
     int selectedRow = tblTramites.getSelectedRow();
     if (selectedRow != -1) { // Verificar si hay una fila seleccionada
@@ -82,34 +77,37 @@ public class frmTramites extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
     }
 }    
-    public void llenarTabla() {
-        Persona persona = personaNegocio.obtenerPersonaPorRFC(txtBusqueda.getText());
 
-        // Verificar si se encontró una persona con el RFC especificado
-        if (persona != null) {
-            DefaultTableModel defa = (DefaultTableModel) tblTramites.getModel();
-            defa.setRowCount(0); // Limpia la tabla antes de agregar nuevos datos
+public void llenarTabla() {
+     String rfc = txtBusqueda.getText();
+    Persona persona = personaNegocio.obtenerPersonaPorRFC(rfc);
 
-            // Crear un array de datos del tamaño de las columnas de la tabla
-            Object[] datos = new Object[defa.getColumnCount()];
+    DefaultTableModel defa = (DefaultTableModel) tblTramites.getModel();
+    defa.setRowCount(0); // Limpia la tabla antes de agregar nuevos datos
 
-            // Agregar los datos de la persona a las columnas correspondientes
-            datos[0] = persona.getNombres();
-            datos[1] = persona.getCurp();
-            datos[2] = persona.getRfc();
-            datos[3] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
-                    + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
-                    + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
-            datos[4] = persona.getTelefono();
-            datos[5] = "Licencia"; // Aquí se coloca la información relacionada con la licencia
+    if (persona != null) {
+        // Crear un array de datos del tamaño de las columnas de la tabla
+        Object[] datos = new Object[defa.getColumnCount()];
 
-            // Añadir la fila a la tabla
-            defa.addRow(datos);
-        } else {
-            // Mostrar un mensaje indicando que no se encontró ninguna persona con el RFC especificado
-            JOptionPane.showMessageDialog(null, "No se encontró ninguna persona con el RFC especificado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
+        // Agregar los datos de la persona a las columnas correspondientes
+        datos[0] = persona.getNombres();
+        datos[1] = persona.getApellidoPaterno();
+        datos[2] = persona.getApellidoMaterno();
+        datos[3] = persona.getCurp();
+        datos[4] = persona.getRfc();
+        datos[5] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
+                + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
+                + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
+        datos[6] = persona.getTelefono();
+        datos[7] = persona.getDiscapacidad();
+
+        // Añadir la fila a la tabla
+        defa.addRow(datos);
+    } else {
+        // Mostrar un mensaje indicando que no se encontró ninguna persona con el RFC especificado
+        JOptionPane.showMessageDialog(null, "No se encontró ninguna persona con el RFC especificado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -303,10 +301,12 @@ public class frmTramites extends javax.swing.JFrame {
             // Si el usuario elige ir a frmLicencia
             frmLicencia frmLicencia = new frmLicencia();
             frmLicencia.setVisible(true);
+            this.dispose();
         } else if (option == JOptionPane.NO_OPTION) {
             // Si el usuario elige ir a frmPlacas
             FrmPlacas frmPlacas = new FrmPlacas();
             frmPlacas.setVisible(true);
+            this.dispose();
         }
     } else {
         // Mostrar un mensaje indicando que no se ha seleccionado ninguna persona

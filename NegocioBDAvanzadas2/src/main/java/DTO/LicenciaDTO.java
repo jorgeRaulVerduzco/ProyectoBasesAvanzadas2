@@ -13,12 +13,10 @@ import java.util.Calendar;
  */
 public class LicenciaDTO extends TramiteDTO{
       private int añosVigencia;
-    private TipoLicencia tipoLicencia;
 
-    public LicenciaDTO(int añosVigencia, TipoLicencia tipoLicencia, float costo, Calendar fechaTramite, PersonaDTO persona, Calendar fechaVigencia) {
+    public LicenciaDTO(int añosVigencia, float costo, Calendar fechaTramite, PersonaDTO persona, Calendar fechaVigencia) {
         super(costo, fechaTramite, persona, fechaVigencia);
         this.añosVigencia = añosVigencia;
-        this.tipoLicencia = tipoLicencia;
     }
 
     // Getters y setters
@@ -31,19 +29,12 @@ public class LicenciaDTO extends TramiteDTO{
         this.añosVigencia = añosVigencia;
     }
 
-    public TipoLicencia getTipoLicencia() {
-        return tipoLicencia;
-    }
-
-    public void setTipoLicencia(TipoLicencia tipoLicencia) {
-        this.tipoLicencia = tipoLicencia;
-    }
+ 
 
     @Override
     public String toString() {
         return "LicenciaDto{" +
                 "añosVigencia=" + añosVigencia +
-                ", tipoLicencia=" + tipoLicencia +
                 ", costo=" + getCosto() +
                 ", fechaTramite=" + getFechaTramite().getTime() +
                 ", fechaVigencia=" + getFechaVigencia().getTime() +

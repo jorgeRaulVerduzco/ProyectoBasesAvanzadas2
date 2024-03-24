@@ -57,4 +57,8 @@ public class DatosAleatorios {
         fechaNacimiento.set(Calendar.DAY_OF_MONTH, RANDOM.nextInt(28) + 1);
         return fechaNacimiento;
     }
+    
+     public static String generarDiscapacidadAleatoria() {
+        return (RANDOM.nextInt(2) == 0) ? "Sí" : "No";
+    }
 }
