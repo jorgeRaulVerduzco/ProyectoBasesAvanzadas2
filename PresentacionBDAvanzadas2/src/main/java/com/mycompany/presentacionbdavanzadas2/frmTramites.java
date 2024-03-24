@@ -29,22 +29,15 @@ public class frmTramites extends javax.swing.JFrame {
 
     int row, columna;
 
-    JButton btnLicencia = new JButton("Solicitar Licencia");
     private IAgregarLicenciaBO personaNegocio;
 
     public frmTramites() {
         personaNegocio = new AgregarLicencioBO();
         initComponents();
-        jPanel2.add(btnLicencia);
-        btnLicencia.setBounds(20, 400, 150, 30);
+     
         tabla();
         llenarTabla();
-        btnLicencia.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frmLicencia frmLicencia = new frmLicencia();
-                frmLicencia.setVisible(true);
-            }
-        });
+        
     }
 
 
@@ -85,13 +78,11 @@ public void llenarTabla() {
     Persona persona = personaNegocio.obtenerPersonaPorRFC(rfc);
 
     DefaultTableModel defa = (DefaultTableModel) tblTramites.getModel();
-    defa.setRowCount(0); // Limpia la tabla antes de agregar nuevos datos
+    defa.setRowCount(0); 
 
     if (persona != null) {
-        // Crear un array de datos del tamaño de las columnas de la tabla
         Object[] datos = new Object[defa.getColumnCount()];
 
-        // Agregar los datos de la persona a las columnas correspondientes
         datos[0] = persona.getNombres();
         datos[1] = persona.getApellidoPaterno();
         datos[2] = persona.getApellidoMaterno();
@@ -103,10 +94,8 @@ public void llenarTabla() {
         datos[6] = persona.getTelefono();
         datos[7] = persona.getDiscapacidad();
 
-        // Añadir la fila a la tabla
         defa.addRow(datos);
     } else {
-        // Mostrar un mensaje indicando que no se encontró ninguna persona con el RFC especificado
         JOptionPane.showMessageDialog(null, "No se encontró ninguna persona con el RFC especificado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
     }
 }
@@ -128,7 +117,6 @@ public void llenarTabla() {
         tblTramites = new javax.swing.JTable();
         txtBusqueda = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
-        btnAgregar20Personas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -218,31 +206,17 @@ public void llenarTabla() {
             }
         });
 
-        btnAgregar20Personas.setBackground(new java.awt.Color(255, 102, 102));
-        btnAgregar20Personas.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
-        btnAgregar20Personas.setForeground(new java.awt.Color(2, 2, 2));
-        btnAgregar20Personas.setText("agregar 20");
-        btnAgregar20Personas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnAgregar20Personas.setFocusPainted(false);
-        btnAgregar20Personas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregar20PersonasActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAgregar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -254,11 +228,9 @@ public void llenarTabla() {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtBusqueda))
-                    .addComponent(btnAgregar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBusqueda))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
@@ -291,18 +263,14 @@ public void llenarTabla() {
         DefaultTableModel model = (DefaultTableModel) tblTramites.getModel();
         PersonaDTO personaSeleccionada = new PersonaDTO();
 
-        // Obtener los datos de la fila seleccionada
         personaSeleccionada.setNombres((String) model.getValueAt(selectedRow, 0));
         personaSeleccionada.setApellidoPaterno((String) model.getValueAt(selectedRow, 1));
         personaSeleccionada.setApellidoMaterno((String) model.getValueAt(selectedRow, 2));
         personaSeleccionada.setCurp((String) model.getValueAt(selectedRow, 3));
         personaSeleccionada.setRfc((String) model.getValueAt(selectedRow, 4));
-        // Aquí puedes setear los demás campos de la persona seleccionada si los tienes disponibles en la tabla
 
-        // Almacenar la persona seleccionada en la variable estática
         PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
 
-        // Abrir el formulario frmLicencia
         frmLicencia frmLicencia = new frmLicencia();
         frmLicencia.setVisible(true);
         this.dispose();
@@ -338,15 +306,6 @@ public void llenarTabla() {
             evt.consume();
         }
     }//GEN-LAST:event_txtBusquedaKeyTyped
-
-    private void btnAgregar20PersonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregar20PersonasActionPerformed
-
-        IAgregarLicenciaBO agregarLicenciaBO = new AgregarLicencioBO();
-        agregarLicenciaBO.incersionMasiva();
-        JOptionPane.showMessageDialog(null, "Se han registrado 20 personas de forma masiva.", "Información", JOptionPane.INFORMATION_MESSAGE);
-
-
-    }//GEN-LAST:event_btnAgregar20PersonasActionPerformed
  
     /**
      * @param args the command line arguments
@@ -384,7 +343,6 @@ public void llenarTabla() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregar20Personas;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

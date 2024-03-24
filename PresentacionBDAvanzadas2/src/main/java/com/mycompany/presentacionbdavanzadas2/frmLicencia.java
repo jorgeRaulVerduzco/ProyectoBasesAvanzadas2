@@ -216,8 +216,8 @@ if (personaSeleccionada != null) {
     float costo = licenciaBO.costo(aniosVigencia, discapacidad);
 
     Calendar fechaTramite = Calendar.getInstance();
-    int ano = fechaTramite.get(Calendar.YEAR) + aniosVigencia;
-    Calendar fechaVigencia = new GregorianCalendar(ano, fechaTramite.get(Calendar.MONTH), fechaTramite.get(Calendar.DAY_OF_MONTH));
+    int anioo = fechaTramite.get(Calendar.YEAR) + aniosVigencia;
+    Calendar fechaVigencia = new GregorianCalendar(anioo, fechaTramite.get(Calendar.MONTH), fechaTramite.get(Calendar.DAY_OF_MONTH));
     
     LicenciaDTO licenciaDTO = new LicenciaDTO(aniosVigencia, costo, fechaTramite, personaSeleccionada, fechaVigencia);
 
