@@ -205,12 +205,13 @@ if (personaSeleccionada != null) {
     String rfcPersona = personaSeleccionada.getRfc();
     
     String discapacidadStr = personaSeleccionada.getDiscapacidad();
-    int discapacidad = 0; // Valor predeterminado si la discapacidad es nula
+    int discapacidad=0; // Valor predeterminado si la discapacidad es nula
     if (discapacidadStr != null) {
         discapacidad = Integer.parseInt(discapacidadStr);
     }
     
-    int costo = licenciaBO.costo(aniosVigencia, discapacidad);
+    
+    float costo = licenciaBO.costo(aniosVigencia, discapacidad);
 
     Calendar fechaTramite = Calendar.getInstance();
     int ano = fechaTramite.get(Calendar.YEAR) + aniosVigencia;
@@ -219,6 +220,11 @@ if (personaSeleccionada != null) {
     LicenciaDTO licenciaDTO = new LicenciaDTO(aniosVigencia, costo, fechaTramite, personaSeleccionada, fechaVigencia);
 
     licenciaBO.AgregarLicencia(licenciaDTO, rfcPersona);
+                JOptionPane.showMessageDialog(this, "Se genero la licencia de: " + personaSeleccionada.getNombres());
+
+    frmInicio inicio = new frmInicio();
+    inicio.setVisible(true);
+    this.dispose();
 } else {
     // Manejar el caso donde no se ha seleccionado ninguna persona
     JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna persona.", "Mensaje", JOptionPane.WARNING_MESSAGE);
