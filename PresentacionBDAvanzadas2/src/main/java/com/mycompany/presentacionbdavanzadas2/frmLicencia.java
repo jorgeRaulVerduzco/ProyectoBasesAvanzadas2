@@ -169,7 +169,9 @@ public class frmLicencia extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtCostoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCostoActionPerformed
-        // TODO add your handling code here:
+
+
+
     }//GEN-LAST:event_txtCostoActionPerformed
 
     public void costo() {
@@ -182,7 +184,7 @@ public class frmLicencia extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-        String seleccion = (String) jComboBox1.getSelectedItem();
+  String seleccion = (String) jComboBox1.getSelectedItem();
         int aniosVigencia = 0;
 
         // Obtener el número de años de vigencia según la selección del combo box
@@ -229,6 +231,7 @@ if (personaSeleccionada != null) {
     // Manejar el caso donde no se ha seleccionado ninguna persona
     JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna persona.", "Mensaje", JOptionPane.WARNING_MESSAGE);
 }
+        
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     /**

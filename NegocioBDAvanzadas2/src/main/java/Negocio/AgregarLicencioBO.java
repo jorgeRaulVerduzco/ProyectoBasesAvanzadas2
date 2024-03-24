@@ -13,6 +13,8 @@ import Excepciones.PersistenciaException;
 import INegocio.IAgregarLicenciaBO;
 import Persistencia.LicenciaDAO;
 import Persistencia.PersonaDAO;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -77,20 +79,37 @@ public class AgregarLicencioBO implements IAgregarLicenciaBO {
 
     @Override
     public void AgregarLicencia(LicenciaDTO licenciaDTO, String rfcPersona) {
-        Licencia licencia = convertirLicenciaDTO(licenciaDTO);
+       // Obtener la fecha de nacimiento de la persona
+    Persona persona = personaDAO.obtenerPersonaPorRFC(rfcPersona);
 
-        // Buscar la persona por RFC
-        Persona persona = personaDAO.obtenerPersonaPorRFC(rfcPersona);
+    if (persona != null) {
+        // Convertir la fecha de nacimiento de Calendar a LocalDate
+        Calendar fechaNacimientoCalendar = persona.getFechaNacimiento();
+        LocalDate fechaNacimiento = LocalDate.of(fechaNacimientoCalendar.get(Calendar.YEAR),
+                                                  fechaNacimientoCalendar.get(Calendar.MONTH) + 1,
+                                                  fechaNacimientoCalendar.get(Calendar.DAY_OF_MONTH));
 
-        if (persona != null) {
+        // Calcular la edad de la persona
+        LocalDate fechaActual = LocalDate.now();
+        long años = ChronoUnit.YEARS.between(fechaNacimiento, fechaActual);
+
+        // Verificar si la persona es mayor o igual a 18 años
+        if (años >= 18) {
+            Licencia licencia = convertirLicenciaDTO(licenciaDTO);
+
             // Asignar la persona a la licencia
             licencia.setPersona(persona);
 
             // Llamar al método agregarLicencia de LicenciaDAO
             licenciaDAO.agregarLicencia(licencia); // Manejar la excepción, si es necesario
         } else {
-            System.out.println("No se encontró ninguna persona con el RFC proporcionado.");
+            JOptionPane.showMessageDialog(null, "La persona debe ser mayor o igual a 18 años para obtener una licencia.",
+                                          "Error", JOptionPane.ERROR_MESSAGE);
         }
+    } else {
+        JOptionPane.showMessageDialog(null, "No se encontró ninguna persona con el RFC proporcionado.",
+                                      "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }
 
     private Licencia convertirLicenciaDTO(LicenciaDTO licenciaDTO) {
