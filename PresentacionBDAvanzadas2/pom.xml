@@ -8,17 +8,6 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>NegocioBDAvanzadas2</artifactId>
-            <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.mycompany</groupId>
-                    <artifactId>PersistenciaBDAvanzadas2</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>PersistenciaBDAvanzadas2</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -26,6 +15,11 @@
             <groupId>com.github.lgooddatepicker</groupId>
             <artifactId>LGoodDatePicker</artifactId>
             <version>11.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>NegocioBDAvanzadas2</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <properties>

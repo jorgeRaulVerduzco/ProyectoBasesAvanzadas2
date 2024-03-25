@@ -258,7 +258,7 @@ public void llenarTabla() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblTramitesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTramitesMouseClicked
-      int selectedRow = tblTramites.getSelectedRow();
+    int selectedRow = tblTramites.getSelectedRow();
     if (selectedRow != -1) {
         DefaultTableModel model = (DefaultTableModel) tblTramites.getModel();
         PersonaDTO personaSeleccionada = new PersonaDTO();
@@ -271,9 +271,27 @@ public void llenarTabla() {
 
         PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
 
-        frmLicencia frmLicencia = new frmLicencia();
-        frmLicencia.setVisible(true);
-        this.dispose();
+        // Mostrar el JOptionPane para elegir entre frmLicencia y frmTramite
+        String[] opciones = {"Licencia", "Tramite"};
+        int opcionSeleccionada = JOptionPane.showOptionDialog(this,
+            "¿Que tramite desea realizar?",
+            "Seleccione una opción",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0]);
+
+        // Redirigir según la opción seleccionada
+        if (opcionSeleccionada == 0) {
+            frmLicencia frmLicencia = new frmLicencia();
+            frmLicencia.setVisible(true);
+            this.dispose();
+        } else if (opcionSeleccionada == 1) {
+            FrmPlacas frmTramite = new FrmPlacas();
+            frmTramite.setVisible(true);
+            this.dispose();
+        }
     } else {
         JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
     }
