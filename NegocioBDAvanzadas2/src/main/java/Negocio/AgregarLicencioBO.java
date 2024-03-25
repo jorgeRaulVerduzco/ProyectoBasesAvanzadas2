@@ -31,7 +31,6 @@ public class AgregarLicencioBO implements IAgregarLicenciaBO {
     public AgregarLicencioBO() {
         this.licenciaDAO = new LicenciaDAO();
         this.personaDAO = new PersonaDAO();
-
     }
 
     public void agregarPersona(PersonaDTO personaDTO) {

@@ -272,7 +272,7 @@ public void llenarTabla() {
         PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
 
         // Mostrar el JOptionPane para elegir entre frmLicencia y frmTramite
-        String[] opciones = {"Licencia", "Tramite"};
+        String[] opciones = {"Licencia", "Placas"};
         int opcionSeleccionada = JOptionPane.showOptionDialog(this,
             "¿Que tramite desea realizar?",
             "Seleccione una opción",
