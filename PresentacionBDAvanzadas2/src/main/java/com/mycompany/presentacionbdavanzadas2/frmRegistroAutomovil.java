@@ -8,12 +8,12 @@ package com.mycompany.presentacionbdavanzadas2;
  *
  * @author Ruzzky
  */
-public class frmPlacas extends javax.swing.JFrame {
+public class frmRegistroAutomovil extends javax.swing.JFrame {
 
     /**
      * Creates new form frmRegistroAutomovil
      */
-    public frmPlacas() {
+    public frmRegistroAutomovil() {
         initComponents();
     }
 
@@ -56,9 +56,9 @@ public class frmPlacas extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(126, 126, 126)
+                .addGap(129, 129, 129)
                 .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -4,10 +4,12 @@
  */
 package INegocio;
 
+import Dominio.Persona;
+
 /**
  *
  * @author INEGI
  */
 public interface IObtenerPersonaPorRFC {
-    
+    public Persona obtenerPersonaPorRFC(String rfc);
 }

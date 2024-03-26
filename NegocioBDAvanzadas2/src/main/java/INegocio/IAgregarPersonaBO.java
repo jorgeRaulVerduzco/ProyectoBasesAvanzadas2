@@ -4,10 +4,13 @@
  */
 package INegocio;
 
+import DTO.PersonaDTO;
+
 /**
  *
  * @author INEGI
  */
-public interface IAgregarPlaca {
-    
+public interface IAgregarPersonaBO{
+      public void agregarPersona(PersonaDTO personaDTO);
+         public void incersionMasiva() ;
 }

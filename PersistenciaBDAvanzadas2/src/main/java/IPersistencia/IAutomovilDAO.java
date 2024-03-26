@@ -22,4 +22,6 @@ public interface IAutomovilDAO {
     public List<Automovil> buscarAutomovilesPorColor(String color);
 
     public List<Automovil> buscarAutomovilesPorLinea(String linea);
+    
+    public Automovil buscarAutomovilPorNumeroSerie(String numeroSerie);
 }

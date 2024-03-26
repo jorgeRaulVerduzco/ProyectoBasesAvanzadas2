@@ -288,7 +288,7 @@ public void llenarTabla() {
             frmLicencia.setVisible(true);
             this.dispose();
         } else if (opcionSeleccionada == 1) {
-            frmPlacas frmTramite = new frmPlacas();
+            frmPlaca frmTramite = new frmPlaca();
             frmTramite.setVisible(true);
             this.dispose();
         }

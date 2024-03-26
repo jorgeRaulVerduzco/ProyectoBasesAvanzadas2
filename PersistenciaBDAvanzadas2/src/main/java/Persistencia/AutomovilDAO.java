@@ -39,91 +39,117 @@ public class AutomovilDAO implements IAutomovilDAO {
             em.close();
         }
     }
-    @Override
-    public List<Automovil> buscarAutomovilesPorNumeroSerie(String numeroSerie) {
-    EntityManager em = emf.createEntityManager();
-    List<Automovil> automoviles = null;
 
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT a FROM Automovil a WHERE a.numeroSerie = :numeroSerie";
-        TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
-        query.setParameter("numeroSerie", numeroSerie);
-        automoviles = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
+    @Override
+    public Automovil buscarAutomovilPorNumeroSerie(String numeroSerie) {
+        EntityManager em = emf.createEntityManager();
+        Automovil automovil = null;
+
+        try {
+            em.getTransaction().begin();
+            String jpql = "SELECT a FROM Automovil a WHERE a.numeroSerie = :numeroSerie";
+            TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
+            query.setParameter("numeroSerie", numeroSerie);
+            List<Automovil> resultList = query.getResultList();
+            if (!resultList.isEmpty()) {
+                automovil = resultList.get(0);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return automovil;
     }
 
-    return automoviles;
-}
+    @Override
+    public List<Automovil> buscarAutomovilesPorNumeroSerie(String numeroSerie) {
+        EntityManager em = emf.createEntityManager();
+        List<Automovil> automoviles = null;
+
+        try {
+            em.getTransaction().begin();
+            String jpql = "SELECT a FROM Automovil a WHERE a.numeroSerie = :numeroSerie";
+            TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
+            query.setParameter("numeroSerie", numeroSerie);
+            automoviles = query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return automoviles;
+    }
 
     @Override
     public List<Automovil> buscarAutomovilesPorMarca(String marca) {
-    EntityManager em = emf.createEntityManager();
-    List<Automovil> automoviles = null;
+        EntityManager em = emf.createEntityManager();
+        List<Automovil> automoviles = null;
 
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT a FROM Automovil a WHERE a.marca = :marca";
-        TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
-        query.setParameter("marca", marca);
-        automoviles = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
+        try {
+            em.getTransaction().begin();
+            String jpql = "SELECT a FROM Automovil a WHERE a.marca = :marca";
+            TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
+            query.setParameter("marca", marca);
+            automoviles = query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return automoviles;
     }
-
-    return automoviles;
-}
 
     @Override
     public List<Automovil> buscarAutomovilesPorLinea(String linea) {
-    EntityManager em = emf.createEntityManager();
-    List<Automovil> automoviles = null;
+        EntityManager em = emf.createEntityManager();
+        List<Automovil> automoviles = null;
 
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT a FROM Automovil a WHERE a.linea = :linea";
-        TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
-        query.setParameter("linea", linea);
-        automoviles = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
+        try {
+            em.getTransaction().begin();
+            String jpql = "SELECT a FROM Automovil a WHERE a.linea = :linea";
+            TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
+            query.setParameter("linea", linea);
+            automoviles = query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return automoviles;
     }
-
-    return automoviles;
-}
 
     @Override
     public List<Automovil> buscarAutomovilesPorColor(String color) {
-    EntityManager em = emf.createEntityManager();
-    List<Automovil> automoviles = null;
+        EntityManager em = emf.createEntityManager();
+        List<Automovil> automoviles = null;
 
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT a FROM Automovil a WHERE a.color = :color";
-        TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
-        query.setParameter("color", color);
-        automoviles = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
+        try {
+            em.getTransaction().begin();
+            String jpql = "SELECT a FROM Automovil a WHERE a.color = :color";
+            TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
+            query.setParameter("color", color);
+            automoviles = query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return automoviles;
     }
-
-    return automoviles;
-}
 }

@@ -57,8 +57,24 @@ public class DatosAleatorios {
         fechaNacimiento.set(Calendar.DAY_OF_MONTH, RANDOM.nextInt(28) + 1);
         return fechaNacimiento;
     }
-    
-     public static String generarDiscapacidadAleatoria() {
+
+    public static String generarDiscapacidadAleatoria() {
         return (RANDOM.nextInt(2) == 0) ? "Sí" : "No";
+    }
+
+    public static String generarPlacaAleatoria() {
+        StringBuilder placa = new StringBuilder();
+
+        for (int i = 0; i < 3; i++) {
+            placa.append(LETRAS.charAt(RANDOM.nextInt(LETRAS.length())));
+        }
+
+        placa.append("-");
+
+        for (int i = 0; i < 3; i++) {
+            placa.append(RANDOM.nextInt(10));
+        }
+
+        return placa.toString();
     }
 }

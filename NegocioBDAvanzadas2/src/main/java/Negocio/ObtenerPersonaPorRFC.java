@@ -4,10 +4,25 @@
  */
 package Negocio;
 
+import Dominio.Persona;
+import INegocio.IObtenerPersonaPorRFC;
+import Persistencia.PersonaDAO;
+
 /**
  *
  * @author INEGI
  */
-public class ObtenerPersonaPorRFC {
-    
+public class ObtenerPersonaPorRFC implements IObtenerPersonaPorRFC {
+
+    PersonaDAO personaDAO;
+
+    public ObtenerPersonaPorRFC() {
+        personaDAO= new PersonaDAO();
+        
+    }
+
+    @Override
+    public Persona obtenerPersonaPorRFC(String rfc) {
+        return personaDAO.obtenerPersonaPorRFC(rfc);
+    }
 }

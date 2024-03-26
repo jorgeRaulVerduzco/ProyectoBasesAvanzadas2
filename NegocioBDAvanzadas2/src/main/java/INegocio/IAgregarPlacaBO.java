@@ -4,10 +4,13 @@
  */
 package INegocio;
 
+import DTO.AutomovilDTO;
+import DTO.PlacaDTO;
+
 /**
  *
  * @author INEGI
  */
-public interface IAgregarPersona {
-    
+public interface IAgregarPlacaBO {
+    public void AgregarPlaca(AutomovilDTO automovilDTO,PlacaDTO placaDTO);
 }

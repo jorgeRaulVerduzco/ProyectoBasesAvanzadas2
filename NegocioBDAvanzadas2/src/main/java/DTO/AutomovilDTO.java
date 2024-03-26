@@ -22,6 +22,9 @@ public class AutomovilDTO {
     private PersonaDTO persona;
     private List<PlacaDTO> placas;
 
+    public AutomovilDTO() {
+    }
+
     
     
        public AutomovilDTO(String numeroSerie, String marca, String linea, String color, String modelo, PersonaDTO persona) {

@@ -33,6 +33,7 @@ public class AgregarLicencioBO implements IAgregarLicenciaBO {
         this.personaDAO = new PersonaDAO();
     }
 
+    @Override
     public void agregarPersona(PersonaDTO personaDTO) {
         if (personaDTO.getNombres() == null || personaDTO.getApellidoPaterno() == null || personaDTO.getRfc() == null) {
             JOptionPane.showMessageDialog(null, "Error: Los campos obligatorios (nombres, apellido paterno y RFC) no pueden ser nulos.", "Error", JOptionPane.ERROR_MESSAGE);

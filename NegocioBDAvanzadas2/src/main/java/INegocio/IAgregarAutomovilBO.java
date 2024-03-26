@@ -4,10 +4,12 @@
  */
 package INegocio;
 
+import DTO.AutomovilDTO;
+
 /**
  *
  * @author INEGI
  */
-public interface IAgregarAutomovil {
-    
+public interface IAgregarAutomovilBO {
+    public void AgregarAutomovil(AutomovilDTO automovilDTO);
 }
