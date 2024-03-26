@@ -5,13 +5,24 @@
 package IPersistencia;
 
 import Dominio.Automovil;
+import Dominio.Persona;
 import Dominio.Placa;
+import java.util.List;
 
 /**
  *
  * @author INEGI
  */
 public interface IPlacasDAO {
+
     public void agregarPlacas(Automovil automovil, Placa placa);
+
     public void desactivarPlacasActivas(Automovil automovil);
+
+    public List<Placa> obtenerTodasLasPlacas();
+
+    public List<Placa> obtenerHistorialDePlacasPorAutomovil(List<Automovil> automoviles);
+
+    public List<Placa> obtenerHistorialDePlacasPorPersona(List<Persona> personas);
+
 }

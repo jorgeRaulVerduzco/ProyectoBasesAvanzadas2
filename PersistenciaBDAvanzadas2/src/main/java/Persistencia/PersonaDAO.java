@@ -76,4 +76,70 @@ public Persona obtenerPersonaPorRFC(String rfc) {
     }
     return persona;
 }
+
+    @Override
+    public List<Persona> buscarPersonasPorNombre(String nombre) {
+    EntityManager em = emf.createEntityManager();
+    List<Persona> personas = null;
+
+    try {
+        em.getTransaction().begin();
+        String jpql = "SELECT p FROM Persona p WHERE p.nombres LIKE CONCAT('%', :nombre, '%')";
+        TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
+        query.setParameter("nombre", nombre);
+        personas = query.getResultList();
+        em.getTransaction().commit();
+    } catch (Exception e) {
+        em.getTransaction().rollback();
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+
+    return personas;
+}
+
+    @Override
+    public List<Persona> buscarPersonasPorAñoNacimiento(int añoNacimiento) {
+    EntityManager em = emf.createEntityManager();
+    List<Persona> personas = null;
+
+    try {
+        em.getTransaction().begin();
+        String jpql = "SELECT p FROM Persona p WHERE YEAR(p.fechaNacimiento) = :añoNacimiento";
+        TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
+        query.setParameter("añoNacimiento", añoNacimiento);
+        personas = query.getResultList();
+        em.getTransaction().commit();
+    } catch (Exception e) {
+        em.getTransaction().rollback();
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+
+    return personas;
+}
+
+    @Override
+    public List<Persona> buscarPersonasPorCURP(String curp) {
+    EntityManager em = emf.createEntityManager();
+    List<Persona> personas = null;
+
+    try {
+        em.getTransaction().begin();
+        String jpql = "SELECT p FROM Persona p WHERE p.curp = :curp";
+        TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
+        query.setParameter("curp", curp);
+        personas = query.getResultList();
+        em.getTransaction().commit();
+    } catch (Exception e) {
+        em.getTransaction().rollback();
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+
+    return personas;
+}
 }

@@ -5,13 +5,21 @@
 package IPersistencia;
 
 import Dominio.Automovil;
+import java.util.List;
 
 /**
  *
  * @author INEGI
  */
 public interface IAutomovilDAO {
+
     public void AgregarAutomovil(Automovil automovil);
-    
-    
+
+    public List<Automovil> buscarAutomovilesPorNumeroSerie(String numeroSerie);
+
+    public List<Automovil> buscarAutomovilesPorMarca(String marca);
+
+    public List<Automovil> buscarAutomovilesPorColor(String color);
+
+    public List<Automovil> buscarAutomovilesPorLinea(String linea);
 }

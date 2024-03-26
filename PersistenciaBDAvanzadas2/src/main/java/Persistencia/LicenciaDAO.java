@@ -5,10 +5,14 @@
 package Persistencia;
 
 import Dominio.Licencia;
+import Dominio.Persona;
 import IPersistencia.ILicenciaDAO;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -37,5 +41,24 @@ public class LicenciaDAO implements ILicenciaDAO {
             em.close();
         }
     }
+    @Override
+  public List<Licencia> obtenerLicenciasPorPersonas(List<Persona> personas) {
+    EntityManager em = emf.createEntityManager();
+    List<Licencia> licencias = new ArrayList<>();
 
+    try {
+        em.getTransaction().begin();
+        TypedQuery<Licencia> query = em.createQuery("SELECT l FROM Licencia l WHERE l.persona IN :personas", Licencia.class);
+        query.setParameter("personas", personas);
+        licencias = query.getResultList();
+        em.getTransaction().commit();
+    } catch (Exception e) {
+        em.getTransaction().rollback();
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+
+    return licencias;
+}
 }

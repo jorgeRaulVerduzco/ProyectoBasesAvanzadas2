@@ -5,12 +5,16 @@
 package IPersistencia;
 
 import Dominio.Licencia;
+import Dominio.Persona;
+import java.util.List;
 
 /**
  *
  * @author INEGI
  */
 public interface ILicenciaDAO {
-    
+
     public void agregarLicencia(Licencia licencia);
+
+    public List<Licencia> obtenerLicenciasPorPersonas(List<Persona> personas);
 }
