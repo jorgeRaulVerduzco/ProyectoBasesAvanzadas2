@@ -8,12 +8,12 @@ package com.mycompany.presentacionbdavanzadas2;
  *
  * @author Ruzzky
  */
-public class frmRegistroAutomovil extends javax.swing.JFrame {
+public class frmPlacas extends javax.swing.JFrame {
 
     /**
      * Creates new form frmRegistroAutomovil
      */
-    public frmRegistroAutomovil() {
+    public frmPlacas() {
         initComponents();
     }
 
