@@ -4,22 +4,28 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import DTO.AutomovilDTO;
+import DTO.PersonaDTO;
+import DatosAleatorios.PersonaSeleccionada;
+import Dominio.Persona;
 import INegocio.IAgregarAutomovilBO;
+import INegocio.IObtenerPersonaPorRFC;
 import Negocio.AgregarAutomovilBO;
+import Negocio.ObtenerPersonaPorRFC;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Ruzzky
  */
 public class frmRegistroAutomovil extends javax.swing.JFrame {
-IAgregarAutomovilBO agregarAutoBO;
-   
-    
-    
-    
+
+    IAgregarAutomovilBO agregarAutoBO;
+    IObtenerPersonaPorRFC personaRFC;
+
     public frmRegistroAutomovil() {
-        agregarAutoBO= new AgregarAutomovilBO();
-        
+        agregarAutoBO = new AgregarAutomovilBO();
+        personaRFC = new ObtenerPersonaPorRFC();
         initComponents();
     }
 
@@ -156,6 +162,12 @@ IAgregarAutomovilBO agregarAutoBO;
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -179,12 +191,6 @@ IAgregarAutomovilBO agregarAutoBO;
                         .addGap(18, 18, 18)
                         .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(121, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,8 +275,36 @@ IAgregarAutomovilBO agregarAutoBO;
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+  
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+      AutomovilDTO automovilDTO = new AutomovilDTO();
 
+    // Verificar campos obligatorios
+    if (txtNumero.getText().isEmpty() || txtColor.getText().isEmpty() || txtLinea.getText().isEmpty() || txtMarca.getText().isEmpty() || txtModelo.getText().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Error: Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    automovilDTO.setNumeroSerie(txtNumero.getText());
+    automovilDTO.setColor(txtColor.getText());
+    automovilDTO.setLinea(txtLinea.getText());
+    automovilDTO.setMarca(txtMarca.getText());
+    automovilDTO.setModelo(txtModelo.getText());
+
+    PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
+
+    if (personaSeleccionada != null) {
+        automovilDTO.setPersona(personaSeleccionada);
+        try {
+            agregarAutoBO.AgregarAutomovil(automovilDTO);
+            JOptionPane.showMessageDialog(null, "El automóvil se ha registrado correctamente.", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al intentar registrar el automóvil.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "No se encontró una persona seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     /**

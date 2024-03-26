@@ -6,6 +6,7 @@ package Dominio;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -42,7 +43,7 @@ public class Tramite implements Serializable {
     @Temporal(TemporalType.DATE)
     Calendar fechaTramite;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idPersona")
     private Persona persona;
 

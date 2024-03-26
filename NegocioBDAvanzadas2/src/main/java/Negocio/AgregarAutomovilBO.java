@@ -5,60 +5,77 @@
 package Negocio;
 
 import DTO.AutomovilDTO;
+import DTO.PersonaDTO;
 import Dominio.Automovil;
 import Dominio.Persona;
 import Excepciones.PersistenciaException;
 import INegocio.IAgregarAutomovilBO;
 import Persistencia.AutomovilDAO;
+import Persistencia.PersonaDAO;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author INEGI
  */
-public class AgregarAutomovilBO implements IAgregarAutomovilBO{
-AutomovilDAO automovilDAO;
+public class AgregarAutomovilBO implements IAgregarAutomovilBO {
+
+    AutomovilDAO automovilDAO;
+PersonaDAO personaDAO;
     public AgregarAutomovilBO() {
- automovilDAO = new AutomovilDAO();
+        automovilDAO = new AutomovilDAO();
+ personaDAO = new PersonaDAO();
 
     }
 
- @Override
-public void AgregarAutomovil(AutomovilDTO automovilDTO) {
-    if (automovilDTO.getNumeroSerie() == null || automovilDTO.getMarca() == null || automovilDTO.getLinea() == null) {
-        JOptionPane.showMessageDialog(null, "Error: Los campos obligatorios (número de serie, marca y línea) no pueden ser nulos.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
+    @Override
+    public void AgregarAutomovil(AutomovilDTO automovilDTO) {
+        if (automovilDTO.getNumeroSerie() == null || automovilDTO.getMarca() == null || automovilDTO.getLinea() == null) {
+            JOptionPane.showMessageDialog(null, "Error: Los campos obligatorios (número de serie, marca y línea) no pueden ser nulos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Automovil automovil = new Automovil();
+        automovil.setNumeroSerie(automovilDTO.getNumeroSerie());
+        automovil.setMarca(automovilDTO.getMarca());
+        automovil.setLinea(automovilDTO.getLinea());
+        automovil.setColor(automovilDTO.getColor());
+        automovil.setModelo(automovilDTO.getModelo());
+
+        // Verificar si se proporcionó información de persona en el DTO
+        PersonaDTO personaDTO = automovilDTO.getPersona();
+        if (personaDTO != null) {
+            // Verificar si la persona ya existe en la base de datos
+            Persona personaExistente = personaDAO.obtenerPersonaPorRFC(personaDTO.getRfc());
+            if (personaExistente != null) {
+                // Usar la persona existente
+                automovil.setPersona(personaExistente);
+            } else {
+                // Crear una nueva persona
+                Persona nuevaPersona = new Persona();
+                nuevaPersona.setNombres(personaDTO.getNombres());
+                nuevaPersona.setApellidoPaterno(personaDTO.getApellidoPaterno());
+                nuevaPersona.setApellidoMaterno(personaDTO.getApellidoMaterno());
+                nuevaPersona.setCurp(personaDTO.getCurp());
+                nuevaPersona.setRfc(personaDTO.getRfc());
+                nuevaPersona.setTelefono(personaDTO.getTelefono());
+                nuevaPersona.setFechaNacimiento(personaDTO.getFechaNacimiento());
+                nuevaPersona.setDiscapacidad(personaDTO.getDiscapacidad());
+
+                automovil.setPersona(nuevaPersona);
+            }
+        } else {
+            // Mostrar un mensaje de error si no se proporcionó información de persona
+            JOptionPane.showMessageDialog(null, "Error: No se proporcionó la información de la persona asociada al automóvil.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            automovilDAO.AgregarAutomovil(automovil);
+            JOptionPane.showMessageDialog(null, "El automóvil se ha registrado correctamente.", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al registrar el automóvil.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-
-    Automovil automovil = new Automovil();
-    automovil.setNumeroSerie(automovilDTO.getNumeroSerie());
-    automovil.setMarca(automovilDTO.getMarca());
-    automovil.setLinea(automovilDTO.getLinea());
-    automovil.setColor(automovilDTO.getColor());
-    automovil.setModelo(automovilDTO.getModelo());
-
-    // Convertir la PersonaDTO en Persona
-    Persona persona = new Persona();
-    persona.setNombres(automovilDTO.getPersona().getNombres());
-    persona.setApellidoPaterno(automovilDTO.getPersona().getApellidoPaterno());
-    persona.setApellidoMaterno(automovilDTO.getPersona().getApellidoMaterno());
-    persona.setCurp(automovilDTO.getPersona().getCurp());
-    persona.setRfc(automovilDTO.getPersona().getRfc());
-    persona.setTelefono(automovilDTO.getPersona().getTelefono());
-    persona.setFechaNacimiento(automovilDTO.getPersona().getFechaNacimiento());
-    persona.setDiscapacidad(automovilDTO.getPersona().getDiscapacidad());
-
-    automovil.setPersona(persona);
-
-    
-
-    try {
-        automovilDAO.AgregarAutomovil(automovil);
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
-  
-    
 }
