@@ -5,6 +5,9 @@
 package INegocio;
 
 import DTO.AutomovilDTO;
+import DTO.PersonaDTO;
+import Dominio.Automovil;
+import java.util.List;
 
 /**
  *
@@ -12,4 +15,5 @@ import DTO.AutomovilDTO;
  */
 public interface IAgregarAutomovilBO {
     public void AgregarAutomovil(AutomovilDTO automovilDTO);
+ public List<Automovil> buscarAutomovilesPorRFC(String rfc);
 }

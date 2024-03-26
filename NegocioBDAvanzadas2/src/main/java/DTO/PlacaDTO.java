@@ -17,6 +17,9 @@ public class PlacaDTO extends TramiteDTO {
     private String estado;
     private AutomovilDTO automovil;
 
+    public PlacaDTO() {
+    }
+
     public PlacaDTO(String digitosPlaca, String estado, AutomovilDTO automovil, float costo, Calendar fechaTramite, PersonaDTO persona, Calendar fechaVigencia) {
         super(costo, fechaTramite, persona, fechaVigencia);
         this.digitosPlaca = digitosPlaca;

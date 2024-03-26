@@ -5,7 +5,9 @@
 package INegocio;
 
 import DTO.AutomovilDTO;
+import DTO.PersonaDTO;
 import DTO.PlacaDTO;
+import java.util.List;
 
 /**
  *

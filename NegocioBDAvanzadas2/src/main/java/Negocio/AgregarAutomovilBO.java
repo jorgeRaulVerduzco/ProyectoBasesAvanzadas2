@@ -12,6 +12,9 @@ import Excepciones.PersistenciaException;
 import INegocio.IAgregarAutomovilBO;
 import Persistencia.AutomovilDAO;
 import Persistencia.PersonaDAO;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,10 +24,11 @@ import javax.swing.JOptionPane;
 public class AgregarAutomovilBO implements IAgregarAutomovilBO {
 
     AutomovilDAO automovilDAO;
-PersonaDAO personaDAO;
+    PersonaDAO personaDAO;
+
     public AgregarAutomovilBO() {
         automovilDAO = new AutomovilDAO();
- personaDAO = new PersonaDAO();
+        personaDAO = new PersonaDAO();
 
     }
 
@@ -42,16 +46,13 @@ PersonaDAO personaDAO;
         automovil.setColor(automovilDTO.getColor());
         automovil.setModelo(automovilDTO.getModelo());
 
-        // Verificar si se proporcionó información de persona en el DTO
         PersonaDTO personaDTO = automovilDTO.getPersona();
         if (personaDTO != null) {
-            // Verificar si la persona ya existe en la base de datos
             Persona personaExistente = personaDAO.obtenerPersonaPorRFC(personaDTO.getRfc());
             if (personaExistente != null) {
                 // Usar la persona existente
                 automovil.setPersona(personaExistente);
             } else {
-                // Crear una nueva persona
                 Persona nuevaPersona = new Persona();
                 nuevaPersona.setNombres(personaDTO.getNombres());
                 nuevaPersona.setApellidoPaterno(personaDTO.getApellidoPaterno());
@@ -65,7 +66,6 @@ PersonaDAO personaDAO;
                 automovil.setPersona(nuevaPersona);
             }
         } else {
-            // Mostrar un mensaje de error si no se proporcionó información de persona
             JOptionPane.showMessageDialog(null, "Error: No se proporcionó la información de la persona asociada al automóvil.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -76,6 +76,17 @@ PersonaDAO personaDAO;
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al registrar el automóvil.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+ 
+    
+    @Override
+   public List<Automovil> buscarAutomovilesPorRFC(String rfc) {
+        try {
+            return automovilDAO.buscarAutomovilesPorRFC(rfc);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar automóviles por RFC de persona", e);
         }
     }
 }

@@ -4,8 +4,24 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import DTO.AutomovilDTO;
+import DTO.PersonaDTO;
+import DatosAleatorios.AutoSeleccionado;
+import DatosAleatorios.PersonaSeleccionada;
+import Dominio.Automovil;
+import INegocio.IAgregarAutomovilBO;
+import INegocio.IAgregarLicenciaBO;
+import INegocio.IAgregarPlacaBO;
+import Negocio.AgregarAutomovilBO;
+import Negocio.AgregarLicencioBO;
+import Negocio.AgregarPlacaBO;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -13,11 +29,26 @@ import java.awt.Font;
  */
 public class frmPlaca extends javax.swing.JFrame {
 
+    int row, columna;
+    List<AutomovilDTO> lista;
+    IAgregarPlacaBO placaBO;
+    IAgregarAutomovilBO automovilBO;
+    IAgregarLicenciaBO licenciaBO;
+
     /**
      * Creates new form frmPlaca
      */
     public frmPlaca() {
+        this.lista = new ArrayList<AutomovilDTO>();
+        this.placaBO = new AgregarPlacaBO();
+        this.automovilBO = new AgregarAutomovilBO();
+        this.licenciaBO = new AgregarLicencioBO();
         initComponents();
+        txtBusqueda.setEditable(false);
+
+        
+        tabla();
+        llenarTabla();
     }
 
     /**
@@ -163,7 +194,6 @@ public class frmPlaca extends javax.swing.JFrame {
                         .addComponent(txtBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
                         .addGap(2, 2, 2))
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -187,8 +217,105 @@ public class frmPlaca extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
+  public void tabla() {
+    tblPlacas.setDefaultRenderer(Object.class, new RenderTabla());
+    DefaultTableModel defa = new DefaultTableModel();
+    tblPlacas.setModel(defa);
+    defa.addColumn("NumeroDeSerie");
+    defa.addColumn("Marca");
+    defa.addColumn("Linea");
+    defa.addColumn("Modelo");
+    defa.addColumn("Color");
+    tblPlacas.setRowHeight(40);
+    
+    // Ajustar el ancho de las columnas existentes
+    for (int i = 0; i < tblPlacas.getColumnCount(); i++) {
+        TableColumn column = tblPlacas.getColumnModel().getColumn(i);
+        if (i == 0) {
+            column.setPreferredWidth(100); 
+        } else {
+            column.setPreferredWidth(150); 
+        }
+    }
+    
+    defa.fireTableDataChanged();
+}
+    public void llenarTabla() {
+           try {
+        PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
 
+        if (personaSeleccionada != null) {
+            String rfc = personaSeleccionada.getRfc();
+            txtBusqueda.setText(rfc);
+
+            List<Automovil> automoviles = automovilBO.buscarAutomovilesPorRFC(rfc);
+
+            DefaultTableModel modeloTabla = new DefaultTableModel();
+            modeloTabla.setColumnIdentifiers(new Object[]{"Número de Serie", "Marca", "Línea", "Modelo", "Color"});
+
+            for (Automovil automovil : automoviles) {
+                Object[] fila = {
+                    automovil.getNumeroSerie(),
+                    automovil.getMarca(),
+                    automovil.getLinea(),
+                    automovil.getModelo(),
+                    automovil.getColor()
+                };
+                modeloTabla.addRow(fila);
+            }
+
+            tblPlacas.setModel(modeloTabla); // Establecer el nuevo modelo de tabla
+        } else {
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna persona.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al llenar la tabla: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } 
+    }
+    
+    
+    private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
+  int selectedRow = tblPlacas.getSelectedRow();
+    if (selectedRow != -1) {
+        // Obtener el modelo de la tabla
+        DefaultTableModel model = (DefaultTableModel) tblPlacas.getModel();
+        // Obtener los datos de la fila seleccionada
+        String numeroSerie = (String) model.getValueAt(selectedRow, 0);
+        String marca = (String) model.getValueAt(selectedRow, 1);
+        String linea = (String) model.getValueAt(selectedRow, 2);
+        String modelo = (String) model.getValueAt(selectedRow, 3);
+        String color = (String) model.getValueAt(selectedRow, 4);
+
+        // Establecer el automóvil seleccionado
+        AutomovilDTO automovilSeleccionado = new AutomovilDTO();
+        automovilSeleccionado.setNumeroSerie(numeroSerie);
+        automovilSeleccionado.setMarca(marca);
+        automovilSeleccionado.setLinea(linea);
+        automovilSeleccionado.setModelo(modelo);
+        automovilSeleccionado.setColor(color);
+        AutoSeleccionado.setAutomovilSeleccionado(automovilSeleccionado);
+
+        // Mostrar JOptionPane para confirmar la acción
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+            "¿Desea registrar una placa con los siguientes datos?\n\n" +
+            "Número de Serie: " + numeroSerie + "\n" +
+            "Marca: " + marca + "\n" +
+            "Línea: " + linea + "\n" +
+            "Modelo: " + modelo + "\n" +
+            "Color: " + color,
+            "Confirmación",
+            JOptionPane.YES_NO_OPTION);
+
+        // Si el usuario confirma, abrir el formulario de registro de placas
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            frmRegistroPlacas registroPlacas = new frmRegistroPlacas();
+            registroPlacas.setVisible(true);
+            this.dispose();
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+    }
     }//GEN-LAST:event_tblPlacasMouseClicked
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -208,7 +335,9 @@ public class frmPlaca extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrar1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-
+frmTramites tramitesss = new frmTramites();
+tramitesss.setVisible(true);
+this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**

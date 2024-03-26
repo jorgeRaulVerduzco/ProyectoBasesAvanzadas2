@@ -5,7 +5,9 @@
 package Persistencia;
 
 import Dominio.Automovil;
+import Dominio.Persona;
 import IPersistencia.IAutomovilDAO;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -155,5 +157,46 @@ public class AutomovilDAO implements IAutomovilDAO {
         }
 
         return automoviles;
+    }
+
+    public List<Automovil> buscarAutomovilesPorPersona(Persona persona) {
+        List<Automovil> automoviles = new ArrayList<>();
+        EntityManager entityManager = emf.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+            TypedQuery<Automovil> query = entityManager.createQuery("SELECT a FROM Automovil a WHERE a.persona = :persona", Automovil.class);
+            query.setParameter("persona", persona);
+            automoviles = query.getResultList();
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw new RuntimeException("Error al buscar automóviles por persona", e);
+        } finally {
+            entityManager.close();
+        }
+
+        return automoviles;
+    }
+
+    public List<Automovil> buscarAutomovilesPorRFC(String rfc) {
+        EntityManager entityManager = emf.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+            TypedQuery<Automovil> query = entityManager.createQuery(
+                    "SELECT a FROM Automovil a JOIN a.persona p WHERE p.rfc = :rfc",
+                    Automovil.class
+            );
+            query.setParameter("rfc", rfc);
+            List<Automovil> automoviles = query.getResultList();
+            entityManager.getTransaction().commit();
+            return automoviles;
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw new RuntimeException("Error al buscar automóviles por RFC de persona", e);
+        } finally {
+            entityManager.close();
+        }
     }
 }
