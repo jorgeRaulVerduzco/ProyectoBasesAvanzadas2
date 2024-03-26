@@ -4,10 +4,14 @@
  */
 package IPersistencia;
 
+import Dominio.Automovil;
+import Dominio.Placa;
+
 /**
  *
  * @author INEGI
  */
 public interface IPlacasDAO {
-    
+    public void agregarPlacas(Automovil automovil, Placa placa);
+    public void desactivarPlacasActivas(Automovil automovil);
 }

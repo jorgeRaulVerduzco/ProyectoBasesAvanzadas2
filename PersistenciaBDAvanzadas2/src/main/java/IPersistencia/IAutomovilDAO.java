@@ -4,10 +4,14 @@
  */
 package IPersistencia;
 
+import Dominio.Automovil;
+
 /**
  *
  * @author INEGI
  */
 public interface IAutomovilDAO {
+    public void AgregarAutomovil(Automovil automovil);
+    
     
 }
