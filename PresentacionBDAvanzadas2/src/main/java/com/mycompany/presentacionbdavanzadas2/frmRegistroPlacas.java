@@ -8,26 +8,31 @@ import DTO.AutomovilDTO;
 import DTO.PersonaDTO;
 import DTO.PlacaDTO;
 import DatosAleatorios.AutoSeleccionado;
+import DatosAleatorios.PersonaSeleccionada;
 import INegocio.IAgregarPlacaBO;
 import Negocio.AgregarPlacaBO;
+import java.util.Calendar;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author INEGI
  */
 public class frmRegistroPlacas extends javax.swing.JFrame {
-IAgregarPlacaBO placasBO;
+
+    IAgregarPlacaBO placasBO;
+
     /**
      * Creates new form frmRegistroPlacas
      */
     public frmRegistroPlacas() {
         
-       placasBO = new AgregarPlacaBO();
+        placasBO = new AgregarPlacaBO();
         initComponents();
         deshabilitarEdicionCampos();
         llenarDatosAutomovilSeleccionado();
     }
-
+    
     private void deshabilitarEdicionCampos() {
         txtNumeroDeSerie.setEditable(false);
         txtMarca.setEditable(false);
@@ -36,23 +41,23 @@ IAgregarPlacaBO placasBO;
         txtColor.setEditable(false);
         txtPropietario.setEditable(false);
     }
-
+    
     private void llenarDatosAutomovilSeleccionado() {
-         AutomovilDTO automovilSeleccionado = AutoSeleccionado.getAutomovilSeleccionado();
-    if (automovilSeleccionado != null) {
-        txtNumeroDeSerie.setText(automovilSeleccionado.getNumeroSerie());
-        txtMarca.setText(automovilSeleccionado.getMarca());
-        txtLinea.setText(automovilSeleccionado.getLinea());
-        txtModelo.setText(automovilSeleccionado.getModelo());
-        txtColor.setText(automovilSeleccionado.getColor());
-        
-        PersonaDTO persona = automovilSeleccionado.getPersona();
-        if (persona != null) {
-            txtPropietario.setText(persona.getRfc());
-        } else {
-            txtPropietario.setText("Sin propietario");
+        AutomovilDTO automovilSeleccionado = AutoSeleccionado.getAutomovilSeleccionado();
+        if (automovilSeleccionado != null) {
+            txtNumeroDeSerie.setText(automovilSeleccionado.getNumeroSerie());
+            txtMarca.setText(automovilSeleccionado.getMarca());
+            txtLinea.setText(automovilSeleccionado.getLinea());
+            txtModelo.setText(automovilSeleccionado.getModelo());
+            txtColor.setText(automovilSeleccionado.getColor());
+                    PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
+
+            if (personaSeleccionada != null) {
+                txtPropietario.setText(personaSeleccionada.getRfc());
+            } else {
+                txtPropietario.setText("Sin propietario");
+            }
         }
-    }
     }
 
     /**
@@ -233,18 +238,39 @@ IAgregarPlacaBO placasBO;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSolicitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarActionPerformed
-         AutomovilDTO automovilSeleccionado = AutoSeleccionado.getAutomovilSeleccionado();
-PlacaDTO placa = new PlacaDTO();
-        
-        placasBO.AgregarPlaca(automovilSeleccionado, placa);
+       AutomovilDTO automovilSeleccionado = AutoSeleccionado.getAutomovilSeleccionado();
+    
+    // Verificar si se ha seleccionado un automóvil
+    if (automovilSeleccionado == null) {
+        JOptionPane.showMessageDialog(null, "Por favor, seleccione un automóvil antes de solicitar una placa.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+        PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
 
+    PlacaDTO placa = new PlacaDTO();
+    placa.setCosto(1500f);
+    placa.setEstado("activo");
+    Calendar fechaTramite = Calendar.getInstance();
+    placa.setFechaTramite(fechaTramite);
+    placa.setFechaVigencia(fechaTramite);
+    placa.setPersona(personaSeleccionada);
+    
+    // Intentar agregar la placa
+    try {
+        placasBO.AgregarPlaca(automovilSeleccionado, placa);
+        JOptionPane.showMessageDialog(null, "Placa solicitada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error al solicitar la placa: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace(); // Para depuración, imprime el rastreo de la pila
+    }
     }//GEN-LAST:event_btnSolicitarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-frmPlaca plaquetas = new frmPlaca();
-
-plaquetas.setVisible(true);
-this.dispose();
+        frmPlaca plaquetas = new frmPlaca();
+        
+        plaquetas.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**

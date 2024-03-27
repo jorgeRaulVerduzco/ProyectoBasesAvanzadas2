@@ -29,6 +29,8 @@ import javax.swing.table.TableColumn;
  */
 public class frmPlaca extends javax.swing.JFrame {
 
+    private frmRegistroPlacas registroPlacas;
+    DefaultTableModel modeloTabla;
     int row, columna;
     List<AutomovilDTO> lista;
     IAgregarPlacaBO placaBO;
@@ -39,16 +41,15 @@ public class frmPlaca extends javax.swing.JFrame {
      * Creates new form frmPlaca
      */
     public frmPlaca() {
-        this.lista = new ArrayList<AutomovilDTO>();
-        this.placaBO = new AgregarPlacaBO();
-        this.automovilBO = new AgregarAutomovilBO();
-        this.licenciaBO = new AgregarLicencioBO();
-        initComponents();
-        txtBusqueda.setEditable(false);
-
-        
-        tabla();
-        llenarTabla();
+       this.lista = new ArrayList<AutomovilDTO>();
+    this.placaBO = new AgregarPlacaBO();
+    this.automovilBO = new AgregarAutomovilBO();
+    this.licenciaBO = new AgregarLicencioBO();
+    initComponents();
+    txtBusqueda.setEditable(false);
+    tabla(); // Configura la tabla
+    modeloTabla = (DefaultTableModel) tblPlacas.getModel(); // Inicializa el modelo de tabla
+    llenarTabla(); // Llena la tabla con los datos por primera vez
     }
 
     /**
@@ -217,8 +218,12 @@ public class frmPlaca extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-  public void tabla() {
+    public void tabla() {
+       // Configurar propiedades de la tabla
     tblPlacas.setDefaultRenderer(Object.class, new RenderTabla());
+    tblPlacas.setRowHeight(40);
+
+    // Configurar modelo de tabla
     DefaultTableModel defa = new DefaultTableModel();
     tblPlacas.setModel(defa);
     defa.addColumn("NumeroDeSerie");
@@ -226,8 +231,7 @@ public class frmPlaca extends javax.swing.JFrame {
     defa.addColumn("Linea");
     defa.addColumn("Modelo");
     defa.addColumn("Color");
-    tblPlacas.setRowHeight(40);
-    
+
     // Ajustar el ancho de las columnas existentes
     for (int i = 0; i < tblPlacas.getColumnCount(); i++) {
         TableColumn column = tblPlacas.getColumnModel().getColumn(i);
@@ -237,11 +241,10 @@ public class frmPlaca extends javax.swing.JFrame {
             column.setPreferredWidth(150); 
         }
     }
-    
-    defa.fireTableDataChanged();
-}
+    }
+
     public void llenarTabla() {
-           try {
+  try {
         PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
 
         if (personaSeleccionada != null) {
@@ -250,8 +253,8 @@ public class frmPlaca extends javax.swing.JFrame {
 
             List<Automovil> automoviles = automovilBO.buscarAutomovilesPorRFC(rfc);
 
-            DefaultTableModel modeloTabla = new DefaultTableModel();
-            modeloTabla.setColumnIdentifiers(new Object[]{"Número de Serie", "Marca", "Línea", "Modelo", "Color"});
+            // Limpia el modelo de tabla antes de agregar nuevos datos
+            modeloTabla.setRowCount(0);
 
             for (Automovil automovil : automoviles) {
                 Object[] fila = {
@@ -263,8 +266,6 @@ public class frmPlaca extends javax.swing.JFrame {
                 };
                 modeloTabla.addRow(fila);
             }
-
-            tblPlacas.setModel(modeloTabla); // Establecer el nuevo modelo de tabla
         } else {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna persona.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -273,49 +274,49 @@ public class frmPlaca extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Error al llenar la tabla: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     } 
     }
-    
-    
+
+
     private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
-  int selectedRow = tblPlacas.getSelectedRow();
-    if (selectedRow != -1) {
-        // Obtener el modelo de la tabla
-        DefaultTableModel model = (DefaultTableModel) tblPlacas.getModel();
-        // Obtener los datos de la fila seleccionada
-        String numeroSerie = (String) model.getValueAt(selectedRow, 0);
-        String marca = (String) model.getValueAt(selectedRow, 1);
-        String linea = (String) model.getValueAt(selectedRow, 2);
-        String modelo = (String) model.getValueAt(selectedRow, 3);
-        String color = (String) model.getValueAt(selectedRow, 4);
+        int selectedRow = tblPlacas.getSelectedRow();
+        if (selectedRow != -1) {
+            // Obtener el modelo de la tabla
+            DefaultTableModel model = (DefaultTableModel) tblPlacas.getModel();
+            // Obtener los datos de la fila seleccionada
+            String numeroSerie = (String) model.getValueAt(selectedRow, 0);
+            String marca = (String) model.getValueAt(selectedRow, 1);
+            String linea = (String) model.getValueAt(selectedRow, 2);
+            String modelo = (String) model.getValueAt(selectedRow, 3);
+            String color = (String) model.getValueAt(selectedRow, 4);
 
-        // Establecer el automóvil seleccionado
-        AutomovilDTO automovilSeleccionado = new AutomovilDTO();
-        automovilSeleccionado.setNumeroSerie(numeroSerie);
-        automovilSeleccionado.setMarca(marca);
-        automovilSeleccionado.setLinea(linea);
-        automovilSeleccionado.setModelo(modelo);
-        automovilSeleccionado.setColor(color);
-        AutoSeleccionado.setAutomovilSeleccionado(automovilSeleccionado);
+            // Establecer el automóvil seleccionado
+            AutomovilDTO automovilSeleccionado = new AutomovilDTO();
+            automovilSeleccionado.setNumeroSerie(numeroSerie);
+            automovilSeleccionado.setMarca(marca);
+            automovilSeleccionado.setLinea(linea);
+            automovilSeleccionado.setModelo(modelo);
+            automovilSeleccionado.setColor(color);
+            AutoSeleccionado.setAutomovilSeleccionado(automovilSeleccionado);
 
-        // Mostrar JOptionPane para confirmar la acción
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-            "¿Desea registrar una placa con los siguientes datos?\n\n" +
-            "Número de Serie: " + numeroSerie + "\n" +
-            "Marca: " + marca + "\n" +
-            "Línea: " + linea + "\n" +
-            "Modelo: " + modelo + "\n" +
-            "Color: " + color,
-            "Confirmación",
-            JOptionPane.YES_NO_OPTION);
+            // Mostrar JOptionPane para confirmar la acción
+            int confirmacion = JOptionPane.showConfirmDialog(this,
+                    "¿Desea registrar una placa con los siguientes datos?\n\n"
+                    + "Número de Serie: " + numeroSerie + "\n"
+                    + "Marca: " + marca + "\n"
+                    + "Línea: " + linea + "\n"
+                    + "Modelo: " + modelo + "\n"
+                    + "Color: " + color,
+                    "Confirmación",
+                    JOptionPane.YES_NO_OPTION);
 
-        // Si el usuario confirma, abrir el formulario de registro de placas
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            frmRegistroPlacas registroPlacas = new frmRegistroPlacas();
-            registroPlacas.setVisible(true);
-            this.dispose();
+            // Si el usuario confirma, abrir el formulario de registro de placas
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                frmRegistroPlacas registroPlacas = new frmRegistroPlacas();
+                registroPlacas.setVisible(true);
+                this.dispose();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
-    }
     }//GEN-LAST:event_tblPlacasMouseClicked
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -335,9 +336,9 @@ public class frmPlaca extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrar1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-frmTramites tramitesss = new frmTramites();
-tramitesss.setVisible(true);
-this.dispose();
+        frmTramites tramitesss = new frmTramites();
+        tramitesss.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**

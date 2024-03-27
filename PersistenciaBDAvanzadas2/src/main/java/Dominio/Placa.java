@@ -107,17 +107,16 @@ public class Placa extends Tramite implements Serializable {
         this.fechaTramite = fechaTramite;
     }
 
-    @Override
-    public String toString() {
-        return "Placa{"
-                + "id=" + id
-                + ", digitosPlaca='" + digitosPlaca + '\''
-                + ", estado='" + estado + '\''
-                + ", automovil=" + automovil
-                + ", costo=" + costo
-                + ", fechaTramite=" + fechaTramite.getTime()
-                + ", fechaVigencia=" + fechaVigencia.getTime()
-                + '}';
-    }
+  public String toString() {
+    return "Placa{" +
+            "id=" + id +
+            ", digitosPlaca='" + digitosPlaca + '\'' +
+            ", estado='" + estado + '\'' +
+            ", automovilId=" + (automovil != null ? automovil.getIdAutomovil() : null) +
+            ", costo=" + costo +
+            ", fechaTramite=" + fechaTramite.getTime() +
+            ", fechaVigencia=" + fechaVigencia.getTime() +
+            '}';
+}
 
 }

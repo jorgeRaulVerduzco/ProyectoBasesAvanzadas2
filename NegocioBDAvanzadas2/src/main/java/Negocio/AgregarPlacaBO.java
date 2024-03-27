@@ -35,24 +35,21 @@ PersonaDAO personaDAO;
         return;
     }
 
-    // Buscar el automóvil por número de serie
     Automovil automovil = automovilDAO.buscarAutomovilPorNumeroSerie(automovilDTO.getNumeroSerie());
 
-    // Si no se encuentra el automóvil, mostrar un mensaje de error y salir del método
     if (automovil == null) {
         JOptionPane.showMessageDialog(null, "Error: No se encontró el automóvil con el número de serie proporcionado.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
 
 Placa placa = new Placa();
-placa.setDigitosPlaca(DatosAleatorios.generarPlacaAleatoria()); // Generar placa aleatoria
+placa.setDigitosPlaca(DatosAleatorios.generarPlacaAleatoria()); 
 placa.setEstado(placaDTO.getEstado());
-placa.setCosto(placaDTO.getCosto()); // Establecer el costo
-placa.setFechaTramite(placaDTO.getFechaTramite()); // Establecer la fecha de trámite
+placa.setCosto(placaDTO.getCosto()); 
+placa.setFechaTramite(placaDTO.getFechaTramite()); 
 placa.setPersona(personaDAO.obtenerPersonaPorRFC(placaDTO.getPersona().getRfc())); 
-placa.setFechaVigencia(placaDTO.getFechaVigencia()); // Establecer la fecha de vigencia
+placa.setFechaVigencia(placaDTO.getFechaVigencia()); 
 
-    // Asignar el automóvil a la placa
     placa.setAutomovil(automovil);
 
     try {
