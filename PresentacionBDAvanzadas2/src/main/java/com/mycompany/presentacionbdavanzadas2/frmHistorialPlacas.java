@@ -4,8 +4,18 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import DTO.PersonaDTO;
+import DatosAleatorios.PersonaSeleccionada;
+import Dominio.Persona;
+import INegocio.IHistorialPlacasBO;
+import INegocio.IObtenerPersonaPorRFC;
+import Negocio.HistorialPlacasBO;
+import Negocio.ObtenerPersonaPorRFC;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,11 +23,51 @@ import java.awt.Font;
  */
 public class frmHistorialPlacas extends javax.swing.JFrame {
 
+    PersonaDTO personaSeleccionada;
+
+    IHistorialPlacasBO historialBO;
+    IObtenerPersonaPorRFC personaRFC;
+
     /**
      * Creates new form frmHistorialPlacas
      */
     public frmHistorialPlacas() {
+        personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
+        historialBO = new HistorialPlacasBO();
+        personaRFC = new ObtenerPersonaPorRFC();
         initComponents();
+        tabla();
+        llenarTabla();
+        noEditar();
+        agregarNombrePersonaSeleccionada();
+    }
+
+    public void noEditar() {
+        txtPersonaSeleccionadaAnteriormente.setEditable(false);
+    }
+
+    public void agregarNombrePersonaSeleccionada() {
+        txtPersonaSeleccionadaAnteriormente.setText(personaSeleccionada.getNombres());
+        
+    }
+
+    public void tabla() {
+        tblPlacas.setDefaultRenderer(Object.class, new RenderTabla());
+
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        tblPlacas.setModel(modeloTabla);
+
+        tblPlacas.setRowHeight(40);
+
+        // Definición de las columnas y sus encabezados
+        String[] encabezados = {"ID Placas", "Digitos de Placa", "Estado", "Costo", "Fecha de Trámite", "Fecha de Vigencia"};
+        modeloTabla.setColumnIdentifiers(encabezados);
+
+        // Configuración del ancho preferido de las columnas
+        int[] anchos = {100, 100, 100, 100, 100, 100};
+        for (int i = 0; i < anchos.length; i++) {
+            tblPlacas.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
     }
 
     /**
@@ -98,16 +148,15 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)
-                        .addComponent(txtPersonaSeleccionadaAnteriormente, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(19, 19, 19)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(22, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51)
+                .addComponent(txtPersonaSeleccionadaAnteriormente, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,6 +187,37 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void llenarTabla() {
+        
+        List<Object[]> historialPlacas = historialBO.obtenerHistorialPlacasPorPersona(personaSeleccionada.getIdPersona());
+
+        // Limpiar el modelo de la tabla
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblPlacas.getModel();
+        modeloTabla.setRowCount(0);
+
+        // Llenar la tabla con los datos obtenidos
+        for (Object[] fila : historialPlacas) {
+            // Crear un nuevo array de objetos para los datos de la fila
+            Object[] datos = new Object[modeloTabla.getColumnCount()];
+
+            // Copiar los datos de la fila obtenida a la fila de la tabla
+            for (int i = 0; i < fila.length; i++) {
+                datos[i] = fila[i];
+            }
+
+            // Agregar la fila al modelo de la tabla
+            modeloTabla.addRow(datos);
+        }
+        System.out.println("Historial de Placas: " + historialPlacas);
+
+        // Actualizar la tabla con el nuevo modelo
+        tblPlacas.setModel(modeloTabla);
+
+        // Verificar si la lista de historialPlacas está vacía
+        if (historialPlacas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron placas para la persona seleccionada.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
     private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
 
     }//GEN-LAST:event_tblPlacasMouseClicked

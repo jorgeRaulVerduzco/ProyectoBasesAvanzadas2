@@ -44,27 +44,26 @@ public class frmHistorialTramites extends javax.swing.JFrame {
         tblConsultas.setRowHeight(40);
 
         // Definición de las columnas y sus encabezados
-        String[] encabezados = {"Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC", "Fecha de Nacimiento", "Teléfono", "Discapacidad"};
+        String[] encabezados = {"Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC", "Fecha de Nacimiento", "Teléfono", "Discapacidad", "ID"};
         modeloTabla.setColumnIdentifiers(encabezados);
 
         // Configuración del ancho preferido de las columnas
-        int[] anchos = {100, 100, 100, 100, 100, 100, 100};
+        int[] anchos = {100, 100, 100, 100, 100, 100, 100, 100, 50}; // Ajusta el ancho de la última columna
         for (int i = 0; i < anchos.length; i++) {
             tblConsultas.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
     }
 
-    
     public void llenarTabla() {
         String rfc = txtRfc.getText().trim();
 
         Persona persona = personaNegocio.obtenerPersonaPorRFC(rfc);
 
-        DefaultTableModel defa = (DefaultTableModel) tblConsultas.getModel();
-        defa.setRowCount(0);
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblConsultas.getModel();
+        modeloTabla.setRowCount(0);
 
         if (persona != null) {
-            Object[] datos = new Object[defa.getColumnCount()];
+            Object[] datos = new Object[modeloTabla.getColumnCount()];
 
             datos[0] = persona.getNombres();
             datos[1] = persona.getApellidoPaterno();
@@ -76,8 +75,8 @@ public class frmHistorialTramites extends javax.swing.JFrame {
                     + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
             datos[6] = persona.getTelefono();
             datos[7] = persona.getDiscapacidad();
-
-            defa.addRow(datos);
+            datos[8] = (persona.getIdPersona() != null) ? persona.getIdPersona().toString() : ""; // Convertir el ID a String
+            modeloTabla.addRow(datos);
         }
     }
 
@@ -408,38 +407,39 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarMouseExited
 
     private void tblConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConsultasMouseClicked
- int filaSeleccionada = tblConsultas.getSelectedRow();
-    if (filaSeleccionada != -1) {
-        DefaultTableModel model = (DefaultTableModel) tblConsultas.getModel();
-        PersonaDTO personaSeleccionada = new PersonaDTO();
+        int filaSeleccionada = tblConsultas.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            DefaultTableModel model = (DefaultTableModel) tblConsultas.getModel();
+            PersonaDTO personaSeleccionada = new PersonaDTO();
 
-        personaSeleccionada.setNombres((String) model.getValueAt(filaSeleccionada, 0));
-        personaSeleccionada.setApellidoPaterno((String) model.getValueAt(filaSeleccionada, 1));
-        personaSeleccionada.setApellidoMaterno((String) model.getValueAt(filaSeleccionada, 2));
-        personaSeleccionada.setCurp((String) model.getValueAt(filaSeleccionada, 3));
-        personaSeleccionada.setRfc((String) model.getValueAt(filaSeleccionada, 4));
+            personaSeleccionada.setNombres((String) model.getValueAt(filaSeleccionada, 0));
+            personaSeleccionada.setApellidoPaterno((String) model.getValueAt(filaSeleccionada, 1));
+            personaSeleccionada.setApellidoMaterno((String) model.getValueAt(filaSeleccionada, 2));
+            personaSeleccionada.setCurp((String) model.getValueAt(filaSeleccionada, 3));
+            personaSeleccionada.setRfc((String) model.getValueAt(filaSeleccionada, 4));
+            personaSeleccionada.setIdPersona(Long.parseLong((String) model.getValueAt(filaSeleccionada, 8))); // Asignar el ID de la persona
 
-        PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
+            PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
 
-        String[] opciones = {"Placas", "Licencia"};
-        int opcionSeleccionada = JOptionPane.showOptionDialog(
-                this,
-                "Seleccione el historial que desea ver:",
-                "Seleccione",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                opciones,
-                opciones[0]);
+            String[] opciones = {"Placas", "Licencia"};
+            int opcionSeleccionada = JOptionPane.showOptionDialog(
+                    this,
+                    "Seleccione el historial que desea ver:",
+                    "Seleccione",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]);
 
-        if (opcionSeleccionada == 0) {
-            frmHistorialPlacas historialPlacasForm = new frmHistorialPlacas();
-            historialPlacasForm.setVisible(true);
-        } else if (opcionSeleccionada == 1) {
-            frmHistorialLicencia historialLicenciaForm = new frmHistorialLicencia();
-            historialLicenciaForm.setVisible(true);
+            if (opcionSeleccionada == 0) {
+                frmHistorialPlacas historialPlacasForm = new frmHistorialPlacas();
+                historialPlacasForm.setVisible(true);
+            } else if (opcionSeleccionada == 1) {
+                frmHistorialLicencia historialLicenciaForm = new frmHistorialLicencia();
+                historialLicenciaForm.setVisible(true);
+            }
         }
-    }
     }//GEN-LAST:event_tblConsultasMouseClicked
 
     /**
