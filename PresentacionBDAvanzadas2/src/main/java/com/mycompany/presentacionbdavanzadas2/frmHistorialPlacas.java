@@ -188,10 +188,10 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void llenarTabla() {
-        
-        List<Object[]> historialPlacas = historialBO.obtenerHistorialPlacasPorPersona(personaSeleccionada.getIdPersona());
+        System.out.println(personaSeleccionada.getIdPersona());
+        long id= personaSeleccionada.getIdPersona();
+        List<Object[]> historialPlacas = historialBO.obtenerHistorialPlacasPorPersona(id);
 
-        // Limpiar el modelo de la tabla
         DefaultTableModel modeloTabla = (DefaultTableModel) tblPlacas.getModel();
         modeloTabla.setRowCount(0);
 
@@ -213,10 +213,7 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
         // Actualizar la tabla con el nuevo modelo
         tblPlacas.setModel(modeloTabla);
 
-        // Verificar si la lista de historialPlacas está vacía
-        if (historialPlacas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No se encontraron placas para la persona seleccionada.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
+      
     }
     private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
 
