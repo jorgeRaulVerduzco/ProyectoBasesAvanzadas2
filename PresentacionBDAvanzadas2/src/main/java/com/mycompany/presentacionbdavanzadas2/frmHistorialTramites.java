@@ -4,8 +4,13 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import DTO.TramiteDTO;
+import Dominio.Persona;
+import Negocio.ObtenerPersonaPorRFC;
 import com.mycompany.presentacionbdavanzadas2.frmInicio;
 import java.awt.Color;
+import java.util.Calendar;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,11 +18,63 @@ import java.awt.Color;
  */
 public class frmHistorialTramites extends javax.swing.JFrame {
 
+    private ObtenerPersonaPorRFC personaNegocio;
+    private TramiteDTO tramite;
+
     /**
      * Creates new form frmHistorialTramites
      */
     public frmHistorialTramites() {
         initComponents();
+        personaNegocio = new ObtenerPersonaPorRFC();
+        tramite = new TramiteDTO();
+        tabla();
+        llenarTabla();
+    }
+
+    public void tabla() {
+        tblConsultas.setDefaultRenderer(Object.class, new RenderTabla());
+
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        tblConsultas.setModel(modeloTabla);
+
+        tblConsultas.setRowHeight(40);
+
+        // Definición de las columnas y sus encabezados
+        String[] encabezados = {"Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC", "Fecha de Nacimiento", "Teléfono", "Discapacidad"};
+        modeloTabla.setColumnIdentifiers(encabezados);
+
+        // Configuración del ancho preferido de las columnas
+        int[] anchos = {100, 100, 100, 100, 100, 100, 100};
+        for (int i = 0; i < anchos.length; i++) {
+            tblConsultas.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+    }
+
+    public void llenarTabla() {
+        String rfc = txtRfc.getText().trim();
+
+        Persona persona = personaNegocio.obtenerPersonaPorRFC(rfc);
+
+        DefaultTableModel defa = (DefaultTableModel) tblConsultas.getModel();
+        defa.setRowCount(0);
+
+        if (persona != null) {
+            Object[] datos = new Object[defa.getColumnCount()];
+
+            datos[0] = persona.getNombres();
+            datos[1] = persona.getApellidoPaterno();
+            datos[2] = persona.getApellidoMaterno();
+            datos[3] = persona.getCurp();
+            datos[4] = persona.getRfc();
+            datos[5] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
+                    + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
+                    + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
+            datos[6] = persona.getTelefono();
+            datos[7] = persona.getDiscapacidad();
+
+            defa.addRow(datos);
+        }
     }
 
     /**
@@ -36,7 +93,7 @@ public class frmHistorialTramites extends javax.swing.JFrame {
         tblConsultas = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtCurpo = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         txtRfc = new javax.swing.JTextField();
@@ -115,13 +172,13 @@ public class frmHistorialTramites extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(204, 204, 204));
-        jButton1.setText("🔎    Buscar");
-        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton1.setFocusPainted(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.setBackground(new java.awt.Color(204, 204, 204));
+        btnBuscar.setText("🔎    Buscar");
+        btnBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnBuscar.setFocusPainted(false);
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -204,10 +261,6 @@ public class frmHistorialTramites extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
@@ -229,8 +282,12 @@ public class frmHistorialTramites extends javax.swing.JFrame {
                         .addGap(50, 50, 50)
                         .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,7 +308,7 @@ public class frmHistorialTramites extends javax.swing.JFrame {
                             .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -283,36 +340,33 @@ public class frmHistorialTramites extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void tblConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConsultasMouseClicked
-        
-    }//GEN-LAST:event_tblConsultasMouseClicked
-
     private void txtCurpoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCurpoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCurpoActionPerformed
 
     private void txtCurpoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCurpoKeyReleased
-       
+
     }//GEN-LAST:event_txtCurpoKeyReleased
 
     private void txtCurpoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCurpoKeyTyped
-       
+
     }//GEN-LAST:event_txtCurpoKeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        llenarTabla();
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
-        
+
     }//GEN-LAST:event_txtNombreKeyReleased
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
-        
+
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtRfcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRfcActionPerformed
@@ -320,11 +374,11 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     }//GEN-LAST:event_txtRfcActionPerformed
 
     private void txtRfcKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRfcKeyReleased
-        
+
     }//GEN-LAST:event_txtRfcKeyReleased
 
     private void txtRfcKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRfcKeyTyped
-       
+
     }//GEN-LAST:event_txtRfcKeyTyped
 
     private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
@@ -332,22 +386,26 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFechaActionPerformed
 
     private void txtFechaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFechaKeyReleased
-        
+
     }//GEN-LAST:event_txtFechaKeyReleased
 
     private void txtFechaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFechaKeyTyped
-        
+
     }//GEN-LAST:event_txtFechaKeyTyped
 
     private void btnRegresarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresarMouseEntered
         // TODO add your handling code here:
-        btnRegresar.setBackground(new Color (255,51,51));
+        btnRegresar.setBackground(new Color(255, 51, 51));
     }//GEN-LAST:event_btnRegresarMouseEntered
 
     private void btnRegresarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresarMouseExited
         // TODO add your handling code here:
-        btnRegresar.setBackground(new Color (255,102,102));
+        btnRegresar.setBackground(new Color(255, 102, 102));
     }//GEN-LAST:event_btnRegresarMouseExited
+
+    private void tblConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConsultasMouseClicked
+
+    }//GEN-LAST:event_tblConsultasMouseClicked
 
     /**
      * @param args the command line arguments
@@ -385,8 +443,8 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
