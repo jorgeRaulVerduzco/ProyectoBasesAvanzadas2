@@ -4,7 +4,9 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import DTO.PersonaDTO;
 import DTO.TramiteDTO;
+import DatosAleatorios.PersonaSeleccionada;
 import Dominio.Persona;
 import Negocio.ObtenerPersonaPorRFC;
 import com.mycompany.presentacionbdavanzadas2.frmInicio;
@@ -406,8 +408,19 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarMouseExited
 
     private void tblConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConsultasMouseClicked
-int filaSeleccionada = tblConsultas.getSelectedRow();
+ int filaSeleccionada = tblConsultas.getSelectedRow();
     if (filaSeleccionada != -1) {
+        DefaultTableModel model = (DefaultTableModel) tblConsultas.getModel();
+        PersonaDTO personaSeleccionada = new PersonaDTO();
+
+        personaSeleccionada.setNombres((String) model.getValueAt(filaSeleccionada, 0));
+        personaSeleccionada.setApellidoPaterno((String) model.getValueAt(filaSeleccionada, 1));
+        personaSeleccionada.setApellidoMaterno((String) model.getValueAt(filaSeleccionada, 2));
+        personaSeleccionada.setCurp((String) model.getValueAt(filaSeleccionada, 3));
+        personaSeleccionada.setRfc((String) model.getValueAt(filaSeleccionada, 4));
+
+        PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
+
         String[] opciones = {"Placas", "Licencia"};
         int opcionSeleccionada = JOptionPane.showOptionDialog(
                 this,

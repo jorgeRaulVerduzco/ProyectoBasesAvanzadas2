@@ -20,7 +20,7 @@ import javax.persistence.TypedQuery;
  *
  * @author INEGI
  */
-public class PlacasDAO implements IPlacasDAO{
+public class PlacasDAO implements IPlacasDAO {
 
     private EntityManagerFactory emf;
 
@@ -29,7 +29,7 @@ public class PlacasDAO implements IPlacasDAO{
     }
 
     @Override
-       public void agregarPlacas(Automovil automovil, Placa placa) {
+    public void agregarPlacas(Automovil automovil, Placa placa) {
         EntityManager entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
         try {
@@ -54,7 +54,7 @@ public class PlacasDAO implements IPlacasDAO{
 
     @Override
     public void desactivarPlacasActivas(Automovil automovil) {
-        EntityManager entityManager = emf.createEntityManager(); 
+        EntityManager entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
         try {
 
@@ -78,9 +78,9 @@ public class PlacasDAO implements IPlacasDAO{
             entityManager.close();
         }
     }
-    
+
     @Override
-     public List<Placa> obtenerTodasLasPlacas() {
+    public List<Placa> obtenerTodasLasPlacas() {
         List<Placa> placas = new ArrayList<>();
         EntityManager entityManager = emf.createEntityManager();
 
@@ -98,46 +98,39 @@ public class PlacasDAO implements IPlacasDAO{
 
         return placas;
     }
-     
-     
- @Override
-public List<Placa> obtenerHistorialDePlacasPorAutomovil(List<Automovil> automoviles) {
-    List<Placa> historialPlacas = new ArrayList<>();
-    EntityManager entityManager = emf.createEntityManager();
 
-    try {
-        entityManager.getTransaction().begin();
-        TypedQuery<Placa> query = entityManager.createQuery("SELECT p FROM Placa p WHERE p.automovil IN :automoviles", Placa.class);
-        query.setParameter("automoviles", automoviles);
-        historialPlacas = query.getResultList();
-        entityManager.getTransaction().commit();
-    } catch (Exception e) {
-        entityManager.getTransaction().rollback();
-        throw new RuntimeException("Error al obtener el historial de placas del automóvil", e);
-    } finally {
-        entityManager.close();
+    @Override
+    public List<Placa> obtenerHistorialDePlacasPorAutomovil(List<Automovil> automoviles) {
+        List<Placa> historialPlacas = new ArrayList<>();
+        EntityManager entityManager = emf.createEntityManager();
+
+        try {
+            entityManager.getTransaction().begin();
+            TypedQuery<Placa> query = entityManager.createQuery("SELECT p FROM Placa p WHERE p.automovil IN :automoviles", Placa.class);
+            query.setParameter("automoviles", automoviles);
+            historialPlacas = query.getResultList();
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw new RuntimeException("Error al obtener el historial de placas del automóvil", e);
+        } finally {
+            entityManager.close();
+        }
+
+        return historialPlacas;
     }
 
-    return historialPlacas;
-}
-@Override
-    public List<Placa> obtenerHistorialDePlacasPorPersona(List<Persona> personas) {
-    List<Placa> historialPlacas = new ArrayList<>();
-    EntityManager entityManager = emf.createEntityManager();
+    @Override
+    public List<Object[]> obtenerHistorialPlacasPorPersona(Long idPersona) {
+                EntityManager entityManager = emf.createEntityManager();
 
-    try {
-        entityManager.getTransaction().begin();
-        TypedQuery<Placa> query = entityManager.createQuery("SELECT p FROM Placa p WHERE p.persona IN :personas", Placa.class);
-        query.setParameter("personas", personas);
-        historialPlacas = query.getResultList();
-        entityManager.getTransaction().commit();
-    } catch (Exception e) {
-        entityManager.getTransaction().rollback();
-        throw new RuntimeException("Error al obtener el historial de placas de las personas", e);
-    } finally {
-        entityManager.close();
-    }
-
-    return historialPlacas;
+    TypedQuery<Object[]> query = entityManager.createQuery(
+        "SELECT p.idPlacas, p.digitosPlaca, p.estado, t.costo, t.fechaTramite, t.fechaVigencia " +
+        "FROM Placa p " +
+        "INNER JOIN p.tramite t " +
+        "INNER JOIN t.persona pers " +
+        "WHERE pers.idPersona = :idPersona", Object[].class);
+    query.setParameter("idPersona", idPersona);
+    return query.getResultList();
 }
 }
