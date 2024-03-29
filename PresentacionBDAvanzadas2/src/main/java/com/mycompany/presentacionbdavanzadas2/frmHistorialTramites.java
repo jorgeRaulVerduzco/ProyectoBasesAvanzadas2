@@ -10,6 +10,7 @@ import Negocio.ObtenerPersonaPorRFC;
 import com.mycompany.presentacionbdavanzadas2.frmInicio;
 import java.awt.Color;
 import java.util.Calendar;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -51,6 +52,7 @@ public class frmHistorialTramites extends javax.swing.JFrame {
         }
     }
 
+    
     public void llenarTabla() {
         String rfc = txtRfc.getText().trim();
 
@@ -404,7 +406,27 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarMouseExited
 
     private void tblConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConsultasMouseClicked
+int filaSeleccionada = tblConsultas.getSelectedRow();
+    if (filaSeleccionada != -1) {
+        String[] opciones = {"Placas", "Licencia"};
+        int opcionSeleccionada = JOptionPane.showOptionDialog(
+                this,
+                "Seleccione el historial que desea ver:",
+                "Seleccione",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]);
 
+        if (opcionSeleccionada == 0) {
+            frmHistorialPlacas historialPlacasForm = new frmHistorialPlacas();
+            historialPlacasForm.setVisible(true);
+        } else if (opcionSeleccionada == 1) {
+            frmHistorialLicencia historialLicenciaForm = new frmHistorialLicencia();
+            historialLicenciaForm.setVisible(true);
+        }
+    }
     }//GEN-LAST:event_tblConsultasMouseClicked
 
     /**
