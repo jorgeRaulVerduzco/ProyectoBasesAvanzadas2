@@ -15,6 +15,5 @@ import java.util.List;
 public interface ILicenciaDAO {
 
     public void agregarLicencia(Licencia licencia);
-
-    public List<Licencia> obtenerLicenciasPorPersonas(List<Persona> personas);
+public List<Object[]> obtenerHistorialLicenciasPorPersona(Long idPersona);
 }

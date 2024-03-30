@@ -417,7 +417,7 @@ public class frmHistorialTramites extends javax.swing.JFrame {
             personaSeleccionada.setApellidoMaterno((String) model.getValueAt(filaSeleccionada, 2));
             personaSeleccionada.setCurp((String) model.getValueAt(filaSeleccionada, 3));
             personaSeleccionada.setRfc((String) model.getValueAt(filaSeleccionada, 4));
-            personaSeleccionada.setIdPersona(Long.parseLong((String) model.getValueAt(filaSeleccionada, 8))); // Asignar el ID de la persona
+            personaSeleccionada.setIdPersona(Long.valueOf((String) model.getValueAt(filaSeleccionada, 8))); // Asignar el ID de la persona
 
             PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
 

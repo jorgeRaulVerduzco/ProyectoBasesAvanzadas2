@@ -139,6 +139,12 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
         tblPlacas.getTableHeader().setBackground(new Color(102,89,222));
         tblPlacas.getTableHeader().setForeground(new Color(255,255,255));
 
+        txtPersonaSeleccionadaAnteriormente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPersonaSeleccionadaAnteriormenteActionPerformed(evt);
+            }
+        });
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Historial de:");
 
@@ -147,28 +153,28 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(65, 65, 65)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
+                .addGap(57, 57, 57)
                 .addComponent(txtPersonaSeleccionadaAnteriormente, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(155, 155, 155))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 23, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPersonaSeleccionadaAnteriormente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -190,7 +196,7 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
     public void llenarTabla() {
         System.out.println(personaSeleccionada.getIdPersona());
         long id= personaSeleccionada.getIdPersona();
-        List<Object[]> historialPlacas = historialBO.obtenerHistorialPlacasPorPersona(id);
+        List<Object[]> historialPlacas = historialBO.obtenerHistorialPlacasPorPersona(58L);
 
         DefaultTableModel modeloTabla = (DefaultTableModel) tblPlacas.getModel();
         modeloTabla.setRowCount(0);
@@ -218,6 +224,10 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
     private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
 
     }//GEN-LAST:event_tblPlacasMouseClicked
+
+    private void txtPersonaSeleccionadaAnteriormenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPersonaSeleccionadaAnteriormenteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPersonaSeleccionadaAnteriormenteActionPerformed
 
     /**
      * @param args the command line arguments
