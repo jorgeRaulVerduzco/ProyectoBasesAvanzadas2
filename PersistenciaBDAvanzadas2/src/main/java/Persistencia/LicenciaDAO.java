@@ -7,7 +7,10 @@ package Persistencia;
 import Dominio.Licencia;
 import Dominio.Persona;
 import IPersistencia.ILicenciaDAO;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -42,16 +45,34 @@ public class LicenciaDAO implements ILicenciaDAO {
         }
     }
    @Override
-    public List<Object[]> obtenerHistorialLicenciasPorPersona(Long idPersona) {
-        EntityManager entityManager = emf.createEntityManager();
+public List<Object[]> obtenerHistorialLicenciasPorPersona(Long idPersona) {
+    EntityManager entityManager = emf.createEntityManager();
 
-        TypedQuery<Object[]> query = entityManager.createQuery(
-                "SELECT l.id, l.añosVigencia, t.costo, t.fechaTramite, t.fechaVigencia "
-                + "FROM Licencia l "
-                + "JOIN l.persona p "
-                + "JOIN Tramite t ON l.id = t.id "
-                + "WHERE p.idPersona = :idPersona", Object[].class);
-        query.setParameter("idPersona", idPersona);
-        return query.getResultList();
+    TypedQuery<Object[]> query = entityManager.createQuery(
+            "SELECT l.id, l.añosVigencia, t.costo, t.fechaTramite, t.fechaVigencia "
+            + "FROM Licencia l "
+            + "JOIN l.persona p "
+            + "JOIN Tramite t ON l.id = t.id "
+            + "WHERE p.idPersona = :idPersona", Object[].class);
+    query.setParameter("idPersona", idPersona);
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    List<Object[]> resultList = query.getResultList();
+    List<Object[]> formattedResultList = new ArrayList<>();
+
+    for (Object[] result : resultList) {
+        Object[] formattedResult = new Object[result.length];
+        for (int i = 0; i < result.length; i++) {
+            if (result[i] instanceof GregorianCalendar) {
+                Date date = ((GregorianCalendar) result[i]).getTime();
+                formattedResult[i] = dateFormat.format(date);
+            } else {
+                formattedResult[i] = result[i];
+            }
+        }
+        formattedResultList.add(formattedResult);
     }
+
+    return formattedResultList;
+}
 }

@@ -8,8 +8,11 @@ import Dominio.Automovil;
 import Dominio.Persona;
 import Dominio.Placa;
 import IPersistencia.IPlacasDAO;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -120,17 +123,35 @@ public class PlacasDAO implements IPlacasDAO {
         return historialPlacas;
     }
 
-    @Override
-    public List<Object[]> obtenerHistorialPlacasPorPersona(Long idPersona) {
-         EntityManager entityManager = emf.createEntityManager();
+  @Override
+public List<Object[]> obtenerHistorialPlacasPorPersona(Long idPersona) {
+    EntityManager entityManager = emf.createEntityManager();
 
     TypedQuery<Object[]> query = entityManager.createQuery(
-    "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia " +
-    "FROM Placa p " +
-    "INNER JOIN p.persona pers " +
-    "WHERE pers.idPersona = :idPersona", Object[].class);
+        "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia " +
+        "FROM Placa p " +
+        "INNER JOIN p.persona pers " +
+        "WHERE pers.idPersona = :idPersona", Object[].class);
     query.setParameter("idPersona", idPersona);
-    return query.getResultList();
+    
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    List<Object[]> resultList = query.getResultList();
+    List<Object[]> formattedResultList = new ArrayList<>();
+
+    for (Object[] result : resultList) {
+        Object[] formattedResult = new Object[result.length];
+        for (int i = 0; i < result.length; i++) {
+            if (result[i] instanceof GregorianCalendar) {
+                Date date = ((GregorianCalendar) result[i]).getTime();
+                formattedResult[i] = dateFormat.format(date);
+            } else {
+                formattedResult[i] = result[i];
+            }
+        }
+        formattedResultList.add(formattedResult);
+    }
+
+    return formattedResultList;
 }
 
 }
