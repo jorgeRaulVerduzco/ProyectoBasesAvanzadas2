@@ -43,7 +43,7 @@ public class Tramite implements Serializable {
     @Temporal(TemporalType.DATE)
     Calendar fechaTramite;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idPersona")
     private Persona persona;
 

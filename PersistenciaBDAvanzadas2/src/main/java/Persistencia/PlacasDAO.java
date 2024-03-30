@@ -122,14 +122,13 @@ public class PlacasDAO implements IPlacasDAO {
 
     @Override
     public List<Object[]> obtenerHistorialPlacasPorPersona(Long idPersona) {
-     EntityManager entityManager = emf.createEntityManager();
+         EntityManager entityManager = emf.createEntityManager();
 
     TypedQuery<Object[]> query = entityManager.createQuery(
-        "SELECT l.id, l.añosVigencia, t.costo, t.fechaTramite, t.fechaVigencia " +
-        "FROM Licencia l " +
-        "JOIN l.tramite t " +
-        "JOIN t.persona p " +
-        "WHERE p.idPersona = :idPersona", Object[].class);
+    "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia " +
+    "FROM Placa p " +
+    "INNER JOIN p.persona pers " +
+    "WHERE pers.idPersona = :idPersona", Object[].class);
     query.setParameter("idPersona", idPersona);
     return query.getResultList();
 }
