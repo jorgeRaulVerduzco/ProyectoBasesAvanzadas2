@@ -259,7 +259,9 @@ public class frmRegistroPlacas extends javax.swing.JFrame {
     try {
         placasBO.AgregarPlaca(automovilSeleccionado, placa);
         JOptionPane.showMessageDialog(null, "Placa solicitada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
+   frmPlaca placatelas = new frmPlaca();
+            placatelas.setVisible(true);
+            this.dispose();
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Error al solicitar la placa: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         e.printStackTrace(); // Para depuración, imprime el rastreo de la pila
@@ -267,10 +269,9 @@ public class frmRegistroPlacas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSolicitarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        frmPlaca plaquetas = new frmPlaca();
-        
-        plaquetas.setVisible(true);
-        this.dispose();
+         frmPlaca placatelas = new frmPlaca();
+            placatelas.setVisible(true);
+            this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
