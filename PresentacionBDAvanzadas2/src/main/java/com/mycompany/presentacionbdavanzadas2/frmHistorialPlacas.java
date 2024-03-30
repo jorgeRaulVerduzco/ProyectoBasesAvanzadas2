@@ -48,7 +48,7 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
 
     public void agregarNombrePersonaSeleccionada() {
         txtPersonaSeleccionadaAnteriormente.setText(personaSeleccionada.getNombres());
-        
+
     }
 
     public void tabla() {
@@ -86,6 +86,7 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
         tblPlacas = new javax.swing.JTable();
         txtPersonaSeleccionadaAnteriormente = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        btnInicio = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,6 +149,13 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Historial de:");
 
+        btnInicio.setText("REGRESAR");
+        btnInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInicioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -160,8 +168,13 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
                 .addComponent(txtPersonaSeleccionadaAnteriormente, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(155, 155, 155))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(251, 251, 251)
+                        .addComponent(btnInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -174,7 +187,9 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnInicio, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -195,8 +210,8 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
 
     public void llenarTabla() {
         System.out.println(personaSeleccionada.getIdPersona());
-        long id= personaSeleccionada.getIdPersona();
-        List<Object[]> historialPlacas = historialBO.obtenerHistorialPlacasPorPersona(58L);
+        long id = personaSeleccionada.getIdPersona();
+        List<Object[]> historialPlacas = historialBO.obtenerHistorialPlacasPorPersona(id);
 
         DefaultTableModel modeloTabla = (DefaultTableModel) tblPlacas.getModel();
         modeloTabla.setRowCount(0);
@@ -219,7 +234,6 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
         // Actualizar la tabla con el nuevo modelo
         tblPlacas.setModel(modeloTabla);
 
-      
     }
     private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
 
@@ -228,6 +242,13 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
     private void txtPersonaSeleccionadaAnteriormenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPersonaSeleccionadaAnteriormenteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPersonaSeleccionadaAnteriormenteActionPerformed
+
+    private void btnInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicioActionPerformed
+        frmInicio inicio = new frmInicio();
+        inicio.setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_btnInicioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -265,6 +286,7 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInicio;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

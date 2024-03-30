@@ -6,8 +6,11 @@ package com.mycompany.presentacionbdavanzadas2;
 
 import DTO.PersonaDTO;
 import DatosAleatorios.PersonaSeleccionada;
+import INegocio.IHistorialLicenciaBO;
+import Negocio.HistorialLicenciaBO;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,27 +20,49 @@ import javax.swing.table.DefaultTableModel;
 public class frmHistorialLicencia extends javax.swing.JFrame {
 
     PersonaDTO personaSeleccionada;
+    IHistorialLicenciaBO historialBO;
 
     /**
      * Creates new form frmHistorialLicencia
      */
     public frmHistorialLicencia() {
         personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
-
+        historialBO = new HistorialLicenciaBO();
         initComponents();
         noEditar();
         agregarNombrePersonaSeleccionada();
+        tabla();
+        llenarTabla();
     }
-   public void noEditar() {
+
+    public void noEditar() {
         txtPersonaSeleccionadaAnteriormente.setEditable(false);
     }
 
     public void agregarNombrePersonaSeleccionada() {
         txtPersonaSeleccionadaAnteriormente.setText(personaSeleccionada.getNombres());
-        
+
     }
-    
-    
+
+    public void tabla() {
+        tblLicencia.setDefaultRenderer(Object.class, new RenderTabla());
+
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        tblLicencia.setModel(modeloTabla);
+
+        tblLicencia.setRowHeight(40);
+
+        // Definición de las columnas y sus encabezados
+        String[] encabezados = {"id licencia", "Años Vigencia", "Costo", "fecha tramite", "Fecha de vigencia"};
+        modeloTabla.setColumnIdentifiers(encabezados);
+
+        // Configuración del ancho preferido de las columnas
+        int[] anchos = {100, 100, 100, 100, 100};
+        for (int i = 0; i < anchos.length; i++) {
+            tblLicencia.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,6 +79,7 @@ public class frmHistorialLicencia extends javax.swing.JFrame {
         txtPersonaSeleccionadaAnteriormente = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLicencia = new javax.swing.JTable();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,7 +97,7 @@ public class frmHistorialLicencia extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(84, 84, 84)
                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,6 +142,13 @@ public class frmHistorialLicencia extends javax.swing.JFrame {
         tblLicencia.getTableHeader().setBackground(new Color(102,89,222));
         tblLicencia.getTableHeader().setForeground(new Color(255,255,255));
 
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -130,7 +163,11 @@ public class frmHistorialLicencia extends javax.swing.JFrame {
                         .addComponent(txtPersonaSeleccionadaAnteriormente, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(233, 233, 233)
+                                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -143,7 +180,9 @@ public class frmHistorialLicencia extends javax.swing.JFrame {
                     .addComponent(txtPersonaSeleccionadaAnteriormente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 15, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,24 +205,20 @@ public class frmHistorialLicencia extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void tabla() {
-        tblLicencia.setDefaultRenderer(Object.class, new RenderTabla());
+    public void llenarTabla() {
+        long id = personaSeleccionada.getIdPersona();
 
-        DefaultTableModel modeloTabla = new DefaultTableModel();
-        tblLicencia.setModel(modeloTabla);
+        List<Object[]> historialLicencia = historialBO.obtenerHistorialLicenciasPorPersona(id);
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblLicencia.getModel();
 
-        tblLicencia.setRowHeight(40);
+        modeloTabla.setRowCount(0);
 
-        // Definición de las columnas y sus encabezados
-        String[] encabezados = {"id licencia", "Años Vigencia", "Costo", "fecha tramite", "Fecha de vigencia"};
-        modeloTabla.setColumnIdentifiers(encabezados);
-
-        // Configuración del ancho preferido de las columnas
-        int[] anchos = {100, 100, 100, 100, 100};
-        for (int i = 0; i < anchos.length; i++) {
-            tblLicencia.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        for (Object[] fila : historialLicencia) {
+            modeloTabla.addRow(fila);
         }
     }
+
+
     private void txtPersonaSeleccionadaAnteriormenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPersonaSeleccionadaAnteriormenteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPersonaSeleccionadaAnteriormenteActionPerformed
@@ -192,7 +227,14 @@ public class frmHistorialLicencia extends javax.swing.JFrame {
 
     }//GEN-LAST:event_tblLicenciaMouseClicked
 
-    
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+frmInicio inicio = new frmInicio();
+inicio.setVisible(true);
+this.dispose();
+
+
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -229,13 +271,10 @@ public class frmHistorialLicencia extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel10;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblLicencia;

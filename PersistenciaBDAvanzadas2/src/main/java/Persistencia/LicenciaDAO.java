@@ -43,15 +43,15 @@ public class LicenciaDAO implements ILicenciaDAO {
     }
    @Override
     public List<Object[]> obtenerHistorialLicenciasPorPersona(Long idPersona) {
-    EntityManager entityManager = emf.createEntityManager();
+        EntityManager entityManager = emf.createEntityManager();
 
-    TypedQuery<Object[]> query = entityManager.createQuery(
-        "SELECT l.id, l.añosVigencia, t.costo, t.fechaTramite, t.fechaVigencia " +
-        "FROM Licencia l " +
-        "JOIN l.persona p " +
-        "JOIN Tramite t ON l.id = t.id " +
-        "WHERE p.idPersona = :idPersona", Object[].class);
-    query.setParameter("idPersona", idPersona);
-    return query.getResultList();
-}
+        TypedQuery<Object[]> query = entityManager.createQuery(
+                "SELECT l.id, l.añosVigencia, t.costo, t.fechaTramite, t.fechaVigencia "
+                + "FROM Licencia l "
+                + "JOIN l.persona p "
+                + "JOIN Tramite t ON l.id = t.id "
+                + "WHERE p.idPersona = :idPersona", Object[].class);
+        query.setParameter("idPersona", idPersona);
+        return query.getResultList();
+    }
 }
