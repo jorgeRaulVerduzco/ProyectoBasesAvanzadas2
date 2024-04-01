@@ -16,6 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
@@ -34,25 +35,40 @@ public class PlacasDAO implements IPlacasDAO {
     @Override
     public void agregarPlacas(Automovil automovil, Placa placa) {
         EntityManager entityManager = emf.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
-            desactivarPlacasActivas(automovil);
+    EntityTransaction transaction = entityManager.getTransaction();
 
-            automovil.agregarPlacas(placa);
-            placa.setAutomovil(automovil);
+    try {
+        transaction.begin();
 
-            entityManager.persist(automovil);
-            entityManager.persist(placa);
+        // Desactivar placas activas antes de agregar una nueva
+        desactivarPlacasActivas(automovil);
 
-            entityManager.flush();
-            entityManager.refresh(automovil);
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new RuntimeException("Error al agregar placa", e);
-        } finally {
-            entityManager.close();
+        // Asociar la placa al automóvil y viceversa
+        automovil.agregarPlacas(placa);
+        placa.setAutomovil(automovil);
+
+        // Persistir la nueva placa
+        entityManager.persist(placa);
+        entityManager.flush();
+        
+        // Refrescar el automóvil después de la transacción
+        if (!entityManager.contains(automovil)) {
+            automovil = entityManager.merge(automovil);
         }
+        entityManager.refresh(automovil);
+
+        // Confirmar la transacción
+        transaction.commit();
+    } catch (Exception e) {
+        // Revertir la transacción si ocurre alguna excepción
+        if (transaction.isActive()) {
+            transaction.rollback();
+        }
+        throw new RuntimeException("Error al agregar placa", e);
+    } finally {
+        // Cerrar el EntityManager al finalizar
+        entityManager.close();
+    }
     }
 
     @Override
@@ -123,36 +139,35 @@ public class PlacasDAO implements IPlacasDAO {
         return historialPlacas;
     }
 
-  @Override
-public List<Object[]> obtenerHistorialPlacasPorPersona(Long idPersona) {
-    EntityManager entityManager = emf.createEntityManager();
+    @Override
+    public List<Object[]> obtenerHistorialPlacasPorPersona(Long idPersona) {
+        EntityManager entityManager = emf.createEntityManager();
 
-    TypedQuery<Object[]> query = entityManager.createQuery(
-        "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia " +
-        "FROM Placa p " +
-        "INNER JOIN p.persona pers " +
-        "WHERE pers.idPersona = :idPersona", Object[].class);
-    query.setParameter("idPersona", idPersona);
-    
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    List<Object[]> resultList = query.getResultList();
-    List<Object[]> formattedResultList = new ArrayList<>();
+        TypedQuery<Object[]> query = entityManager.createQuery(
+                "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia "
+                + "FROM Placa p "
+                + "INNER JOIN p.persona pers "
+                + "WHERE pers.idPersona = :idPersona", Object[].class);
+        query.setParameter("idPersona", idPersona);
 
-    for (Object[] result : resultList) {
-        Object[] formattedResult = new Object[result.length];
-        for (int i = 0; i < result.length; i++) {
-            if (result[i] instanceof GregorianCalendar) {
-                Date date = ((GregorianCalendar) result[i]).getTime();
-                formattedResult[i] = dateFormat.format(date);
-            } else {
-                formattedResult[i] = result[i];
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        List<Object[]> resultList = query.getResultList();
+        List<Object[]> formattedResultList = new ArrayList<>();
+
+        for (Object[] result : resultList) {
+            Object[] formattedResult = new Object[result.length];
+            for (int i = 0; i < result.length; i++) {
+                if (result[i] instanceof GregorianCalendar) {
+                    Date date = ((GregorianCalendar) result[i]).getTime();
+                    formattedResult[i] = dateFormat.format(date);
+                } else {
+                    formattedResult[i] = result[i];
+                }
             }
+            formattedResultList.add(formattedResult);
         }
-        formattedResultList.add(formattedResult);
+
+        return formattedResultList;
     }
 
-    return formattedResultList;
 }
-
-}
-
