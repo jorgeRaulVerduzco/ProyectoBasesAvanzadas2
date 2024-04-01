@@ -255,7 +255,6 @@ public class frmRegistroPlacas extends javax.swing.JFrame {
     placa.setFechaVigencia(fechaTramite);
     placa.setPersona(personaSeleccionada);
     
-    // Intentar agregar la placa
     try {
         placasBO.AgregarPlaca(automovilSeleccionado, placa);
         JOptionPane.showMessageDialog(null, "Placa solicitada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);

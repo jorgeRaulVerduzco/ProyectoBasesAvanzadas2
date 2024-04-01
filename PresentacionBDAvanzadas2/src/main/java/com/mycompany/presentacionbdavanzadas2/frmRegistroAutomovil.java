@@ -19,7 +19,6 @@ import javax.swing.JOptionPane;
  * @author Ruzzky
  */
 public class frmRegistroAutomovil extends javax.swing.JFrame {
-
     IAgregarAutomovilBO agregarAutoBO;
     IObtenerPersonaPorRFC personaRFC;
 
@@ -279,7 +278,6 @@ public class frmRegistroAutomovil extends javax.swing.JFrame {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
       AutomovilDTO automovilDTO = new AutomovilDTO();
 
-    // Verificar campos obligatorios
     if (txtNumero.getText().isEmpty() || txtColor.getText().isEmpty() || txtLinea.getText().isEmpty() || txtMarca.getText().isEmpty() || txtModelo.getText().isEmpty()) {
         JOptionPane.showMessageDialog(null, "Error: Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
@@ -297,13 +295,13 @@ public class frmRegistroAutomovil extends javax.swing.JFrame {
         automovilDTO.setPersona(personaSeleccionada);
         try {
             agregarAutoBO.AgregarAutomovil(automovilDTO);
-            JOptionPane.showMessageDialog(null, "El automóvil se ha registrado correctamente.", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El automovil se ha registrado correctamente.", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
             frmPlaca placatelas = new frmPlaca();
             placatelas.setVisible(true);
             this.dispose();
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al intentar registrar el automóvil.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al intentar registrar el automovil.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     } else {
         JOptionPane.showMessageDialog(null, "No se encontró una persona seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
