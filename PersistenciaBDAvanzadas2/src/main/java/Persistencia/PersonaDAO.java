@@ -56,57 +56,57 @@ public class PersonaDAO implements IPersonaDao {
         return personas;
     }
 
-@Override
-public Persona obtenerPersonaPorRFC(String rfc) {
-    EntityManager em = emf.createEntityManager();
-    Persona persona = null;
-    try {
-        TypedQuery<Persona> query = em.createQuery("SELECT p FROM Persona p WHERE p.rfc = :rfc", Persona.class);
-        query.setParameter("rfc", rfc);
-        // Obtenemos el resultado de la consulta, si existe
-        List<Persona> personas = query.getResultList();
-        // Si la lista no está vacía, tomamos la primera persona encontrada
-        if (!personas.isEmpty()) {
-            persona = personas.get(0);
+    @Override
+    public Persona obtenerPersonaPorRFC(String rfc) {
+        EntityManager em = emf.createEntityManager();
+        Persona persona = null;
+        try {
+            TypedQuery<Persona> query = em.createQuery("SELECT p FROM Persona p WHERE p.rfc = :rfc", Persona.class);
+            query.setParameter("rfc", rfc);
+            // Obtenemos el resultado de la consulta, si existe
+            List<Persona> personas = query.getResultList();
+            // Si la lista no está vacía, tomamos la primera persona encontrada
+            if (!personas.isEmpty()) {
+                persona = personas.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        em.close();
+        return persona;
     }
-    return persona;
-}
 
     @Override
     public List<Persona> buscarPersonasPorNombre(String nombre) {
-    EntityManager em = emf.createEntityManager();
-    List<Persona> personas = null;
+        EntityManager em = emf.createEntityManager();
+        List<Persona> personas = null;
 
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT p FROM Persona p WHERE p.nombres LIKE CONCAT('%', :nombre, '%')";
-        TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
-        query.setParameter("nombre", nombre);
-        personas = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
+        try {
+            em.getTransaction().begin();
+            String jpql = "SELECT p FROM Persona p WHERE p.nombres LIKE CONCAT('%', :nombre, '%')";
+            TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
+            query.setParameter("nombre", nombre);
+            personas = query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return personas;
     }
 
-    return personas;
-}
-
     @Override
-    public List<Persona> buscarPersonasPorAñoNacimiento(int añoNacimiento) {
+public List<Persona> buscarPersonasPorAñoNacimiento(int añoNacimiento) {
     EntityManager em = emf.createEntityManager();
     List<Persona> personas = null;
 
     try {
         em.getTransaction().begin();
-        String jpql = "SELECT p FROM Persona p WHERE YEAR(p.fechaNacimiento) = :añoNacimiento";
+        String jpql = "SELECT p FROM Persona p WHERE FUNCTION('YEAR', p.fechaNacimiento) = :añoNacimiento";
         TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
         query.setParameter("añoNacimiento", añoNacimiento);
         personas = query.getResultList();
@@ -123,23 +123,23 @@ public Persona obtenerPersonaPorRFC(String rfc) {
 
     @Override
     public List<Persona> buscarPersonasPorCURP(String curp) {
-    EntityManager em = emf.createEntityManager();
-    List<Persona> personas = null;
+        EntityManager em = emf.createEntityManager();
+        List<Persona> personas = null;
 
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT p FROM Persona p WHERE p.curp = :curp";
-        TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
-        query.setParameter("curp", curp);
-        personas = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
+        try {
+            em.getTransaction().begin();
+            String jpql = "SELECT p FROM Persona p WHERE p.curp = :curp";
+            TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
+            query.setParameter("curp", curp);
+            personas = query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return personas;
     }
-
-    return personas;
-}
 }
