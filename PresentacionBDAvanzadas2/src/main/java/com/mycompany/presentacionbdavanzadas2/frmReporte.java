@@ -6,6 +6,7 @@ package com.mycompany.presentacionbdavanzadas2;
 
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -168,6 +169,24 @@ public class frmReporte extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+        public void tabla() {
+        tblReporte.setDefaultRenderer(Object.class, new RenderTabla());
+
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        tblReporte.setModel(modeloTabla);
+
+        tblReporte.setRowHeight(40);
+
+        // Definición de las columnas y sus encabezados
+        String[] encabezados = {"Tipo", "Fecha", "Solicitante", "Costo"};
+        modeloTabla.setColumnIdentifiers(encabezados);
+
+        // Configuración del ancho preferido de las columnas
+        int[] anchos = {100, 100, 100, 100};
+        for (int i = 0; i < anchos.length; i++) {
+            tblReporte.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+    }
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
