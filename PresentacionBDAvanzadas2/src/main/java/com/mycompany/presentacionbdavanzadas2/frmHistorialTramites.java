@@ -8,10 +8,18 @@ import DTO.PersonaDTO;
 import DTO.TramiteDTO;
 import DatosAleatorios.PersonaSeleccionada;
 import Dominio.Persona;
+import INegocio.IObtenerPersonaPorRFC;
+import INegocio.IPersonaAñoNacimientoBO;
+import INegocio.IPersonaCurpBO;
+import INegocio.IPersonaNombreBO;
 import Negocio.ObtenerPersonaPorRFC;
+import Negocio.PersonaAñoNacimientoBO;
+import Negocio.PersonaCurpBO;
+import Negocio.PersonaNombreBO;
 import com.mycompany.presentacionbdavanzadas2.frmInicio;
 import java.awt.Color;
 import java.util.Calendar;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,7 +29,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public class frmHistorialTramites extends javax.swing.JFrame {
 
-    private ObtenerPersonaPorRFC personaNegocio;
+    private IObtenerPersonaPorRFC personaRFC;
+    private IPersonaCurpBO  personaCURP;
+    private IPersonaNombreBO personaNombre;
+    private IPersonaAñoNacimientoBO personaAnioNacimiento;
     private TramiteDTO tramite;
 
     /**
@@ -29,7 +40,10 @@ public class frmHistorialTramites extends javax.swing.JFrame {
      */
     public frmHistorialTramites() {
         initComponents();
-        personaNegocio = new ObtenerPersonaPorRFC();
+        personaRFC = new ObtenerPersonaPorRFC();
+        personaCURP = new PersonaCurpBO();
+        personaNombre = new PersonaNombreBO();
+        personaAnioNacimiento = new PersonaAñoNacimientoBO();
         tramite = new TramiteDTO();
         tabla();
         llenarTabla();
@@ -55,31 +69,62 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     }
 
     public void llenarTabla() {
-        String rfc = txtRfc.getText().trim();
+        String datosPersona = txtDatos.getText().trim();
+    Persona persona = null;
+    DefaultTableModel modeloTabla = (DefaultTableModel) tblConsultas.getModel();
+    modeloTabla.setRowCount(0);
 
-        Persona persona = personaNegocio.obtenerPersonaPorRFC(rfc);
-
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblConsultas.getModel();
-        modeloTabla.setRowCount(0);
-
-        if (persona != null) {
-            Object[] datos = new Object[modeloTabla.getColumnCount()];
-
-            datos[0] = persona.getNombres();
-            datos[1] = persona.getApellidoPaterno();
-            datos[2] = persona.getApellidoMaterno();
-            datos[3] = persona.getCurp();
-            datos[4] = persona.getRfc();
-            datos[5] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
-                    + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
-                    + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
-            datos[6] = persona.getTelefono();
-            datos[7] = persona.getDiscapacidad();
-            datos[8] = (persona.getIdPersona() != null) ? persona.getIdPersona().toString() : ""; // Convertir el ID a String
-            modeloTabla.addRow(datos);
-        }
+    if (jComboBoxConsulta.getSelectedItem().equals("RFC")) {
+        persona = personaRFC.obtenerPersonaPorRFC(datosPersona);
+    } else if (jComboBoxConsulta.getSelectedItem().equals("NOMBRE")) {
+        List<Persona> personas = personaNombre.buscarPersonasPorNombre(datosPersona);
+        agregarPersonasATabla(personas, modeloTabla);
+        return;
+    } else if (jComboBoxConsulta.getSelectedItem().equals("CURP")) {
+        List<Persona> personas = personaCURP.buscarPersonasPorCURP(datosPersona);
+        agregarPersonasATabla(personas, modeloTabla);
+        return;
+    } else if (jComboBoxConsulta.getSelectedItem().equals("AÑO NACIMIENTO")) {
+        int año = Integer.parseInt(datosPersona);
+        List<Persona> personas = personaAnioNacimiento.buscarPersonasPorAñoNacimiento(año);
+        agregarPersonasATabla(personas, modeloTabla);
+        return;
     }
 
+    if (persona != null) {
+        Object[] datos = new Object[modeloTabla.getColumnCount()];
+        datos[0] = persona.getNombres();
+        datos[1] = persona.getApellidoPaterno();
+        datos[2] = persona.getApellidoMaterno();
+        datos[3] = persona.getCurp();
+        datos[4] = persona.getRfc();
+        datos[5] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
+                + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
+                + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
+        datos[6] = persona.getTelefono();
+        datos[7] = persona.getDiscapacidad();
+        datos[8] = (persona.getIdPersona() != null) ? persona.getIdPersona().toString() : ""; // Convertir el ID a String
+        modeloTabla.addRow(datos);
+    }
+    }
+
+    private void agregarPersonasATabla(List<Persona> personas, DefaultTableModel modeloTabla) {
+    for (Persona persona : personas) {
+        Object[] datos = new Object[modeloTabla.getColumnCount()];
+        datos[0] = persona.getNombres();
+        datos[1] = persona.getApellidoPaterno();
+        datos[2] = persona.getApellidoMaterno();
+        datos[3] = persona.getCurp();
+        datos[4] = persona.getRfc();
+        datos[5] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
+                + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
+                + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
+        datos[6] = persona.getTelefono();
+        datos[7] = persona.getDiscapacidad();
+        datos[8] = (persona.getIdPersona() != null) ? persona.getIdPersona().toString() : ""; // Convertir el ID a String
+        modeloTabla.addRow(datos);
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,16 +139,12 @@ public class frmHistorialTramites extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblConsultas = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        txtCurpo = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
-        txtRfc = new javax.swing.JTextField();
+        txtDatos = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtFecha = new javax.swing.JTextField();
         btnRegresar = new javax.swing.JButton();
+        jComboBoxConsulta = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -158,23 +199,6 @@ public class frmHistorialTramites extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tblConsultas);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel1.setText("Año de Nacimiento");
-
-        txtCurpo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCurpoActionPerformed(evt);
-            }
-        });
-        txtCurpo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtCurpoKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCurpoKeyTyped(evt);
-            }
-        });
-
         btnBuscar.setBackground(new java.awt.Color(204, 204, 204));
         btnBuscar.setText("🔎    Buscar");
         btnBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -185,56 +209,22 @@ public class frmHistorialTramites extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("Curp:");
-
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+        txtDatos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
+                txtDatosActionPerformed(evt);
             }
         });
-        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtDatos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNombreKeyReleased(evt);
+                txtDatosKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNombreKeyTyped(evt);
-            }
-        });
-
-        txtRfc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRfcActionPerformed(evt);
-            }
-        });
-        txtRfc.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtRfcKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtRfcKeyTyped(evt);
+                txtDatosKeyTyped(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setText("RFC:");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel4.setText("Nombre:");
-
-        txtFecha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaActionPerformed(evt);
-            }
-        });
-        txtFecha.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtFechaKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtFechaKeyTyped(evt);
-            }
-        });
+        jLabel3.setText("CONSULTA:");
 
         btnRegresar.setBackground(new java.awt.Color(255, 102, 102));
         btnRegresar.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
@@ -255,6 +245,16 @@ public class frmHistorialTramites extends javax.swing.JFrame {
             }
         });
 
+        jComboBoxConsulta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RFC", "NOMBRE", "CURP", "AÑO NACIMIENTO" }));
+        jComboBoxConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxConsultaActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setText("DATOS:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -264,26 +264,14 @@ public class frmHistorialTramites extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel2))
+                .addGap(78, 78, 78)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtCurpo, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtRfc, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtNombre))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBoxConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(6, 6, 6)
+                        .addComponent(txtDatos, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
@@ -291,32 +279,36 @@ public class frmHistorialTramites extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(82, 82, 82)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(534, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtCurpo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtRfc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBoxConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(9, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(50, 50, 50)
+                    .addComponent(jLabel4)
+                    .addContainerGap(441, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -343,68 +335,31 @@ public class frmHistorialTramites extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void txtCurpoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCurpoActionPerformed
+    private void btnRegresarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresarMouseExited
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCurpoActionPerformed
-
-    private void txtCurpoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCurpoKeyReleased
-
-    }//GEN-LAST:event_txtCurpoKeyReleased
-
-    private void txtCurpoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCurpoKeyTyped
-
-    }//GEN-LAST:event_txtCurpoKeyTyped
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        llenarTabla();
-
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreActionPerformed
-
-    private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
-
-    }//GEN-LAST:event_txtNombreKeyReleased
-
-    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
-
-    }//GEN-LAST:event_txtNombreKeyTyped
-
-    private void txtRfcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRfcActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtRfcActionPerformed
-
-    private void txtRfcKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRfcKeyReleased
-
-    }//GEN-LAST:event_txtRfcKeyReleased
-
-    private void txtRfcKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRfcKeyTyped
-
-    }//GEN-LAST:event_txtRfcKeyTyped
-
-    private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaActionPerformed
-
-    private void txtFechaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFechaKeyReleased
-
-    }//GEN-LAST:event_txtFechaKeyReleased
-
-    private void txtFechaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFechaKeyTyped
-
-    }//GEN-LAST:event_txtFechaKeyTyped
+        btnRegresar.setBackground(new Color(255, 102, 102));
+    }//GEN-LAST:event_btnRegresarMouseExited
 
     private void btnRegresarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresarMouseEntered
         // TODO add your handling code here:
         btnRegresar.setBackground(new Color(255, 51, 51));
     }//GEN-LAST:event_btnRegresarMouseEntered
 
-    private void btnRegresarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegresarMouseExited
+    private void txtDatosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDatosKeyTyped
+
+    }//GEN-LAST:event_txtDatosKeyTyped
+
+    private void txtDatosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDatosKeyReleased
+
+    }//GEN-LAST:event_txtDatosKeyReleased
+
+    private void txtDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDatosActionPerformed
         // TODO add your handling code here:
-        btnRegresar.setBackground(new Color(255, 102, 102));
-    }//GEN-LAST:event_btnRegresarMouseExited
+    }//GEN-LAST:event_txtDatosActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        llenarTabla();
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void tblConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConsultasMouseClicked
         int filaSeleccionada = tblConsultas.getSelectedRow();
@@ -423,14 +378,14 @@ public class frmHistorialTramites extends javax.swing.JFrame {
 
             String[] opciones = {"Placas", "Licencia"};
             int opcionSeleccionada = JOptionPane.showOptionDialog(
-                    this,
-                    "Seleccione el historial que desea ver:",
-                    "Seleccione",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    opciones,
-                    opciones[0]);
+                this,
+                "Seleccione el historial que desea ver:",
+                "Seleccione",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]);
 
             if (opcionSeleccionada == 0) {
                 frmHistorialPlacas historialPlacasForm = new frmHistorialPlacas();
@@ -441,6 +396,10 @@ public class frmHistorialTramites extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_tblConsultasMouseClicked
+
+    private void jComboBoxConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxConsultaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxConsultaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -480,8 +439,7 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JComboBox<String> jComboBoxConsulta;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
@@ -489,9 +447,6 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblConsultas;
-    private javax.swing.JTextField txtCurpo;
-    private javax.swing.JTextField txtFecha;
-    private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtRfc;
+    private javax.swing.JTextField txtDatos;
     // End of variables declaration//GEN-END:variables
 }
