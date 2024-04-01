@@ -13,7 +13,8 @@ import java.util.List;
  * @author INEGI
  */
 public interface ITramiteDAO {
-public List<Object[]> buscarTramitesPorTipo(String tipoTramite);
-public List<Object[]> buscarTramitesPorPeriodo(Calendar fechaInicio, Calendar fechaFin);
-public List<Object[]> buscarTramitesPorNombresSimilares(String nombre);
+
+ 
+
+    public List<Object[]> buscarTramites(String tipoTramite, Calendar fechaInicio, Calendar fechaFin, String nombre, String apellidoPaterno, String apellidoMaterno);
 }

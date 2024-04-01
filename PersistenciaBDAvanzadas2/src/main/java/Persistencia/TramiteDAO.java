@@ -4,7 +4,9 @@
  */
 package Persistencia;
 
+import Dominio.Licencia;
 import Dominio.Persona;
+import Dominio.Placa;
 import Dominio.Tramite;
 import IPersistencia.ITramiteDAO;
 import java.util.Calendar;
@@ -26,76 +28,43 @@ public class TramiteDAO implements ITramiteDAO {
     public TramiteDAO() {
         emf = Persistence.createEntityManagerFactory("ConexionPU");
     }
-    @Override
-    public List<Object[]> buscarTramitesPorTipo(String tipoTramite) {
-    EntityManager em = emf.createEntityManager();
-    List<Object[]> tramites = null;
-
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT t.fechaTramite, t.tipoTramite, p.nombres, t.costo " +
-                      "FROM Tramite t JOIN t.persona p " +
-                      "WHERE t.tipoTramite = :tipo";
-        TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
-        query.setParameter("tipo", tipoTramite);
-        tramites = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
-    }
-
-    return tramites;
-}
 
     @Override
-    public List<Object[]> buscarTramitesPorPeriodo(Calendar fechaInicio, Calendar fechaFin) {
-    EntityManager em = emf.createEntityManager();
-    List<Object[]> tramites = null;
+    public List<Object[]> buscarTramites(String tipoTramite, Calendar fechaInicio, Calendar fechaFin, String nombre, String apellidoPaterno, String apellidoMaterno) {
+        EntityManager em = emf.createEntityManager();
+        List<Object[]> tramites = null;
 
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT t.fechaTramite, t.tipoTramite, p.nombres, t.costo " +
-                      "FROM Tramite t JOIN t.persona p " +
-                      "WHERE t.fechaTramite BETWEEN :fechaInicio AND :fechaFin";
-        TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
-        query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
-        query.setParameter("fechaFin", fechaFin, TemporalType.DATE);
-        tramites = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
+        try {
+            em.getTransaction().begin();
+            String jpql = "SELECT t.fechaTramite, "
+                    + "CASE TYPE(t) "
+                    + "WHEN Placa THEN 'Placas' "
+                    + "WHEN Licencia THEN 'Licencia' "
+                    + "ELSE 'Otro' END, "
+                    + "p.nombres, p.apellidoPaterno, p.apellidoMaterno, t.costo "
+                    + "FROM Tramite t JOIN t.persona p "
+                    + "WHERE (:tipo IS NULL OR TYPE(t) = :tipo) "
+                    + "AND (:fechaInicio IS NULL OR :fechaFin IS NULL OR t.fechaTramite BETWEEN :fechaInicio AND :fechaFin) "
+                    + "AND (:nombre IS NULL OR p.nombres LIKE :nombre) "
+                    + "AND (:apellidoPaterno IS NULL OR p.apellidoPaterno LIKE :apellidoPaterno) "
+                    + "AND (:apellidoMaterno IS NULL OR p.apellidoMaterno LIKE :apellidoMaterno)";
+            TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
+            query.setParameter("tipo", tipoTramite.equals("Placas") ? Placa.class
+                    : tipoTramite.equals("Licencia") ? Licencia.class : null);
+            query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
+            query.setParameter("fechaFin", fechaFin, TemporalType.DATE);
+            query.setParameter("nombre", "%" + nombre + "%");
+            query.setParameter("apellidoPaterno", "%" + apellidoPaterno + "%");
+            query.setParameter("apellidoMaterno", "%" + apellidoMaterno + "%");
+            tramites = query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+
+        return tramites;
     }
-
-    return tramites;
-}
-
-    @Override
-    public List<Object[]> buscarTramitesPorNombresSimilares(String nombre) {
-    EntityManager em = emf.createEntityManager();
-    List<Object[]> tramites = null;
-
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT t.fechaTramite, t.tipoTramite, p.nombres, t.costo " +
-                      "FROM Tramite t JOIN t.persona p " +
-                      "WHERE p.nombres LIKE :nombre";
-        TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
-        query.setParameter("nombre", "%" + nombre + "%");
-        tramites = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
-    }
-
-    return tramites;
-}
 }

@@ -4,13 +4,13 @@
  */
 package INegocio;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
  *
  * @author INEGI
  */
-public interface IBuscarTramitesPorNombresSimilares {
-    public List<Object[]> buscarTramitesPorNombresSimilares(String nombre);
-
+public interface IBuscarTramitesBO {
+     public List<Object[]> buscarTramites(String tipoTramite, Calendar fechaInicio, Calendar fechaFin, String nombre, String apellidoPaterno, String apellidoMaterno);
 }
