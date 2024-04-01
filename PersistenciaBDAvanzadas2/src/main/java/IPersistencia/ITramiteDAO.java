@@ -5,6 +5,7 @@
 package IPersistencia;
 
 import Dominio.Tramite;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -12,5 +13,7 @@ import java.util.List;
  * @author INEGI
  */
 public interface ITramiteDAO {
-    public List<Tramite> ReporteTramitePorPersona(Long id);
+public List<Object[]> buscarTramitesPorTipo(String tipoTramite);
+public List<Object[]> buscarTramitesPorPeriodo(Calendar fechaInicio, Calendar fechaFin);
+public List<Object[]> buscarTramitesPorNombresSimilares(String nombre);
 }
