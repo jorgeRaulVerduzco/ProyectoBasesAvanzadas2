@@ -26,13 +26,13 @@ public class frmRegistroPlacas extends javax.swing.JFrame {
      * Creates new form frmRegistroPlacas
      */
     public frmRegistroPlacas() {
-        
+
         placasBO = new AgregarPlacaBO();
         initComponents();
         deshabilitarEdicionCampos();
         llenarDatosAutomovilSeleccionado();
     }
-    
+
     private void deshabilitarEdicionCampos() {
         txtNumeroDeSerie.setEditable(false);
         txtMarca.setEditable(false);
@@ -41,7 +41,7 @@ public class frmRegistroPlacas extends javax.swing.JFrame {
         txtColor.setEditable(false);
         txtPropietario.setEditable(false);
     }
-    
+
     private void llenarDatosAutomovilSeleccionado() {
         AutomovilDTO automovilSeleccionado = AutoSeleccionado.getAutomovilSeleccionado();
         if (automovilSeleccionado != null) {
@@ -50,7 +50,7 @@ public class frmRegistroPlacas extends javax.swing.JFrame {
             txtLinea.setText(automovilSeleccionado.getLinea());
             txtModelo.setText(automovilSeleccionado.getModelo());
             txtColor.setText(automovilSeleccionado.getColor());
-                    PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
+            PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
 
             if (personaSeleccionada != null) {
                 txtPropietario.setText(personaSeleccionada.getRfc());
@@ -240,39 +240,38 @@ public class frmRegistroPlacas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSolicitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarActionPerformed
-       AutomovilDTO automovilSeleccionado = AutoSeleccionado.getAutomovilSeleccionado();
-    
-    // Verificar si se ha seleccionado un automóvil
-    if (automovilSeleccionado == null) {
-        JOptionPane.showMessageDialog(null, "Por favor, seleccione un automóvil antes de solicitar una placa.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        AutomovilDTO automovilSeleccionado = AutoSeleccionado.getAutomovilSeleccionado();
+
+        if (automovilSeleccionado == null) {
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione un automóvil antes de solicitar una placa.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
 
-    PlacaDTO placa = new PlacaDTO();
-    placa.setCosto(1500f);
-    placa.setEstado("activo");
-    Calendar fechaTramite = Calendar.getInstance();
-    placa.setFechaTramite(fechaTramite);
-    placa.setFechaVigencia(fechaTramite);
-    placa.setPersona(personaSeleccionada);
-    
-    try {
-        placasBO.AgregarPlaca(automovilSeleccionado, placa);
-        JOptionPane.showMessageDialog(null, "Placa solicitada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-   frmPlaca placatelas = new frmPlaca();
+        PlacaDTO placa = new PlacaDTO();
+        placa.setEstado("activo");
+        Calendar fechaTramite = Calendar.getInstance();
+        placa.setFechaTramite(fechaTramite);
+        placa.setFechaVigencia(fechaTramite);
+        placa.setPersona(personaSeleccionada);
+
+        try {
+            placasBO.AgregarPlaca(automovilSeleccionado, placa);
+            JOptionPane.showMessageDialog(null, "Placa solicitada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            frmPlaca placatelas = new frmPlaca();
             placatelas.setVisible(true);
             this.dispose();
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al solicitar la placa: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace(); // Para depuración, imprime el rastreo de la pila
-    }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al solicitar la placa: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace(); 
+        }
     }//GEN-LAST:event_btnSolicitarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-         frmPlaca placatelas = new frmPlaca();
-            placatelas.setVisible(true);
-            this.dispose();
+        frmPlaca placatelas = new frmPlaca();
+        placatelas.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**

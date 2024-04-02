@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -34,25 +35,35 @@ public class PlacasDAO implements IPlacasDAO {
 
     @Override
     public void agregarPlacas(Automovil automovil, Placa placa) {
-         EntityManager entityManager = emf.createEntityManager();
+        EntityManager entityManager = emf.createEntityManager();
     EntityTransaction transaction = entityManager.getTransaction();
 
     try {
         transaction.begin();
 
-        // Desactivar placas activas antes de agregar una nueva placa
+        Query query = entityManager.createQuery("SELECT COUNT(p) FROM Placa p WHERE p.automovil = :automovil");
+        query.setParameter("automovil", automovil);
+        long placasRegistradas = (long) query.getSingleResult();
+
+        if (placasRegistradas > 0) {
+            placa.setCosto(1000);  
+        } else {
+            placa.setCosto(1500);  
+        }
+
         desactivarPlacasActivas(automovil);
 
-        // Agregar la nueva placa al automóvil
         automovil.agregarPlacas(placa);
         placa.setAutomovil(automovil);
 
-        // Persistir la nueva placa y el automóvil
         entityManager.persist(placa);
-        entityManager.merge(automovil);
-
-        // Hacer flush y commit para asegurar que los cambios se reflejen en la base de datos
         entityManager.flush();
+
+        if (!entityManager.contains(automovil)) {
+            automovil = entityManager.merge(automovil);
+        }
+        entityManager.refresh(automovil);
+
         transaction.commit();
     } catch (Exception e) {
         if (transaction.isActive()) {
@@ -125,13 +136,11 @@ public class PlacasDAO implements IPlacasDAO {
 
         try {
             entityManager.getTransaction().begin();
-            // Consulta para seleccionar todas las placas
             TypedQuery<Placa> query = entityManager.createQuery("SELECT p FROM Placa p WHERE p.automovil IN :automoviles", Placa.class);
             query.setParameter("automoviles", automoviles);
             historialPlacas = query.getResultList();
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-             // Manejo de excepciones y reversión de la transacción en caso de error
             entityManager.getTransaction().rollback();
             throw new RuntimeException("Error al obtener el historial de placas del automóvil", e);
         } finally {

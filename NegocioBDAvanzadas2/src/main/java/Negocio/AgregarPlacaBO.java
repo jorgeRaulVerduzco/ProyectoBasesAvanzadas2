@@ -20,17 +20,20 @@ import javax.swing.JOptionPane;
  * @author INEGI
  */
 public class AgregarPlacaBO implements IAgregarPlacaBO {
-PlacasDAO placaDAO;
-AutomovilDAO automovilDAO;
-PersonaDAO personaDAO;
-    public AgregarPlacaBO(){
+
+    PlacasDAO placaDAO;
+    AutomovilDAO automovilDAO;
+    PersonaDAO personaDAO;
+
+    public AgregarPlacaBO() {
         placaDAO = new PlacasDAO();
         automovilDAO = new AutomovilDAO();
         personaDAO = new PersonaDAO();
     }
+
     @Override
     public void AgregarPlaca(AutomovilDTO automovilDTO, PlacaDTO placaDTO) {
-      if (automovilDTO == null || placaDTO == null) {
+       if (automovilDTO == null || placaDTO == null) {
         JOptionPane.showMessageDialog(null, "Error: El automóvil o la placa no pueden ser nulos.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
@@ -42,21 +45,19 @@ PersonaDAO personaDAO;
         return;
     }
 
-Placa placa = new Placa();
-placa.setDigitosPlaca(DatosAleatorios.generarPlacaAleatoria()); 
-placa.setEstado(placaDTO.getEstado());
-placa.setCosto(placaDTO.getCosto()); 
-placa.setFechaTramite(placaDTO.getFechaTramite()); 
-placa.setPersona(personaDAO.obtenerPersonaPorRFC(placaDTO.getPersona().getRfc())); 
-placa.setFechaVigencia(placaDTO.getFechaVigencia()); 
+    Placa placa = new Placa();
+    placa.setDigitosPlaca(DatosAleatorios.generarPlacaAleatoria()); 
+    placa.setEstado(placaDTO.getEstado());
+    placa.setFechaTramite(placaDTO.getFechaTramite()); 
+    placa.setPersona(personaDAO.obtenerPersonaPorRFC(placaDTO.getPersona().getRfc())); 
+    placa.setFechaVigencia(placaDTO.getFechaVigencia()); 
 
     placa.setAutomovil(automovil);
 
     try {
-        placaDAO.agregarPlacas(automovil,placa);
+        placaDAO.agregarPlacas(automovil, placa);
     } catch (Exception e) {
         e.printStackTrace();
     }
     }
-
 }
