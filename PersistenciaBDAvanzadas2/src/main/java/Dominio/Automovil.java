@@ -26,7 +26,7 @@ import javax.persistence.Table;
 @Table(name = "automovil")
 public class Automovil implements Serializable {
 //prueba
-
+//mapeo
     @Id
     @Column(name = "idAutomovil")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

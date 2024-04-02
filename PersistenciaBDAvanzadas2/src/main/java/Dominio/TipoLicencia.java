@@ -8,6 +8,9 @@ package Dominio;
  *
  * @author INEGI
  */
+
+//enumerador el cual especifica los posibles tipos de licencia de conducir que pueden existir en el sistema.
+//En este caso, los dos tipos de licencia definidos son:
 public enum TipoLicencia {
     NORMAL,DISCAPACITADO
 }

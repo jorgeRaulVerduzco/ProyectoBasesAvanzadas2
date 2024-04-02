@@ -17,23 +17,35 @@ import javax.persistence.TypedQuery;
  *
  * @author INEGI
  */
+
+/**
+ * Esta clase implementa la interfaz IPersonaDao y proporciona métodos para interactuar con la base de datos relacionados con personas.
+ */
 public class PersonaDAO implements IPersonaDao {
 
     private EntityManagerFactory emf;
-
+/**
+     * Constructor de la clase que inicializa la factoría de EntityManager utilizando la unidad de persistencia "ConexionPU".
+     */
     public PersonaDAO() {
         emf = Persistence.createEntityManagerFactory("ConexionPU");
     }
-
+/**
+     * Método para agregar una nueva persona a la base de datos.
+     *
+     * @param persona La persona que se va a agregar.
+     * @throws PersistenciaException Si ocurre un error durante la persistencia de la persona.
+     */
     @Override
     public void agregarPersona(Persona persona) throws PersistenciaException {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-
+// Persiste la persona en la base de datos
         try {
             em.persist(persona);
             em.getTransaction().commit();
         } catch (Exception e) {
+            // Manejo de excepciones y reversión de la transacción en caso de error
             em.getTransaction().rollback();
             e.printStackTrace();
         } finally {
@@ -41,11 +53,19 @@ public class PersonaDAO implements IPersonaDao {
         }
     }
 
+    /**
+     * Método para obtener una lista de todas las personas almacenadas en la base de datos.
+     *
+     * @return Una lista de todas las personas almacenadas.
+     */
+    
+    
     @Override
     public List<Persona> ListaPersonas() {
         EntityManager em = emf.createEntityManager();
         List<Persona> personas = null;
         try {
+             // Consulta para seleccionar todas las personas
             TypedQuery<Persona> query = em.createQuery("SELECT p FROM Persona p", Persona.class);
             personas = query.getResultList();
         } catch (Exception e) {
@@ -55,6 +75,14 @@ public class PersonaDAO implements IPersonaDao {
         }
         return personas;
     }
+    
+    
+    /**
+     * Método para obtener una persona por su RFC.
+     *
+     * @param rfc El RFC de la persona que se desea obtener.
+     * @return La persona correspondiente al RFC especificado, o null si no se encuentra ninguna.
+     */
 
     @Override
     public Persona obtenerPersonaPorRFC(String rfc) {
@@ -76,7 +104,12 @@ public class PersonaDAO implements IPersonaDao {
         }
         return persona;
     }
-
+/**
+     * Método para buscar personas por su nombre.
+     *
+     * @param nombre El nombre (o parte del nombre) de la persona que se desea buscar.
+     * @return Una lista de personas cuyos nombres coinciden (parcialmente) con el nombre especificado.
+     */
     @Override
     public List<Persona> buscarPersonasPorNombre(String nombre) {
         EntityManager em = emf.createEntityManager();
@@ -98,7 +131,12 @@ public class PersonaDAO implements IPersonaDao {
 
         return personas;
     }
-
+/**
+     * Método para buscar personas por su año de nacimiento.
+     *
+     * @param añoNacimiento El año de nacimiento de las personas que se desean buscar.
+     * @return Una lista de personas nacidas en el año especificado.
+     */
     @Override
 public List<Persona> buscarPersonasPorAñoNacimiento(int añoNacimiento) {
     EntityManager em = emf.createEntityManager();

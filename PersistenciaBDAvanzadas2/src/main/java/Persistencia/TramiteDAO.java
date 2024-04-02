@@ -21,14 +21,31 @@ import javax.persistence.TypedQuery;
  *
  * @author INEGI
  */
+
+
+/**
+ * Esta clase implementa la interfaz ITramiteDAO y proporciona métodos para buscar trámites en la base de datos.
+ */
 public class TramiteDAO implements ITramiteDAO {
-
+ // Factoría de EntityManager para gestionar las entidades de persistencia
     private EntityManagerFactory emf;
-
+/**
+     * Constructor de la clase que inicializa la factoría de EntityManager utilizando la unidad de persistencia "ConexionPU".
+     */
     public TramiteDAO() {
         emf = Persistence.createEntityManagerFactory("ConexionPU");
     }
-
+ /**
+     * Método para buscar trámites en la base de datos basados en varios criterios de búsqueda.
+     *
+     * @param tipoTramite     El tipo de trámite a buscar (Placas, Licencia u Otro).
+     * @param fechaInicio     La fecha de inicio del período de búsqueda.
+     * @param fechaFin        La fecha de fin del período de búsqueda.
+     * @param nombre          El nombre de la persona asociada al trámite (opcional).
+     * @param apellidoPaterno El apellido paterno de la persona asociada al trámite (opcional).
+     * @param apellidoMaterno El apellido materno de la persona asociada al trámite (opcional).
+     * @return Una lista de arrays de objetos que representan los trámites encontrados.
+     */
     @Override
     public List<Object[]> buscarTramites(String tipoTramite, Calendar fechaInicio, Calendar fechaFin, String nombre, String apellidoPaterno, String apellidoMaterno) {
         EntityManager em = emf.createEntityManager();
@@ -36,6 +53,7 @@ public class TramiteDAO implements ITramiteDAO {
 
         try {
             em.getTransaction().begin();
+             // Construcción de la consulta JPQL para buscar trámites
             String jpql = "SELECT t.fechaTramite, "
                     + "CASE TYPE(t) "
                     + "WHEN Placa THEN 'Placas' "
@@ -49,6 +67,7 @@ public class TramiteDAO implements ITramiteDAO {
                     + "AND (:apellidoPaterno IS NULL OR p.apellidoPaterno LIKE :apellidoPaterno) "
                     + "AND (:apellidoMaterno IS NULL OR p.apellidoMaterno LIKE :apellidoMaterno)";
             TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
+            // Establecimiento de parámetros para la consulta
             query.setParameter("tipo", tipoTramite.equals("Placas") ? Placa.class
                     : tipoTramite.equals("Licencia") ? Licencia.class : null);
             query.setParameter("fechaInicio", fechaInicio, TemporalType.DATE);
@@ -56,12 +75,15 @@ public class TramiteDAO implements ITramiteDAO {
             query.setParameter("nombre", "%" + nombre + "%");
             query.setParameter("apellidoPaterno", "%" + apellidoPaterno + "%");
             query.setParameter("apellidoMaterno", "%" + apellidoMaterno + "%");
+             // Ejecución de la consulta y obtención de los resultados
             tramites = query.getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
+            // Manejo de excepciones y reversión de la transacción en caso de error
             em.getTransaction().rollback();
             e.printStackTrace();
         } finally {
+            // Cierre del EntityManager
             em.close();
         }
 

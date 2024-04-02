@@ -28,7 +28,7 @@ import javax.persistence.TemporalType;
 @DiscriminatorValue(value = "Placas")
 @PrimaryKeyJoinColumn(name = "idPlacas")
 public class Placa extends Tramite implements Serializable {
-
+//mapeo
     @Id
     @Column(name = "idPlaca")
     @GeneratedValue(strategy = GenerationType.AUTO)

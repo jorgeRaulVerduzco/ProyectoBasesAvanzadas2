@@ -26,7 +26,12 @@ public class AutomovilDAO implements IAutomovilDAO {
     public AutomovilDAO() {
         emf = Persistence.createEntityManagerFactory("ConexionPU");
     }
-
+    
+    /**
+     * Método para agregar un nuevo automóvil a la base de datos.
+     *
+     * @param automovil El automóvil que se va a agregar.
+     */
     @Override
     public void AgregarAutomovil(Automovil automovil) {
         EntityManager em = emf.createEntityManager();
@@ -37,6 +42,7 @@ public class AutomovilDAO implements IAutomovilDAO {
             em.persist(automovil);
             transaction.commit();
         } catch (Exception e) {
+             // Manejo de excepciones y reversión de la transacción en caso de error
             if (transaction.isActive()) {
                 transaction.rollback();
             }
@@ -46,6 +52,13 @@ public class AutomovilDAO implements IAutomovilDAO {
         }
     }
 
+    /**
+     * Método para buscar un automóvil por su número de serie.
+     *
+     * @param numeroSerie El número de serie del automóvil que se desea buscar.
+     * @return El automóvil correspondiente al número de serie especificado, o null si no se encuentra ninguno.
+     */
+    
     @Override
     public Automovil buscarAutomovilPorNumeroSerie(String numeroSerie) {
         EntityManager em = emf.createEntityManager();
@@ -53,6 +66,7 @@ public class AutomovilDAO implements IAutomovilDAO {
 
         try {
             em.getTransaction().begin();
+            // Consulta para seleccionar el automóvil por su número de serie
             String jpql = "SELECT a FROM Automovil a WHERE a.numeroSerie = :numeroSerie";
             TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
             query.setParameter("numeroSerie", numeroSerie);
@@ -71,6 +85,12 @@ public class AutomovilDAO implements IAutomovilDAO {
         return automovil;
     }
 
+     /**
+     * Método para buscar automóviles por su número de serie.
+     *
+     * @param numeroSerie El número de serie del automóvil que se desea buscar.
+     * @return Una lista de automóviles que tienen el número de serie especificado.
+     */
     @Override
     public List<Automovil> buscarAutomovilesPorNumeroSerie(String numeroSerie) {
         EntityManager em = emf.createEntityManager();
@@ -78,6 +98,7 @@ public class AutomovilDAO implements IAutomovilDAO {
 
         try {
             em.getTransaction().begin();
+            // Consulta para seleccionar los automóviles por su número de serie
             String jpql = "SELECT a FROM Automovil a WHERE a.numeroSerie = :numeroSerie";
             TypedQuery<Automovil> query = em.createQuery(jpql, Automovil.class);
             query.setParameter("numeroSerie", numeroSerie);
@@ -92,7 +113,12 @@ public class AutomovilDAO implements IAutomovilDAO {
 
         return automoviles;
     }
-
+ /**
+     * Método para buscar automóviles por marca.
+     *
+     * @param marca La marca de los automóviles que se desean buscar.
+     * @return Una lista de automóviles que tienen la marca especificada.
+     */
     @Override
     public List<Automovil> buscarAutomovilesPorMarca(String marca) {
         EntityManager em = emf.createEntityManager();
@@ -114,7 +140,13 @@ public class AutomovilDAO implements IAutomovilDAO {
 
         return automoviles;
     }
-
+    
+    /**
+     * Método para buscar automóviles por línea.
+     *
+     * @param linea La línea de los automóviles que se desean buscar.
+     * @return Una lista de automóviles que tienen la línea especificada.
+     */
     @Override
     public List<Automovil> buscarAutomovilesPorLinea(String linea) {
         EntityManager em = emf.createEntityManager();
@@ -137,6 +169,12 @@ public class AutomovilDAO implements IAutomovilDAO {
         return automoviles;
     }
 
+    /**
+     * Método para buscar automóviles por color.
+     *
+     * @param color El color de los automóviles que se desean buscar.
+     * @return Una lista de automóviles que tienen el color especificado.
+     */
     @Override
     public List<Automovil> buscarAutomovilesPorColor(String color) {
         EntityManager em = emf.createEntityManager();
@@ -178,6 +216,14 @@ public class AutomovilDAO implements IAutomovilDAO {
 
         return automoviles;
     }
+    
+    /**
+     * Método para buscar automóviles por persona.
+     *
+     * @param persona La persona a la que pertenecen los automóviles que se desean buscar.
+     * @return Una lista de automóviles que pertenecen a la persona especificada.
+     * @throws RuntimeException Si ocurre un error durante la búsqueda de automóviles por persona.
+     */
 
     public List<Automovil> buscarAutomovilesPorRFC(String rfc) {
         EntityManager entityManager = emf.createEntityManager();

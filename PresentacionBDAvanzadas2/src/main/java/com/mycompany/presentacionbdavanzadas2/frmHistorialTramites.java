@@ -108,20 +108,34 @@ public class frmHistorialTramites extends javax.swing.JFrame {
     }
     }
 
+    /**
+ * Agrega las personas de la lista proporcionada a un modelo de tabla.
+ * Cada persona se agrega como una fila en la tabla.
+ *
+ * @param personas    La lista de personas a agregar a la tabla.
+ * @param modeloTabla El modelo de tabla al que se agregarán las personas.
+ */
+    
     private void agregarPersonasATabla(List<Persona> personas, DefaultTableModel modeloTabla) {
+        // Recorre cada persona en la lista de personas proporcionada
     for (Persona persona : personas) {
+        // Crea un arreglo de objetos para almacenar los datos de la persona
         Object[] datos = new Object[modeloTabla.getColumnCount()];
+        // Asigna los datos de la persona al arreglo de datos
         datos[0] = persona.getNombres();
         datos[1] = persona.getApellidoPaterno();
         datos[2] = persona.getApellidoMaterno();
         datos[3] = persona.getCurp();
         datos[4] = persona.getRfc();
+        // Verifica si la fecha de nacimiento de la persona no es nula
         datos[5] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
+                // Formatea la fecha de nacimiento como "dd/MM/yyyy" y la asigna a la columna 5
                 + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
                 + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
         datos[6] = persona.getTelefono();
         datos[7] = persona.getDiscapacidad();
         datos[8] = (persona.getIdPersona() != null) ? persona.getIdPersona().toString() : ""; // Convertir el ID a String
+         // Agrega los datos de la persona como una nueva fila al modelo de la tabla
         modeloTabla.addRow(datos);
     }
 }
