@@ -420,6 +420,7 @@ public class frmReporte extends javax.swing.JFrame {
         pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new PageNumberEventHandler(pageNumberFont));
  // Creación de la tabla con 6 columnas
         Table table = new Table(6); 
+        
 // Encabezados de la tabla
         String[] encabezados = {"Fecha", "Tipo", "Nombres", "Apellido Paterno", "Apellido Materno", "Costo"};
         for (String encabezado : encabezados) {
