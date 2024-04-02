@@ -19,17 +19,18 @@ import javax.swing.JOptionPane;
  * @author INEGI
  */
 public class frmLicencia extends javax.swing.JFrame {
-
+PersonaDTO personaSeleccionada;
     AgregarLicencioBO licenciaBO;
 
     public frmLicencia() {
+        personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
         licenciaBO = new AgregarLicencioBO();
         initComponents();
-jComboBox1.addActionListener(new ActionListener() {
-    public void actionPerformed(ActionEvent e) {
-        costo();
-    }
-});
+        jComboBox1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                costo();
+            }
+        });
     }
 
     /**
@@ -80,7 +81,6 @@ jComboBox1.addActionListener(new ActionListener() {
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel3.setText("Fecha Vigencia:");
 
-        txtCosto.setText("600");
         txtCosto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCostoActionPerformed(evt);
@@ -182,21 +182,40 @@ jComboBox1.addActionListener(new ActionListener() {
 
     public void costo() {
         String seleccion = (String) jComboBox1.getSelectedItem();
-        switch (seleccion) {
-            case "1 año":
-                txtCosto.setText("600");
-                break;
-            case "2 años":
-                txtCosto.setText("900");
-                break;
-            case "3 años":
-                txtCosto.setText("1100");
-                break;
-            default:
-                break;
+      
+        if (personaSeleccionada != null) {
+            if (personaSeleccionada.getDiscapacidad().equalsIgnoreCase("Sí")) {
+                switch (seleccion) {
+                    case "1 año":
+                        txtCosto.setText("200");
+                        break;
+                    case "2 años":
+                        txtCosto.setText("500");
+                        break;
+                    case "3 años":
+                        txtCosto.setText("700");
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                switch (seleccion) {
+                    case "1 año":
+                        txtCosto.setText("600");
+                        break;
+                    case "2 años":
+                        txtCosto.setText("900");
+                        break;
+                    case "3 años":
+                        txtCosto.setText("1100");
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
-    
+
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         frmTramites tramite = new frmTramites();
         tramite.setVisible(true);
@@ -222,22 +241,16 @@ jComboBox1.addActionListener(new ActionListener() {
                 break;
         }
 
-        PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
         if (personaSeleccionada != null) {
             String rfcPersona = personaSeleccionada.getRfc();
 
             String discapacidadStr = personaSeleccionada.getDiscapacidad();
-            int discapacidad = 0; // Valor predeterminado si la discapacidad es nula
-            if (discapacidadStr != null) {
-                discapacidad = Integer.parseInt(discapacidadStr);
-            }
-
-            float costo = licenciaBO.costo(aniosVigencia, discapacidad);
-
+        
             Calendar fechaTramite = Calendar.getInstance();
             int anioo = fechaTramite.get(Calendar.YEAR) + aniosVigencia;
             Calendar fechaVigencia = new GregorianCalendar(anioo, fechaTramite.get(Calendar.MONTH), fechaTramite.get(Calendar.DAY_OF_MONTH));
-
+            String costoTexto = txtCosto.getText();
+            float costo = Float.parseFloat(costoTexto);
             LicenciaDTO licenciaDTO = new LicenciaDTO(aniosVigencia, costo, fechaTramite, personaSeleccionada, fechaVigencia);
 
             licenciaBO.AgregarLicencia(licenciaDTO, rfcPersona);

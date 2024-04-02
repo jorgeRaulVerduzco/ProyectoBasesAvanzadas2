@@ -133,19 +133,19 @@ public class AgregarLicencioBO implements IAgregarLicenciaBO {
         return personaDAO.obtenerPersonaPorRFC(rfc);
     }
 
-    public float costo(int aniosVigencia, int discapacidad) {
-        float costo = 0;
-        switch (aniosVigencia) {
-            case 1:
-                costo = (discapacidad == 1) ? 200.0f : 600.0f;
-                break;
-            case 2:
-                costo = (discapacidad == 1) ? 500.0f : 900.0f; // Se corrigió el valor 500f a 500.0f
-                break;
-            case 3:
-                costo = (discapacidad == 1) ? 700.0f : 1100.0f;
-                break;
-        }
-        return costo;
+  public float costo(int aniosVigencia, int discapacidad) {
+    float costo = 0;
+    switch (aniosVigencia) {
+        case 1:
+            costo = (discapacidad == 1) ? 200.0f : 600.0f;
+            break;
+        case 2:
+            costo = (discapacidad == 1) ? 500.0f : 900.0f;
+            break;
+        case 3:
+            costo = (discapacidad == 1) ? 700.0f : 1100.0f;
+            break;
     }
+    return costo;
+}
 }

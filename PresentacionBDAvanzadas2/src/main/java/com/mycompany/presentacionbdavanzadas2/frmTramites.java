@@ -26,79 +26,78 @@ import javax.swing.table.TableColumn;
  * @author RUZZKY
  */
 public class frmTramites extends javax.swing.JFrame {
-
+    
     int row, columna;
-
+    
     private IAgregarLicenciaBO personaNegocio;
-
+    
     public frmTramites() {
         personaNegocio = new AgregarLicencioBO();
         initComponents();
-     
+        
         tabla();
         llenarTabla();
         
     }
+    
+    public void tabla() {
+        tblTramites.setDefaultRenderer(Object.class, new RenderTabla());
+        
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        tblTramites.setModel(modeloTabla);
+        
+        tblTramites.setRowHeight(40);
 
+        // Definición de las columnas y sus encabezados
+        String[] encabezados = {"Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC", "Fecha de Nacimiento", "Teléfono", "Discapacidad"};
+        modeloTabla.setColumnIdentifiers(encabezados);
 
-public void tabla() {
-    tblTramites.setDefaultRenderer(Object.class, new RenderTabla());
-
-    DefaultTableModel modeloTabla = new DefaultTableModel();
-    tblTramites.setModel(modeloTabla);
-
-    tblTramites.setRowHeight(40);
-
-    // Definición de las columnas y sus encabezados
-    String[] encabezados = {"Nombre", "Apellido Paterno", "Apellido Materno", "CURP", "RFC", "Fecha de Nacimiento", "Teléfono", "Discapacidad"};
-    modeloTabla.setColumnIdentifiers(encabezados);
-
-    // Configuración del ancho preferido de las columnas
-    int[] anchos = {100, 100, 100, 100, 100, 100, 100, 100};
-    for (int i = 0; i < anchos.length; i++) {
-        tblTramites.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        // Configuración del ancho preferido de las columnas
+        int[] anchos = {100, 100, 100, 100, 100, 100, 100, 100};
+        for (int i = 0; i < anchos.length; i++) {
+            tblTramites.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
     }
-}
-
-private void btnLicenciaActionPerformed(java.awt.event.ActionEvent evt) {                                            
-    // Obtener el índice de la fila seleccionada
-    int selectedRow = tblTramites.getSelectedRow();
-    if (selectedRow != -1) { // Verificar si hay una fila seleccionada
-        // Mostrar el formulario para emitir una licencia
-        frmLicencia frmLicencia = new frmLicencia();
-        frmLicencia.setVisible(true);
-    } else {
-        // Mostrar un mensaje indicando que no se ha seleccionado ninguna persona
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+    
+    private void btnLicenciaActionPerformed(java.awt.event.ActionEvent evt) {
+        // Obtener el índice de la fila seleccionada
+        int selectedRow = tblTramites.getSelectedRow();
+        if (selectedRow != -1) { // Verificar si hay una fila seleccionada
+            // Mostrar el formulario para emitir una licencia
+            frmLicencia frmLicencia = new frmLicencia();
+            frmLicencia.setVisible(true);
+        } else {
+            // Mostrar un mensaje indicando que no se ha seleccionado ninguna persona
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+        }
+    }    
+    
+    public void llenarTabla() {
+        String rfc = txtBusqueda.getText();
+        Persona persona = personaNegocio.obtenerPersonaPorRFC(rfc);
+        
+        DefaultTableModel defa = (DefaultTableModel) tblTramites.getModel();
+        defa.setRowCount(0);        
+        
+        if (persona != null) {
+            Object[] datos = new Object[defa.getColumnCount()];
+            
+            datos[0] = persona.getNombres();
+            datos[1] = persona.getApellidoPaterno();
+            datos[2] = persona.getApellidoMaterno();
+            datos[3] = persona.getCurp();
+            datos[4] = persona.getRfc();
+            datos[5] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
+                    + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
+                    + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
+            datos[6] = persona.getTelefono();
+            datos[7] = persona.getDiscapacidad();
+            
+            defa.addRow(datos);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró ninguna persona con el RFC especificado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
     }
-}    
-
-public void llenarTabla() {
-     String rfc = txtBusqueda.getText();
-    Persona persona = personaNegocio.obtenerPersonaPorRFC(rfc);
-
-    DefaultTableModel defa = (DefaultTableModel) tblTramites.getModel();
-    defa.setRowCount(0); 
-
-    if (persona != null) {
-        Object[] datos = new Object[defa.getColumnCount()];
-
-        datos[0] = persona.getNombres();
-        datos[1] = persona.getApellidoPaterno();
-        datos[2] = persona.getApellidoMaterno();
-        datos[3] = persona.getCurp();
-        datos[4] = persona.getRfc();
-        datos[5] = (persona.getFechaNacimiento() != null) ? persona.getFechaNacimiento().get(Calendar.DAY_OF_MONTH) + "/"
-                + (persona.getFechaNacimiento().get(Calendar.MONTH) + 1) + "/"
-                + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
-        datos[6] = persona.getTelefono();
-        datos[7] = persona.getDiscapacidad();
-
-        defa.addRow(datos);
-    } else {
-        JOptionPane.showMessageDialog(null, "No se encontró ninguna persona con el RFC especificado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-    }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -258,43 +257,43 @@ public void llenarTabla() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblTramitesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTramitesMouseClicked
-    int selectedRow = tblTramites.getSelectedRow();
-    if (selectedRow != -1) {
-        DefaultTableModel model = (DefaultTableModel) tblTramites.getModel();
-        PersonaDTO personaSeleccionada = new PersonaDTO();
+        int selectedRow = tblTramites.getSelectedRow();
+        if (selectedRow != -1) {
+            DefaultTableModel model = (DefaultTableModel) tblTramites.getModel();
+            PersonaDTO personaSeleccionada = new PersonaDTO();
+            
+            personaSeleccionada.setNombres((String) model.getValueAt(selectedRow, 0));
+            personaSeleccionada.setApellidoPaterno((String) model.getValueAt(selectedRow, 1));
+            personaSeleccionada.setApellidoMaterno((String) model.getValueAt(selectedRow, 2));
+            personaSeleccionada.setCurp((String) model.getValueAt(selectedRow, 3));
+            personaSeleccionada.setRfc((String) model.getValueAt(selectedRow, 4));
+            personaSeleccionada.setDiscapacidad((String) model.getValueAt(selectedRow, 7));
+            PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
 
-        personaSeleccionada.setNombres((String) model.getValueAt(selectedRow, 0));
-        personaSeleccionada.setApellidoPaterno((String) model.getValueAt(selectedRow, 1));
-        personaSeleccionada.setApellidoMaterno((String) model.getValueAt(selectedRow, 2));
-        personaSeleccionada.setCurp((String) model.getValueAt(selectedRow, 3));
-        personaSeleccionada.setRfc((String) model.getValueAt(selectedRow, 4));
+            // Mostrar el JOptionPane para elegir entre frmLicencia y frmTramite
+            String[] opciones = {"Licencia", "Placas"};
+            int opcionSeleccionada = JOptionPane.showOptionDialog(this,
+                    "¿Que tramite desea realizar?",
+                    "Seleccione una opción",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]);
 
-        PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
-
-        // Mostrar el JOptionPane para elegir entre frmLicencia y frmTramite
-        String[] opciones = {"Licencia", "Placas"};
-        int opcionSeleccionada = JOptionPane.showOptionDialog(this,
-            "¿Que tramite desea realizar?",
-            "Seleccione una opción",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            opciones,
-            opciones[0]);
-
-        // Redirigir según la opción seleccionada
-        if (opcionSeleccionada == 0) {
-            frmLicencia frmLicencia = new frmLicencia();
-            frmLicencia.setVisible(true);
-            this.dispose();
-        } else if (opcionSeleccionada == 1) {
-            frmPlaca frmTramite = new frmPlaca();
-            frmTramite.setVisible(true);
-            this.dispose();
+            // Redirigir según la opción seleccionada
+            if (opcionSeleccionada == 0) {
+                frmLicencia frmLicencia = new frmLicencia();
+                frmLicencia.setVisible(true);
+                this.dispose();
+            } else if (opcionSeleccionada == 1) {
+                frmPlaca frmTramite = new frmPlaca();
+                frmTramite.setVisible(true);
+                this.dispose();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
-    }
     }//GEN-LAST:event_tblTramitesMouseClicked
 
     private void txtBusquedaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyReleased
@@ -314,17 +313,17 @@ public void llenarTabla() {
 
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
         int key = evt.getKeyChar();
-
+        
         boolean mayusculas = key >= 65 && key <= 90;
         boolean minusculas = key >= 97 && key <= 122;
         boolean numeros = key >= 48 && key <= 57;
         boolean espacio = key == 32;
-
+        
         if (!(minusculas || mayusculas || espacio || numeros)) {
             evt.consume();
         }
     }//GEN-LAST:event_txtBusquedaKeyTyped
- 
+
     /**
      * @param args the command line arguments
      */
