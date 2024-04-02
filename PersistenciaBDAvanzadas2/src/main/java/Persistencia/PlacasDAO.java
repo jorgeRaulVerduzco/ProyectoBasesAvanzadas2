@@ -72,13 +72,13 @@ public class PlacasDAO implements IPlacasDAO {
     
     @Override
     public void desactivarPlacasActivas(Automovil automovil) {
-       EntityManager entityManager = emf.createEntityManager();
+      EntityManager entityManager = emf.createEntityManager();
     entityManager.getTransaction().begin();
     try {
         TypedQuery<Placa> query = entityManager.createQuery(
-                "SELECT p FROM Placa p WHERE p.automovil = :automovil AND p.estado = :estadoActivo", Placa.class)
+                "SELECT p FROM Placa p WHERE p.automovil = :automovil AND p.estado = :activo", Placa.class)
                 .setParameter("automovil", automovil)
-                .setParameter("estadoActivo", "ACTIVA");
+                .setParameter("activo", "activo"); // Cambiado a "activo"
         List<Placa> placasActivas = query.getResultList();
         for (Placa placa : placasActivas) {
             placa.setEstado("INACTIVA");
