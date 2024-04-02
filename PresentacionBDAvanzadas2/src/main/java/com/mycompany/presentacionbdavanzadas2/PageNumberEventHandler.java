@@ -20,10 +20,20 @@ import com.itextpdf.layout.property.TextAlignment;
  */
 public class PageNumberEventHandler implements IEventHandler {
      protected PdfFont font;
+     /**
+     * Constructor de la clase PageNumberEventHandler.
+     *
+     * @param font La fuente que se utilizará para el número de página.
+     */
     
     public PageNumberEventHandler(PdfFont font) {
         this.font = font;
     }
+    /**
+     * Método para manejar el evento de numeración de páginas.
+     *
+     * @param event El evento que se produce en el documento PDF.
+     */
 
     @Override
     public void handleEvent(Event event) {
@@ -34,6 +44,7 @@ public class PageNumberEventHandler implements IEventHandler {
         Rectangle pageSize = page.getPageSize();
         Canvas canvas = new Canvas(page, pageSize);
         canvas.setFont(font).setFontSize(12);
+        // Mostrar el número de página centrado en la parte inferior del documento
         canvas.showTextAligned(String.valueOf(pageNumber),
                 pageSize.getWidth() / 2, pageSize.getBottom() + 30,
                 TextAlignment.CENTER);

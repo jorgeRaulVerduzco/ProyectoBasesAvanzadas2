@@ -6,6 +6,7 @@ package com.mycompany.presentacionbdavanzadas2;
 
 import DTO.PersonaDTO;
 import Negocio.AgregarLicencioBO;
+import java.awt.Color;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -60,9 +61,9 @@ public class frmRegistroPersona extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(0, 51, 51));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jLabel2.setText("Registro");
         jLabel2.setFont(new java.awt.Font("SimSun", 0, 60)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Registro");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -84,46 +85,54 @@ public class frmRegistroPersona extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(242, 239, 230));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        AGREGAR.setBackground(new java.awt.Color(204, 204, 204));
         AGREGAR.setText("AGREGAR");
+        AGREGAR.setBackground(new java.awt.Color(204, 204, 204));
         AGREGAR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        AGREGAR.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                AGREGARMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                AGREGARMouseExited(evt);
+            }
+        });
         AGREGAR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AGREGARActionPerformed(evt);
             }
         });
 
-        SALIR.setBackground(new java.awt.Color(255, 102, 102));
         SALIR.setText("SALIR");
+        SALIR.setBackground(new java.awt.Color(255, 102, 102));
         SALIR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SALIRActionPerformed(evt);
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel3.setText("nombres");
+        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel4.setText("apellido paterno");
+        jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel5.setText("apellido materno");
+        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel6.setText("RFC");
+        jLabel6.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel7.setText("CURP");
+        jLabel7.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel8.setText("telefono");
+        jLabel8.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel9.setText("discapacidad");
+        jLabel9.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel10.setText("fecha nacimiento");
+        jLabel10.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sí", "No" }));
 
@@ -296,6 +305,16 @@ frmCrudPersona hola = new frmCrudPersona();
 hola.setVisible(true);
 this.setVisible(false);
     }//GEN-LAST:event_AGREGARActionPerformed
+
+    private void AGREGARMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AGREGARMouseExited
+       
+        AGREGAR.setBackground(new Color (204,204,204));
+        
+    }//GEN-LAST:event_AGREGARMouseExited
+
+    private void AGREGARMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AGREGARMouseEntered
+        AGREGAR.setBackground(new Color(153,153,153));
+    }//GEN-LAST:event_AGREGARMouseEntered
 
     /**
      * @param args the command line arguments
