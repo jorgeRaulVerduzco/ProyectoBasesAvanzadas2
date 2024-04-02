@@ -6,6 +6,7 @@ package com.mycompany.presentacionbdavanzadas2;
 
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,6 +19,26 @@ public class frmPlacasAuto extends javax.swing.JFrame {
      */
     public frmPlacasAuto() {
         initComponents();
+        tabla();
+    }
+
+    public void tabla() {
+        tblPlacas.setDefaultRenderer(Object.class, new RenderTabla());
+
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        tblPlacas.setModel(modeloTabla);
+
+        tblPlacas.setRowHeight(40);
+
+        // Definición de las columnas y sus encabezados
+        String[] encabezados = {"ID Placas", "Digitos de Placa", "Estado", "Costo", "Fecha de Trámite", "Fecha de Vigencia"};
+        modeloTabla.setColumnIdentifiers(encabezados);
+
+        // Configuración del ancho preferido de las columnas
+        int[] anchos = {100, 100, 100, 100, 100, 100};
+        for (int i = 0; i < anchos.length; i++) {
+            tblPlacas.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
     }
 
     /**

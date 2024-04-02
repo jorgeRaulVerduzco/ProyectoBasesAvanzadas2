@@ -24,4 +24,6 @@ public interface IPlacasDAO {
     public List<Placa> obtenerHistorialDePlacasPorAutomovil(List<Automovil> automoviles);
 
  public List<Object[]> obtenerHistorialPlacasPorPersona(Long idPersona);
+ 
+ public List<Object[]> obtenerHistorialPlacasPorAutomovil(String numeroSerie) ;
 }

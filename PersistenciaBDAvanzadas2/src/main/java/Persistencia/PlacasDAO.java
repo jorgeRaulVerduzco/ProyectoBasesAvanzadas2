@@ -186,4 +186,31 @@ public class PlacasDAO implements IPlacasDAO {
         return formattedResultList;
     }
 
+    @Override
+public List<Object[]> obtenerHistorialPlacasPorAutomovil(String numeroSerie) {
+    EntityManager entityManager = emf.createEntityManager();
+    TypedQuery<Object[]> query = entityManager.createQuery(
+            "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia "
+            + "FROM Placa p "
+            + "WHERE p.automovil.numeroSerie = :numeroSerie", Object[].class);
+    query.setParameter("numeroSerie", numeroSerie);
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    List<Object[]> resultList = query.getResultList();
+    List<Object[]> formattedResultList = new ArrayList<>();
+    for (Object[] result : resultList) {
+        Object[] formattedResult = new Object[result.length];
+        for (int i = 0; i < result.length; i++) {
+            if (result[i] instanceof GregorianCalendar) {
+                Date date = ((GregorianCalendar) result[i]).getTime();
+                formattedResult[i] = dateFormat.format(date);
+            } else {
+                formattedResult[i] = result[i];
+            }
+        }
+        formattedResultList.add(formattedResult);
+    }
+
+    return formattedResultList;
+}
 }
