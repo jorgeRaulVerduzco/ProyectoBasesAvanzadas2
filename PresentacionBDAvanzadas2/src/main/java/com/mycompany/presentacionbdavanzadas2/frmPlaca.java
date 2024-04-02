@@ -280,45 +280,54 @@ public class frmPlaca extends javax.swing.JFrame {
 
     private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
         int selectedRow = tblPlacas.getSelectedRow();
-        if (selectedRow != -1) {
-            // Obtener el modelo de la tabla
-            DefaultTableModel model = (DefaultTableModel) tblPlacas.getModel();
-            // Obtener los datos de la fila seleccionada
-            String numeroSerie = (String) model.getValueAt(selectedRow, 0);
-            String marca = (String) model.getValueAt(selectedRow, 1);
-            String linea = (String) model.getValueAt(selectedRow, 2);
-            String modelo = (String) model.getValueAt(selectedRow, 3);
-            String color = (String) model.getValueAt(selectedRow, 4);
+    if (selectedRow != -1) {
+        // Obtener el modelo de la tabla
+        DefaultTableModel model = (DefaultTableModel) tblPlacas.getModel();
+        // Obtener los datos de la fila seleccionada
+        String numeroSerie = (String) model.getValueAt(selectedRow, 0);
+        String marca = (String) model.getValueAt(selectedRow, 1);
+        String linea = (String) model.getValueAt(selectedRow, 2);
+        String modelo = (String) model.getValueAt(selectedRow, 3);
+        String color = (String) model.getValueAt(selectedRow, 4);
 
-            // Establecer el automóvil seleccionado
-            AutomovilDTO automovilSeleccionado = new AutomovilDTO();
-            automovilSeleccionado.setNumeroSerie(numeroSerie);
-            automovilSeleccionado.setMarca(marca);
-            automovilSeleccionado.setLinea(linea);
-            automovilSeleccionado.setModelo(modelo);
-            automovilSeleccionado.setColor(color);
-            AutoSeleccionado.setAutomovilSeleccionado(automovilSeleccionado);
+        // Establecer el automóvil seleccionado
+        AutomovilDTO automovilSeleccionado = new AutomovilDTO();
+        automovilSeleccionado.setNumeroSerie(numeroSerie);
+        automovilSeleccionado.setMarca(marca);
+        automovilSeleccionado.setLinea(linea);
+        automovilSeleccionado.setModelo(modelo);
+        automovilSeleccionado.setColor(color);
+        AutoSeleccionado.setAutomovilSeleccionado(automovilSeleccionado);
 
-            // Mostrar JOptionPane para confirmar la acción
-            int confirmacion = JOptionPane.showConfirmDialog(this,
-                    "¿Desea registrar una placa con los siguientes datos?\n\n"
-                    + "Número de Serie: " + numeroSerie + "\n"
-                    + "Marca: " + marca + "\n"
-                    + "Línea: " + linea + "\n"
-                    + "Modelo: " + modelo + "\n"
-                    + "Color: " + color,
-                    "Confirmación",
-                    JOptionPane.YES_NO_OPTION);
+        // Mostrar JOptionPane para confirmar la acción
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Desea registrar una placa con los siguientes datos?\n\n"
+                + "Número de Serie: " + numeroSerie + "\n"
+                + "Marca: " + marca + "\n"
+                + "Línea: " + linea + "\n"
+                + "Modelo: " + modelo + "\n"
+                + "Color: " + color,
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
 
-            // Si el usuario confirma, abrir el formulario de registro de placas
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                frmRegistroPlacas registroPlacas = new frmRegistroPlacas();
-                registroPlacas.setVisible(true);
-                this.dispose();
+        // Si el usuario confirma, abrir el formulario de registro de placas
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            frmRegistroPlacas registroPlacas = new frmRegistroPlacas();
+            registroPlacas.setVisible(true);
+            this.dispose();
+        } else if (confirmacion == JOptionPane.NO_OPTION) {
+            // Si el usuario no confirma y dice que no, mostrar el historial de placas
+            int opcion = JOptionPane.showConfirmDialog(this, "¿Desea ver el historial de placas de este automóvil?", "Ver Historial", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (opcion == JOptionPane.YES_OPTION) {
+                // Llevar al formulario de historial de placas
+                frmPlacasAuto historialPlacas = new frmPlacasAuto();
+                historialPlacas.setVisible(true);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
+    }
     }//GEN-LAST:event_tblPlacasMouseClicked
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
