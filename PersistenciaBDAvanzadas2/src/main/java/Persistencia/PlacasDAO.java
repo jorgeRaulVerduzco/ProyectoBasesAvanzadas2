@@ -71,19 +71,25 @@ public class PlacasDAO implements IPlacasDAO {
     }
     }
 
+    /**
+     * Método para desactivar todas las placas activas asociadas a un automóvil dado.
+     *
+     * @param automovil El automóvil del que se desactivarán las placas activas.
+     */
+    
     @Override
     public void desactivarPlacasActivas(Automovil automovil) {
         EntityManager entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
         try {
-
+ // Consulta para seleccionar todas las placas activas asociadas al automóvil
             TypedQuery<Placa> query = entityManager.createQuery(
                     "SELECT p FROM Placa p WHERE p.automovil = :automovil AND p.estado = :estadoActivo", Placa.class)
                     .setParameter("automovil", automovil)
                     .setParameter("estadoActivo", "ACTIVA");
-
+// Obtiene la lista de placas activas
             List<Placa> placasActivas = query.getResultList();
-
+// Itera sobre las placas activas y las desactiva
             for (Placa placa : placasActivas) {
                 placa.setEstado("INACTIVA");
                 entityManager.merge(placa);
@@ -92,6 +98,7 @@ public class PlacasDAO implements IPlacasDAO {
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
+             // Manejo de excepciones y reversión de la transacción en caso de error
             throw new RuntimeException("Error al desactivar placas activas", e);
         } finally {
             entityManager.close();
@@ -117,7 +124,11 @@ public class PlacasDAO implements IPlacasDAO {
 
         return placas;
     }
-
+     /**
+     * Método para obtener todas las placas almacenadas en la base de datos.
+     *
+     * @return Una lista de todas las placas almacenadas.
+     */
     @Override
     public List<Placa> obtenerHistorialDePlacasPorAutomovil(List<Automovil> automoviles) {
         List<Placa> historialPlacas = new ArrayList<>();
@@ -125,11 +136,13 @@ public class PlacasDAO implements IPlacasDAO {
 
         try {
             entityManager.getTransaction().begin();
+            // Consulta para seleccionar todas las placas
             TypedQuery<Placa> query = entityManager.createQuery("SELECT p FROM Placa p WHERE p.automovil IN :automoviles", Placa.class);
             query.setParameter("automoviles", automoviles);
             historialPlacas = query.getResultList();
             entityManager.getTransaction().commit();
         } catch (Exception e) {
+             // Manejo de excepciones y reversión de la transacción en caso de error
             entityManager.getTransaction().rollback();
             throw new RuntimeException("Error al obtener el historial de placas del automóvil", e);
         } finally {
@@ -138,11 +151,16 @@ public class PlacasDAO implements IPlacasDAO {
 
         return historialPlacas;
     }
-
+    /**
+     * Método para obtener el historial de placas asociadas a una persona específica.
+     *
+     * @param idPersona El ID de la persona de la que se desea obtener el historial de placas.
+     * @return Una lista de arrays de objetos que representan el historial de placas de la persona especificada.
+     */
     @Override
     public List<Object[]> obtenerHistorialPlacasPorPersona(Long idPersona) {
         EntityManager entityManager = emf.createEntityManager();
-
+// Consulta para seleccionar el historial de placas asociadas a la persona especificada
         TypedQuery<Object[]> query = entityManager.createQuery(
                 "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia "
                 + "FROM Placa p "
@@ -153,7 +171,7 @@ public class PlacasDAO implements IPlacasDAO {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<Object[]> resultList = query.getResultList();
         List<Object[]> formattedResultList = new ArrayList<>();
-
+ // Formatea los resultados de la consulta antes de devolverlos
         for (Object[] result : resultList) {
             Object[] formattedResult = new Object[result.length];
             for (int i = 0; i < result.length; i++) {

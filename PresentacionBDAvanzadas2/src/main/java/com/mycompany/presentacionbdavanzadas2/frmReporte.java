@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -25,6 +26,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import javax.swing.JOptionPane;
@@ -162,6 +164,8 @@ public class frmReporte extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(242, 239, 230));
+
         jPanel5.setBackground(new java.awt.Color(0, 51, 51));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -250,20 +254,20 @@ public class frmReporte extends javax.swing.JFrame {
             }
         });
 
-        btnGenerarPDF.setBackground(new java.awt.Color(255, 102, 102));
-        btnGenerarPDF.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         btnGenerarPDF.setText("Generar PDF");
+        btnGenerarPDF.setBackground(new java.awt.Color(255, 102, 102));
         btnGenerarPDF.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnGenerarPDF.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         btnGenerarPDF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerarPDFActionPerformed(evt);
             }
         });
 
-        btnCancelar1.setBackground(new java.awt.Color(255, 102, 102));
-        btnCancelar1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         btnCancelar1.setText("Cancelar");
+        btnCancelar1.setBackground(new java.awt.Color(255, 102, 102));
         btnCancelar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnCancelar1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelar1ActionPerformed(evt);
@@ -389,37 +393,47 @@ public class frmReporte extends javax.swing.JFrame {
 
     private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPDFActionPerformed
   try {
+      
+      
+      // Ruta de salida del archivo PDF
         String outputPdfPath = "reporte.pdf";
-
+        // Inicialización del escritor PDF, documento PDF y documento de texto
         PdfWriter writer = new PdfWriter(outputPdfPath);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4);
-
+         // Definición de la fuente y tamaño del título del documento
+         
+         
         PdfFont fontTitle = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-        Paragraph title = new Paragraph("Reporte de Trámites").setFont(fontTitle).setFontSize(20);
-        document.add(title);
+        Paragraph title = new Paragraph("Reporte de Trámites").setFont(fontTitle).setFontSize(20).setFontColor(new DeviceRgb(0, 0, 255)) // Color azul
+        .setHorizontalAlignment(HorizontalAlignment.CENTER); // Centrado
+        document.add(title);// Añadir título al documento
 
+// Obtención de la fecha actual y creación del párrafo para mostrarla en el documento
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String currentDate = dateFormat.format(new Date());
         Paragraph dateParagraph = new Paragraph("Fecha de generación: " + currentDate);
-        document.add(dateParagraph);
-
+        document.add(dateParagraph);// Añadir fecha al documento
+        
+// Creación del manejador de eventos para mostrar el número de página en cada página
         PdfFont pageNumberFont = PdfFontFactory.createFont(StandardFonts.HELVETICA);
         pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new PageNumberEventHandler(pageNumberFont));
-
+ // Creación de la tabla con 6 columnas
         Table table = new Table(6); 
-
+// Encabezados de la tabla
         String[] encabezados = {"Fecha", "Tipo", "Nombres", "Apellido Paterno", "Apellido Materno", "Costo"};
         for (String encabezado : encabezados) {
-            table.addCell(new Cell().add(new Paragraph(encabezado)));
+            table.addCell(new Cell().add(new Paragraph(encabezado)) .setFontColor(new DeviceRgb(255, 255, 255)) // Color blanco para el texto
+            .setBackgroundColor(new DeviceRgb(0, 51, 51))); // Color de fondo RGB(0, 51, 51)
         }
-
+  // Obtención del modelo de la tabla de informes
         DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
-
+  // Recorrido de las filas y columnas de la tabla de informes para agregar los datos a la tabla del PDF
    for (int i = 0; i < modeloTabla.getRowCount(); i++) {
     for (int j = 0; j < modeloTabla.getColumnCount(); j++) {
         Object value = modeloTabla.getValueAt(i, j);
         String cellValue;
+        // Formateo de la fecha si es un valor de tipo GregorianCalendar
         if (value instanceof GregorianCalendar) {
             GregorianCalendar calendar = (GregorianCalendar) value;
             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -427,17 +441,19 @@ public class frmReporte extends javax.swing.JFrame {
         } else {
             cellValue = value == null ? "" : value.toString();
         }
-        table.addCell(new Cell().add(new Paragraph(cellValue)));
+        // Agregar el valor a la celda de la tabla del PDF
+        table.addCell(new Cell().add(new Paragraph(cellValue)) .setBackgroundColor(new DeviceRgb(242, 239, 230))); // Color de fondo RGB(242, 239, 230)
     }
         }
-
+// Agregar la tabla al documento PDF
         document.add(table);
-
+// Cerrar el documento PDF
         document.close();
-        
+        // Mostrar un mensaje de éxito con la ruta del archivo generado
         JOptionPane.showMessageDialog(null, "Informe generado correctamente en: " + outputPdfPath);
 
     } catch (IOException ex) {
+        // Manejo de excepciones de entrada/salida
         ex.printStackTrace();
     }
     }//GEN-LAST:event_btnGenerarPDFActionPerformed
@@ -490,7 +506,6 @@ public class frmReporte extends javax.swing.JFrame {
     private javax.swing.JButton btnGenerarPDF;
     private com.github.lgooddatepicker.components.DatePicker datePickerFechaFin;
     private com.github.lgooddatepicker.components.DatePicker datePickerFechaInicio;
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBoxTramite;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel3;
