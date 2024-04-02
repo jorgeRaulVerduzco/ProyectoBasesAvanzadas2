@@ -13,31 +13,42 @@ import java.util.Random;
  */
 public class DatosAleatorios {
 // Arreglos de nombres y apellidos predefinidos para generar datos aleatorios
-    private static final String[] NOMBRES = {"Juan", "Maria", "Carlos", "Laura", "Pedro", "Ana", "Jose", "Luis", "Sofia", "Diego"};
-    private static final String[] APELLIDOS = {"Garcia", "Hernandez", "Lopez", "Martinez", "Gonzalez", "Perez", "Rodriguez", "Sanchez", "Ramirez", "Torres"};
-   // Cadena de letras utilizada para generar CURP, RFC y placas aleatorias 
+
+    private static final String[] NOMBRES = {
+        "Jorge", "Raul", "Servando", "Fedra", "Juan", "Maria", "Carlos", "Laura", "Pedro", "Ana", "Jose", "Luis", "Sofia", "Diego",
+        "Fernando", "Paula", "Roberto", "Lucia", "Miguel", "Elena", "Alejandro", "Julia", "Raul", "Isabel",
+        "Gabriel", "Daniela", "Manuel", "Carmen", "Antonio", "Rosa", "Francisco", "Natalia", "Javier", "Adriana"
+    };
+    private static final String[] APELLIDOS = {"Verduzco", "Mora", "Garcia", "Hernandez", "Lopez", "Martinez", "Gonzalez", "Perez", "Rodriguez", "Sanchez", "Ramirez", "Torres",
+        "Fernandez", "Gomez", "Diaz", "Ruiz", "Alvarez", "Jimenez", "Moreno", "Munoz", "Romero", "Alonso",
+        "Navarro", "Serrano", "Castillo", "Delgado", "Vazquez", "Ramos", "Blanco", "Nunez", "Cruz", "Iglesias", "Ortega", "Molina", "Suarez", "Gimenez", "Martínez", "Santos", "Cabrera", "Vega", "Aguilar", "Medina"};
     private static final String LETRAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     // Instancia de la clase Random para generar números aleatorios
     private static final Random RANDOM = new Random();
-    
+
     /**
-     * Genera un nombre aleatorio seleccionado de forma aleatoria del arreglo de nombres predefinidos.
+     * Genera un nombre aleatorio seleccionado de forma aleatoria del arreglo de
+     * nombres predefinidos.
      *
      * @return Un nombre aleatorio.
      */
     public static String generarNombreAleatorio() {
         return NOMBRES[RANDOM.nextInt(NOMBRES.length)];
     }
- /**
-     * Genera un apellido aleatorio seleccionado de forma aleatoria del arreglo de apellidos predefinidos.
+
+    /**
+     * Genera un apellido aleatorio seleccionado de forma aleatoria del arreglo
+     * de apellidos predefinidos.
      *
      * @return Un apellido aleatorio.
      */
     public static String generarApellidoAleatorio() {
         return APELLIDOS[RANDOM.nextInt(APELLIDOS.length)];
     }
-/**
-     * Genera una cadena de 18 caracteres aleatorios que representan un CURP (Clave Única de Registro de Población).
+
+    /**
+     * Genera una cadena de 18 caracteres aleatorios que representan un CURP
+     * (Clave Única de Registro de Población).
      *
      * @return Un CURP aleatorio.
      */
@@ -48,8 +59,10 @@ public class DatosAleatorios {
         }
         return curp.toString();
     }
-/**
-     * Genera una cadena de 13 caracteres aleatorios que representan un RFC (Registro Federal de Contribuyentes).
+
+    /**
+     * Genera una cadena de 13 caracteres aleatorios que representan un RFC
+     * (Registro Federal de Contribuyentes).
      *
      * @return Un RFC aleatorio.
      */
@@ -60,8 +73,10 @@ public class DatosAleatorios {
         }
         return rfc.toString();
     }
- /**
-     * Genera una cadena de 10 dígitos aleatorios que representan un número de teléfono.
+
+    /**
+     * Genera una cadena de 10 dígitos aleatorios que representan un número de
+     * teléfono.
      *
      * @return Un número de teléfono aleatorio.
      */
@@ -72,8 +87,10 @@ public class DatosAleatorios {
         }
         return telefono.toString();
     }
- /**
-     * Genera una fecha de nacimiento aleatoria en un rango de años específico (1950-2019).
+
+    /**
+     * Genera una fecha de nacimiento aleatoria en un rango de años específico
+     * (1950-2019).
      *
      * @return Una fecha de nacimiento aleatoria.
      */
@@ -84,17 +101,21 @@ public class DatosAleatorios {
         fechaNacimiento.set(Calendar.DAY_OF_MONTH, RANDOM.nextInt(28) + 1);
         return fechaNacimiento;
     }
-/**
-     * Genera una cadena que indica si una persona tiene o no discapacidad de forma aleatoria.
+
+    /**
+     * Genera una cadena que indica si una persona tiene o no discapacidad de
+     * forma aleatoria.
      *
-     * @return "Sí" si la persona tiene discapacidad, "No" si no tiene discapacidad.
+     * @return "Sí" si la persona tiene discapacidad, "No" si no tiene
+     * discapacidad.
      */
     public static String generarDiscapacidadAleatoria() {
         return (RANDOM.nextInt(2) == 0) ? "Sí" : "No";
     }
-/**
-     * Genera una cadena de 6 caracteres aleatorios seguidos de un guion y 3 dígitos aleatorios,
-     * simulando una placa de vehículo.
+
+    /**
+     * Genera una cadena de 6 caracteres aleatorios seguidos de un guion y 3
+     * dígitos aleatorios, simulando una placa de vehículo.
      *
      * @return Una placa aleatoria.
      */
@@ -106,7 +127,7 @@ public class DatosAleatorios {
         }
 // Añade un guion entre la primera y la segunda parte de la placa
         placa.append("-");
- // Genera 3 dígitos aleatorios para la segunda parte de la placa
+        // Genera 3 dígitos aleatorios para la segunda parte de la placa
         for (int i = 0; i < 3; i++) {
             placa.append(RANDOM.nextInt(10));
         }
