@@ -34,39 +34,32 @@ public class PlacasDAO implements IPlacasDAO {
 
     @Override
     public void agregarPlacas(Automovil automovil, Placa placa) {
-        EntityManager entityManager = emf.createEntityManager();
+         EntityManager entityManager = emf.createEntityManager();
     EntityTransaction transaction = entityManager.getTransaction();
 
     try {
         transaction.begin();
 
-        // Desactivar placas activas antes de agregar una nueva
+        // Desactivar placas activas antes de agregar una nueva placa
         desactivarPlacasActivas(automovil);
 
-        // Asociar la placa al automóvil y viceversa
+        // Agregar la nueva placa al automóvil
         automovil.agregarPlacas(placa);
         placa.setAutomovil(automovil);
 
-        // Persistir la nueva placa
+        // Persistir la nueva placa y el automóvil
         entityManager.persist(placa);
-        entityManager.flush();
-        
-        // Refrescar el automóvil después de la transacción
-        if (!entityManager.contains(automovil)) {
-            automovil = entityManager.merge(automovil);
-        }
-        entityManager.refresh(automovil);
+        entityManager.merge(automovil);
 
-        // Confirmar la transacción
+        // Hacer flush y commit para asegurar que los cambios se reflejen en la base de datos
+        entityManager.flush();
         transaction.commit();
     } catch (Exception e) {
-        // Revertir la transacción si ocurre alguna excepción
         if (transaction.isActive()) {
             transaction.rollback();
         }
         throw new RuntimeException("Error al agregar placa", e);
     } finally {
-        // Cerrar el EntityManager al finalizar
         entityManager.close();
     }
     }
@@ -79,30 +72,26 @@ public class PlacasDAO implements IPlacasDAO {
     
     @Override
     public void desactivarPlacasActivas(Automovil automovil) {
-        EntityManager entityManager = emf.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
- // Consulta para seleccionar todas las placas activas asociadas al automóvil
-            TypedQuery<Placa> query = entityManager.createQuery(
-                    "SELECT p FROM Placa p WHERE p.automovil = :automovil AND p.estado = :estadoActivo", Placa.class)
-                    .setParameter("automovil", automovil)
-                    .setParameter("estadoActivo", "ACTIVA");
-// Obtiene la lista de placas activas
-            List<Placa> placasActivas = query.getResultList();
-// Itera sobre las placas activas y las desactiva
-            for (Placa placa : placasActivas) {
-                placa.setEstado("INACTIVA");
-                entityManager.merge(placa);
-            }
-
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-             // Manejo de excepciones y reversión de la transacción en caso de error
-            throw new RuntimeException("Error al desactivar placas activas", e);
-        } finally {
-            entityManager.close();
+       EntityManager entityManager = emf.createEntityManager();
+    entityManager.getTransaction().begin();
+    try {
+        TypedQuery<Placa> query = entityManager.createQuery(
+                "SELECT p FROM Placa p WHERE p.automovil = :automovil AND p.estado = :estadoActivo", Placa.class)
+                .setParameter("automovil", automovil)
+                .setParameter("estadoActivo", "ACTIVA");
+        List<Placa> placasActivas = query.getResultList();
+        for (Placa placa : placasActivas) {
+            placa.setEstado("INACTIVA");
+            entityManager.merge(placa);
         }
+
+        entityManager.getTransaction().commit();
+    } catch (Exception e) {
+        entityManager.getTransaction().rollback();
+        throw new RuntimeException("Error al desactivar placas activas", e);
+    } finally {
+        entityManager.close();
+    }
     }
 
     @Override
