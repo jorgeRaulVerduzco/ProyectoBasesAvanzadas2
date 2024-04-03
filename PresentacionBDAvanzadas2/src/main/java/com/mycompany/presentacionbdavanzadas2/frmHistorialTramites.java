@@ -404,9 +404,11 @@ public class frmHistorialTramites extends javax.swing.JFrame {
             if (opcionSeleccionada == 0) {
                 frmHistorialPlacas historialPlacasForm = new frmHistorialPlacas();
                 historialPlacasForm.setVisible(true);
+                this.dispose();
             } else if (opcionSeleccionada == 1) {
                 frmHistorialLicencia historialLicenciaForm = new frmHistorialLicencia();
                 historialLicenciaForm.setVisible(true);
+                this.dispose();
             }
         }
     }//GEN-LAST:event_tblConsultasMouseClicked

@@ -41,15 +41,15 @@ public class frmPlaca extends javax.swing.JFrame {
      * Creates new form frmPlaca
      */
     public frmPlaca() {
-       this.lista = new ArrayList<AutomovilDTO>();
-    this.placaBO = new AgregarPlacaBO();
-    this.automovilBO = new AgregarAutomovilBO();
-    this.licenciaBO = new AgregarLicencioBO();
-    initComponents();
-    txtBusqueda.setEditable(false);
-    tabla(); // Configura la tabla
-    modeloTabla = (DefaultTableModel) tblPlacas.getModel(); // Inicializa el modelo de tabla
-    llenarTabla(); // Llena la tabla con los datos por primera vez
+        this.lista = new ArrayList<AutomovilDTO>();
+        this.placaBO = new AgregarPlacaBO();
+        this.automovilBO = new AgregarAutomovilBO();
+        this.licenciaBO = new AgregarLicencioBO();
+        initComponents();
+        txtBusqueda.setEditable(false);
+        tabla(); // Configura la tabla
+        modeloTabla = (DefaultTableModel) tblPlacas.getModel(); // Inicializa el modelo de tabla
+        llenarTabla(); // Llena la tabla con los datos por primera vez
     }
 
     /**
@@ -221,113 +221,115 @@ public class frmPlaca extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void tabla() {
-       // Configurar propiedades de la tabla
-    tblPlacas.setDefaultRenderer(Object.class, new RenderTabla());
-    tblPlacas.setRowHeight(40);
+        // Configurar propiedades de la tabla
+        tblPlacas.setDefaultRenderer(Object.class, new RenderTabla());
+        tblPlacas.setRowHeight(40);
 
-    // Configurar modelo de tabla
-    DefaultTableModel defa = new DefaultTableModel();
-    tblPlacas.setModel(defa);
-    defa.addColumn("NumeroDeSerie");
-    defa.addColumn("Marca");
-    defa.addColumn("Linea");
-    defa.addColumn("Modelo");
-    defa.addColumn("Color");
+        // Configurar modelo de tabla
+        DefaultTableModel defa = new DefaultTableModel();
+        tblPlacas.setModel(defa);
+        defa.addColumn("NumeroDeSerie");
+        defa.addColumn("Marca");
+        defa.addColumn("Linea");
+        defa.addColumn("Modelo");
+        defa.addColumn("Color");
 
-    // Ajustar el ancho de las columnas existentes
-    for (int i = 0; i < tblPlacas.getColumnCount(); i++) {
-        TableColumn column = tblPlacas.getColumnModel().getColumn(i);
-        if (i == 0) {
-            column.setPreferredWidth(100); 
-        } else {
-            column.setPreferredWidth(150); 
+        // Ajustar el ancho de las columnas existentes
+        for (int i = 0; i < tblPlacas.getColumnCount(); i++) {
+            TableColumn column = tblPlacas.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(100);
+            } else {
+                column.setPreferredWidth(150);
+            }
         }
-    }
     }
 
     public void llenarTabla() {
-  try {
-        PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
+        try {
+            PersonaDTO personaSeleccionada = PersonaSeleccionada.getPersonaSeleccionada();
 
-        if (personaSeleccionada != null) {
-            String rfc = personaSeleccionada.getRfc();
-            txtBusqueda.setText(rfc);
+            if (personaSeleccionada != null) {
+                String rfc = personaSeleccionada.getRfc();
+                txtBusqueda.setText(rfc);
 
-            List<Automovil> automoviles = automovilBO.buscarAutomovilesPorRFC(rfc);
+                List<Automovil> automoviles = automovilBO.buscarAutomovilesPorRFC(rfc);
 
-            // Limpia el modelo de tabla antes de agregar nuevos datos
-            modeloTabla.setRowCount(0);
+                // Limpia el modelo de tabla antes de agregar nuevos datos
+                modeloTabla.setRowCount(0);
 
-            for (Automovil automovil : automoviles) {
-                Object[] fila = {
-                    automovil.getNumeroSerie(),
-                    automovil.getMarca(),
-                    automovil.getLinea(),
-                    automovil.getModelo(),
-                    automovil.getColor()
-                };
-                modeloTabla.addRow(fila);
+                for (Automovil automovil : automoviles) {
+                    Object[] fila = {
+                        automovil.getNumeroSerie(),
+                        automovil.getMarca(),
+                        automovil.getLinea(),
+                        automovil.getModelo(),
+                        automovil.getColor()
+                    };
+                    modeloTabla.addRow(fila);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna persona.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna persona.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al llenar la tabla: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al llenar la tabla: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } 
     }
 
 
     private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
         int selectedRow = tblPlacas.getSelectedRow();
-    if (selectedRow != -1) {
-        // Obtener el modelo de la tabla
-        DefaultTableModel model = (DefaultTableModel) tblPlacas.getModel();
-        // Obtener los datos de la fila seleccionada
-        String numeroSerie = (String) model.getValueAt(selectedRow, 0);
-        String marca = (String) model.getValueAt(selectedRow, 1);
-        String linea = (String) model.getValueAt(selectedRow, 2);
-        String modelo = (String) model.getValueAt(selectedRow, 3);
-        String color = (String) model.getValueAt(selectedRow, 4);
+        if (selectedRow != -1) {
+            // Obtener el modelo de la tabla
+            DefaultTableModel model = (DefaultTableModel) tblPlacas.getModel();
+            // Obtener los datos de la fila seleccionada
+            String numeroSerie = (String) model.getValueAt(selectedRow, 0);
+            String marca = (String) model.getValueAt(selectedRow, 1);
+            String linea = (String) model.getValueAt(selectedRow, 2);
+            String modelo = (String) model.getValueAt(selectedRow, 3);
+            String color = (String) model.getValueAt(selectedRow, 4);
 
-        // Establecer el automóvil seleccionado
-        AutomovilDTO automovilSeleccionado = new AutomovilDTO();
-        automovilSeleccionado.setNumeroSerie(numeroSerie);
-        automovilSeleccionado.setMarca(marca);
-        automovilSeleccionado.setLinea(linea);
-        automovilSeleccionado.setModelo(modelo);
-        automovilSeleccionado.setColor(color);
-        AutoSeleccionado.setAutomovilSeleccionado(automovilSeleccionado);
+            // Establecer el automóvil seleccionado
+            AutomovilDTO automovilSeleccionado = new AutomovilDTO();
+            automovilSeleccionado.setNumeroSerie(numeroSerie);
+            automovilSeleccionado.setMarca(marca);
+            automovilSeleccionado.setLinea(linea);
+            automovilSeleccionado.setModelo(modelo);
+            automovilSeleccionado.setColor(color);
+            AutoSeleccionado.setAutomovilSeleccionado(automovilSeleccionado);
 
-        // Mostrar JOptionPane para confirmar la acción
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-                "¿Desea registrar una placa con los siguientes datos?\n\n"
-                + "Número de Serie: " + numeroSerie + "\n"
-                + "Marca: " + marca + "\n"
-                + "Línea: " + linea + "\n"
-                + "Modelo: " + modelo + "\n"
-                + "Color: " + color,
-                "Confirmación",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+            // Mostrar JOptionPane para confirmar la acción
+            int confirmacion = JOptionPane.showConfirmDialog(this,
+                    "¿Desea registrar una placa con los siguientes datos?\n\n"
+                    + "Número de Serie: " + numeroSerie + "\n"
+                    + "Marca: " + marca + "\n"
+                    + "Línea: " + linea + "\n"
+                    + "Modelo: " + modelo + "\n"
+                    + "Color: " + color,
+                    "Confirmación",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
 
-        // Si el usuario confirma, abrir el formulario de registro de placas
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            frmRegistroPlacas registroPlacas = new frmRegistroPlacas();
-            registroPlacas.setVisible(true);
-            this.dispose();
-        } else if (confirmacion == JOptionPane.NO_OPTION) {
-            // Si el usuario no confirma y dice que no, mostrar el historial de placas
-            int opcion = JOptionPane.showConfirmDialog(this, "¿Desea ver el historial de placas de este automóvil?", "Ver Historial", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (opcion == JOptionPane.YES_OPTION) {
-                // Llevar al formulario de historial de placas
-                frmPlacasAuto historialPlacas = new frmPlacasAuto();
-                historialPlacas.setVisible(true);
+            // Si el usuario confirma, abrir el formulario de registro de placas
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                frmRegistroPlacas registroPlacas = new frmRegistroPlacas();
+                registroPlacas.setVisible(true);
+                this.dispose();
+            } else if (confirmacion == JOptionPane.NO_OPTION) {
+                // Si el usuario no confirma y dice que no, mostrar el historial de placas
+                int opcion = JOptionPane.showConfirmDialog(this, "¿Desea ver el historial de placas de este automóvil?", "Ver Historial", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (opcion == JOptionPane.YES_OPTION) {
+                    // Llevar al formulario de historial de placas
+                    frmPlacasAuto historialPlacas = new frmPlacasAuto();
+                    historialPlacas.setVisible(true);
+                    this.dispose();
+
+                }
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
-    }
     }//GEN-LAST:event_tblPlacasMouseClicked
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
