@@ -95,9 +95,9 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(0, 51, 51));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jLabel9.setText("PLacas automovil");
         jLabel9.setFont(new java.awt.Font("SimSun", 0, 60)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("PLacas automovil");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -148,8 +148,8 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Historial de:");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         btnInicio.setText("REGRESAR");
         btnInicio.addActionListener(new java.awt.event.ActionListener() {

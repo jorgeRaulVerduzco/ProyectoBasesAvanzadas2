@@ -36,73 +36,73 @@ public class PlacasDAO implements IPlacasDAO {
     @Override
     public void agregarPlacas(Automovil automovil, Placa placa) {
         EntityManager entityManager = emf.createEntityManager();
-    EntityTransaction transaction = entityManager.getTransaction();
+        EntityTransaction transaction = entityManager.getTransaction();
 
-    try {
-        transaction.begin();
+        try {
+            transaction.begin();
 
-        Query query = entityManager.createQuery("SELECT COUNT(p) FROM Placa p WHERE p.automovil = :automovil");
-        query.setParameter("automovil", automovil);
-        long placasRegistradas = (long) query.getSingleResult();
+            Query query = entityManager.createQuery("SELECT COUNT(p) FROM Placa p WHERE p.automovil = :automovil");
+            query.setParameter("automovil", automovil);
+            long placasRegistradas = (long) query.getSingleResult();
 
-        if (placasRegistradas > 0) {
-            placa.setCosto(1000);  
-        } else {
-            placa.setCosto(1500);  
+            if (placasRegistradas > 0) {
+                placa.setCosto(1000);
+            } else {
+                placa.setCosto(1500);
+            }
+
+            desactivarPlacasActivas(automovil);
+
+            automovil.agregarPlacas(placa);
+            placa.setAutomovil(automovil);
+
+            entityManager.persist(placa);
+            entityManager.flush();
+
+            if (!entityManager.contains(automovil)) {
+                automovil = entityManager.merge(automovil);
+            }
+            entityManager.refresh(automovil);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Error al agregar placa", e);
+        } finally {
+            entityManager.close();
         }
-
-        desactivarPlacasActivas(automovil);
-
-        automovil.agregarPlacas(placa);
-        placa.setAutomovil(automovil);
-
-        entityManager.persist(placa);
-        entityManager.flush();
-
-        if (!entityManager.contains(automovil)) {
-            automovil = entityManager.merge(automovil);
-        }
-        entityManager.refresh(automovil);
-
-        transaction.commit();
-    } catch (Exception e) {
-        if (transaction.isActive()) {
-            transaction.rollback();
-        }
-        throw new RuntimeException("Error al agregar placa", e);
-    } finally {
-        entityManager.close();
-    }
     }
 
     /**
-     * Método para desactivar todas las placas activas asociadas a un automóvil dado.
+     * Método para desactivar todas las placas activas asociadas a un automóvil
+     * dado.
      *
      * @param automovil El automóvil del que se desactivarán las placas activas.
      */
-    
     @Override
     public void desactivarPlacasActivas(Automovil automovil) {
-      EntityManager entityManager = emf.createEntityManager();
-    entityManager.getTransaction().begin();
-    try {
-        TypedQuery<Placa> query = entityManager.createQuery(
-                "SELECT p FROM Placa p WHERE p.automovil = :automovil AND p.estado = :activo", Placa.class)
-                .setParameter("automovil", automovil)
-                .setParameter("activo", "activo"); // Cambiado a "activo"
-        List<Placa> placasActivas = query.getResultList();
-        for (Placa placa : placasActivas) {
-            placa.setEstado("INACTIVA");
-            entityManager.merge(placa);
-        }
+        EntityManager entityManager = emf.createEntityManager();
+        entityManager.getTransaction().begin();
+        try {
+            TypedQuery<Placa> query = entityManager.createQuery(
+                    "SELECT p FROM Placa p WHERE p.automovil = :automovil AND p.estado = :activo", Placa.class)
+                    .setParameter("automovil", automovil)
+                    .setParameter("activo", "activo"); // Cambiado a "activo"
+            List<Placa> placasActivas = query.getResultList();
+            for (Placa placa : placasActivas) {
+                placa.setEstado("INACTIVA");
+                entityManager.merge(placa);
+            }
 
-        entityManager.getTransaction().commit();
-    } catch (Exception e) {
-        entityManager.getTransaction().rollback();
-        throw new RuntimeException("Error al desactivar placas activas", e);
-    } finally {
-        entityManager.close();
-    }
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw new RuntimeException("Error al desactivar placas activas", e);
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
@@ -124,7 +124,8 @@ public class PlacasDAO implements IPlacasDAO {
 
         return placas;
     }
-     /**
+
+    /**
      * Método para obtener todas las placas almacenadas en la base de datos.
      *
      * @return Una lista de todas las placas almacenadas.
@@ -149,11 +150,15 @@ public class PlacasDAO implements IPlacasDAO {
 
         return historialPlacas;
     }
+
     /**
-     * Método para obtener el historial de placas asociadas a una persona específica.
+     * Método para obtener el historial de placas asociadas a una persona
+     * específica.
      *
-     * @param idPersona El ID de la persona de la que se desea obtener el historial de placas.
-     * @return Una lista de arrays de objetos que representan el historial de placas de la persona especificada.
+     * @param idPersona El ID de la persona de la que se desea obtener el
+     * historial de placas.
+     * @return Una lista de arrays de objetos que representan el historial de
+     * placas de la persona especificada.
      */
     @Override
     public List<Object[]> obtenerHistorialPlacasPorPersona(Long idPersona) {
@@ -169,7 +174,7 @@ public class PlacasDAO implements IPlacasDAO {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<Object[]> resultList = query.getResultList();
         List<Object[]> formattedResultList = new ArrayList<>();
- // Formatea los resultados de la consulta antes de devolverlos
+        // Formatea los resultados de la consulta antes de devolverlos
         for (Object[] result : resultList) {
             Object[] formattedResult = new Object[result.length];
             for (int i = 0; i < result.length; i++) {
@@ -187,30 +192,30 @@ public class PlacasDAO implements IPlacasDAO {
     }
 
     @Override
-public List<Object[]> obtenerHistorialPlacasPorAutomovil(String numeroSerie) {
-    EntityManager entityManager = emf.createEntityManager();
-    TypedQuery<Object[]> query = entityManager.createQuery(
-            "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia "
-            + "FROM Placa p "
-            + "WHERE p.automovil.numeroSerie = :numeroSerie", Object[].class);
-    query.setParameter("numeroSerie", numeroSerie);
+    public List<Object[]> obtenerHistorialPlacasPorAutomovil(String numeroSerie) {
+        EntityManager entityManager = emf.createEntityManager();
+        TypedQuery<Object[]> query = entityManager.createQuery(
+                "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite "
+                + "FROM Placa p "
+                + "WHERE p.automovil.numeroSerie = :numeroSerie", Object[].class);
+        query.setParameter("numeroSerie", numeroSerie);
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    List<Object[]> resultList = query.getResultList();
-    List<Object[]> formattedResultList = new ArrayList<>();
-    for (Object[] result : resultList) {
-        Object[] formattedResult = new Object[result.length];
-        for (int i = 0; i < result.length; i++) {
-            if (result[i] instanceof GregorianCalendar) {
-                Date date = ((GregorianCalendar) result[i]).getTime();
-                formattedResult[i] = dateFormat.format(date);
-            } else {
-                formattedResult[i] = result[i];
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        List<Object[]> resultList = query.getResultList();
+        List<Object[]> formattedResultList = new ArrayList<>();
+        for (Object[] result : resultList) {
+            Object[] formattedResult = new Object[result.length];
+            for (int i = 0; i < result.length; i++) {
+                if (result[i] instanceof GregorianCalendar) {
+                    Date date = ((GregorianCalendar) result[i]).getTime();
+                    formattedResult[i] = dateFormat.format(date);
+                } else {
+                    formattedResult[i] = result[i];
+                }
             }
+            formattedResultList.add(formattedResult);
         }
-        formattedResultList.add(formattedResult);
-    }
 
-    return formattedResultList;
-}
+        return formattedResultList;
+    }
 }

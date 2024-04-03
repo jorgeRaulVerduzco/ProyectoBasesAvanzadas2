@@ -10,6 +10,6 @@ import java.util.List;
  *
  * @author INEGI
  */
-public interface IPlacasNumeroSerie {
+public interface IPlacasNumeroSerieBO {
     public List<Object[]> obtenerHistorialPlacasPorAutomovil(String numeroSerie) ;
 }

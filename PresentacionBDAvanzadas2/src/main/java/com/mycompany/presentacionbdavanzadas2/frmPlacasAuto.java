@@ -4,8 +4,13 @@
  */
 package com.mycompany.presentacionbdavanzadas2;
 
+import DTO.AutomovilDTO;
+import DatosAleatorios.AutoSeleccionado;
+import INegocio.IPlacasNumeroSerieBO;
+import Negocio.PlacasNumeroSerieBO;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -13,13 +18,17 @@ import javax.swing.table.DefaultTableModel;
  * @author INEGI
  */
 public class frmPlacasAuto extends javax.swing.JFrame {
-
+AutomovilDTO automovilSeleccionado;
+IPlacasNumeroSerieBO placasNumeroSerieBO;
     /**
      * Creates new form frmPlacasAuto
      */
     public frmPlacasAuto() {
+        automovilSeleccionado = AutoSeleccionado.getAutomovilSeleccionado();
+        placasNumeroSerieBO = new PlacasNumeroSerieBO();
         initComponents();
         tabla();
+        llenarTabla();
     }
 
     public void tabla() {
@@ -31,16 +40,42 @@ public class frmPlacasAuto extends javax.swing.JFrame {
         tblPlacas.setRowHeight(40);
 
         // Definición de las columnas y sus encabezados
-        String[] encabezados = {"ID Placas", "Digitos de Placa", "Estado", "Costo", "Fecha de Trámite", "Fecha de Vigencia"};
+        String[] encabezados = {"ID Placas", "Digitos de Placa", "Estado", "Costo", "Fecha de Trámite"};
         modeloTabla.setColumnIdentifiers(encabezados);
 
         // Configuración del ancho preferido de las columnas
-        int[] anchos = {100, 100, 100, 100, 100, 100};
+        int[] anchos = {100, 100, 100, 100, 100};
         for (int i = 0; i < anchos.length; i++) {
             tblPlacas.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
     }
+    public void llenarTabla() {
+        String numeroSerie;
+        numeroSerie= automovilSeleccionado.getNumeroSerie();
+        List<Object[]> historialPlacas = placasNumeroSerieBO.obtenerHistorialPlacasPorAutomovil(numeroSerie);
 
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblPlacas.getModel();
+        modeloTabla.setRowCount(0);
+
+        // Llenar la tabla con los datos obtenidos
+        for (Object[] fila : historialPlacas) {
+            // Crear un nuevo array de objetos para los datos de la fila
+            Object[] datos = new Object[modeloTabla.getColumnCount()];
+
+            // Copiar los datos de la fila obtenida a la fila de la tabla
+            for (int i = 0; i < fila.length; i++) {
+                datos[i] = fila[i];
+            }
+
+            // Agregar la fila al modelo de la tabla
+            modeloTabla.addRow(datos);
+        }
+        System.out.println("Historial de Placas: " + historialPlacas);
+
+        // Actualizar la tabla con el nuevo modelo
+        tblPlacas.setModel(modeloTabla);
+
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,6 +90,7 @@ public class frmPlacasAuto extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPlacas = new javax.swing.JTable();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,7 +110,7 @@ public class frmPlacasAuto extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(84, 84, 84)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,17 +148,30 @@ public class frmPlacasAuto extends javax.swing.JFrame {
         tblPlacas.getTableHeader().setBackground(new Color(102,89,222));
         tblPlacas.getTableHeader().setForeground(new Color(255,255,255));
 
+        btnRegresar.setText("REGRESAR");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(248, 248, 248)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -131,7 +180,8 @@ public class frmPlacasAuto extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -151,6 +201,12 @@ public class frmPlacasAuto extends javax.swing.JFrame {
     private void tblPlacasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPlacasMouseClicked
 
     }//GEN-LAST:event_tblPlacasMouseClicked
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+frmPlaca frmPlacatias = new frmPlaca();
+frmPlacatias.setVisible(true);
+this.dispose();
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -188,6 +244,7 @@ public class frmPlacasAuto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
