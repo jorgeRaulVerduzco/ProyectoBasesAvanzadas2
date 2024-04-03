@@ -299,33 +299,25 @@ public class frmPlaca extends javax.swing.JFrame {
             automovilSeleccionado.setColor(color);
             AutoSeleccionado.setAutomovilSeleccionado(automovilSeleccionado);
 
-            // Mostrar JOptionPane para confirmar la acción
-            int confirmacion = JOptionPane.showConfirmDialog(this,
-                    "¿Desea registrar una placa con los siguientes datos?\n\n"
-                    + "Número de Serie: " + numeroSerie + "\n"
-                    + "Marca: " + marca + "\n"
-                    + "Línea: " + linea + "\n"
-                    + "Modelo: " + modelo + "\n"
-                    + "Color: " + color,
-                    "Confirmación",
+               String[] opciones = {"Generar placa", "historial placas"};
+            int opcionSeleccionada = JOptionPane.showOptionDialog(this,
+                    "¿Que  desea realizar?",
+                    "Seleccione una opción",
                     JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]);
 
-            // Si el usuario confirma, abrir el formulario de registro de placas
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                frmRegistroPlacas registroPlacas = new frmRegistroPlacas();
-                registroPlacas.setVisible(true);
+            // Redirigir según la opción seleccionada
+            if (opcionSeleccionada == 0) {
+                frmRegistroPlacas frmRegistroPlacas= new frmRegistroPlacas();
+                frmRegistroPlacas.setVisible(true);
                 this.dispose();
-            } else if (confirmacion == JOptionPane.NO_OPTION) {
-                // Si el usuario no confirma y dice que no, mostrar el historial de placas
-                int opcion = JOptionPane.showConfirmDialog(this, "¿Desea ver el historial de placas de este automóvil?", "Ver Historial", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (opcion == JOptionPane.YES_OPTION) {
-                    // Llevar al formulario de historial de placas
-                    frmPlacasAuto historialPlacas = new frmPlacasAuto();
-                    historialPlacas.setVisible(true);
-                    this.dispose();
-
-                }
+            } else if (opcionSeleccionada == 1) {
+                frmPlacasAuto frmTramite = new frmPlacasAuto();
+                frmTramite.setVisible(true);
+                this.dispose();
             }
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un automóvil de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
