@@ -245,4 +245,30 @@ public class AutomovilDAO implements IAutomovilDAO {
             entityManager.close();
         }
     }
+    
+    
+    @Override
+    public boolean existeNumeroSerie(String numeroSerie) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            em.getTransaction().begin();
+            // Consulta para contar la cantidad de automóviles con el número de serie especificado
+            String jpql = "SELECT COUNT(a) FROM Automovil a WHERE a.numeroSerie = :numeroSerie";
+            TypedQuery<Long> query = em.createQuery(jpql, Long.class);
+            query.setParameter("numeroSerie", numeroSerie);
+            Long count = query.getSingleResult();
+            em.getTransaction().commit();
+
+            // Si la cantidad es mayor que cero, significa que el número de serie ya existe
+            return count > 0;
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+            // En caso de error, se puede manejar de diferentes formas, como lanzar una excepción o devolver false
+            return false;
+        } finally {
+            em.close();
+        }
+    }
 }

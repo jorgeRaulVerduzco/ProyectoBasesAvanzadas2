@@ -67,7 +67,6 @@ public class frmPlaca extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPlacas = new javax.swing.JTable();
         btnRegistrar = new javax.swing.JButton();
-        btnRegistrar1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         txtBusqueda = new javax.swing.JTextField();
         btnCancelar = new javax.swing.JButton();
@@ -79,9 +78,9 @@ public class frmPlaca extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(0, 51, 51));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jLabel9.setText("PLacas automovil");
         jLabel9.setFont(new java.awt.Font("SimSun", 0, 60)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("PLacas automovil");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -128,29 +127,19 @@ public class frmPlaca extends javax.swing.JFrame {
         tblPlacas.getTableHeader().setBackground(new Color(102,89,222));
         tblPlacas.getTableHeader().setForeground(new Color(255,255,255));
 
-        btnRegistrar.setBackground(new java.awt.Color(204, 204, 204));
-        btnRegistrar.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         btnRegistrar.setText("Registrar Auto Nuevo");
+        btnRegistrar.setBackground(new java.awt.Color(204, 204, 204));
         btnRegistrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnRegistrar.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarActionPerformed(evt);
             }
         });
 
-        btnRegistrar1.setBackground(new java.awt.Color(204, 204, 204));
-        btnRegistrar1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
-        btnRegistrar1.setText("Registrar Auto Viejo");
-        btnRegistrar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnRegistrar1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrar1ActionPerformed(evt);
-            }
-        });
-
+        jLabel2.setText("Busqueda:");
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(5, 0, 0));
-        jLabel2.setText("Busqueda:");
 
         btnCancelar.setBackground(new java.awt.Color(255, 102, 102));
         btnCancelar.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
@@ -172,9 +161,7 @@ public class frmPlaca extends javax.swing.JFrame {
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
                 .addComponent(btnRegistrar)
-                .addGap(63, 63, 63)
-                .addComponent(btnRegistrar1)
-                .addGap(35, 35, 35))
+                .addGap(283, 283, 283))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,7 +187,6 @@ public class frmPlaca extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegistrar1)
                     .addComponent(btnRegistrar)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -332,14 +318,6 @@ public class frmPlaca extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
-    private void btnRegistrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrar1ActionPerformed
-        frmRegistroAutomovil registro = new frmRegistroAutomovil();
-        registro.setVisible(true);
-        this.dispose();
-
-
-    }//GEN-LAST:event_btnRegistrar1ActionPerformed
-
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         frmTramites tramitesss = new frmTramites();
         tramitesss.setVisible(true);
@@ -384,7 +362,6 @@ public class frmPlaca extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRegistrar;
-    private javax.swing.JButton btnRegistrar1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

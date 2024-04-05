@@ -95,8 +95,7 @@ public class frmTramites extends javax.swing.JFrame {
             
             defa.addRow(datos);
         } else {
-            JOptionPane.showMessageDialog(null, "No se encontró ninguna persona con el RFC especificado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
+            System.out.println("No se encontro una persona con ese rfc");        }
     }
 
     /**

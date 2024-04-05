@@ -295,7 +295,6 @@ public class frmRegistroAutomovil extends javax.swing.JFrame {
         automovilDTO.setPersona(personaSeleccionada);
         try {
             agregarAutoBO.AgregarAutomovil(automovilDTO);
-            JOptionPane.showMessageDialog(null, "El automovil se ha registrado correctamente.", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
             frmPlaca placatelas = new frmPlaca();
             placatelas.setVisible(true);
             this.dispose();

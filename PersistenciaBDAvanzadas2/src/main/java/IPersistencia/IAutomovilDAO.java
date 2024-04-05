@@ -24,4 +24,6 @@ public interface IAutomovilDAO {
     public List<Automovil> buscarAutomovilesPorLinea(String linea);
     
     public Automovil buscarAutomovilPorNumeroSerie(String numeroSerie);
+    
+    public boolean existeNumeroSerie(String numeroSerie);
 }

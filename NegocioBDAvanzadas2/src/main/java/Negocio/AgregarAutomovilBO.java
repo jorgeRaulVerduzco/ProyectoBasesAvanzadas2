@@ -25,29 +25,40 @@ public class AgregarAutomovilBO implements IAgregarAutomovilBO {
 
     AutomovilDAO automovilDAO;
     PersonaDAO personaDAO;
-    
+
     /**
-     * Constructor de la clase AgregarAutomovilBO.
-     * Inicializa las instancias de AutomovilDAO y PersonaDAO para interactuar con la capa de persistencia.
+     * Constructor de la clase AgregarAutomovilBO. Inicializa las instancias de
+     * AutomovilDAO y PersonaDAO para interactuar con la capa de persistencia.
      */
     public AgregarAutomovilBO() {
         automovilDAO = new AutomovilDAO();
         personaDAO = new PersonaDAO();
 
     }
-    /**
-     * Agrega un nuevo automóvil al sistema utilizando la información proporcionada en un objeto AutomovilDTO.
-     * Verifica que los campos obligatorios (número de serie, marca y línea) no sean nulos.
-     * Si se proporciona la información de una persona asociada al automóvil, se verifica si esa persona ya existe en la base de datos.
-     * Si la persona existe, se asocia al automóvil. Si no existe, se crea una nueva persona y se asocia al automóvil.
-     * @param automovilDTO Objeto AutomovilDTO que contiene la información del automóvil a agregar.
-     */
 
+    /**
+     * Agrega un nuevo automóvil al sistema utilizando la información
+     * proporcionada en un objeto AutomovilDTO. Verifica que los campos
+     * obligatorios (número de serie, marca y línea) no sean nulos. Si se
+     * proporciona la información de una persona asociada al automóvil, se
+     * verifica si esa persona ya existe en la base de datos. Si la persona
+     * existe, se asocia al automóvil. Si no existe, se crea una nueva persona y
+     * se asocia al automóvil.
+     *
+     * @param automovilDTO Objeto AutomovilDTO que contiene la información del
+     * automóvil a agregar.
+     */
     @Override
     public void AgregarAutomovil(AutomovilDTO automovilDTO) {
-         // Verificar si los campos obligatorios no son nulos
+        // Verificar si los campos obligatorios no son nulos
         if (automovilDTO.getNumeroSerie() == null || automovilDTO.getMarca() == null || automovilDTO.getLinea() == null) {
             JOptionPane.showMessageDialog(null, "Error: Los campos obligatorios (número de serie, marca y línea) no pueden ser nulos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        // Verificar si el número de serie ya existe en la base de datos
+        String numeroSerie = automovilDTO.getNumeroSerie();
+        if (automovilDAO.existeNumeroSerie(numeroSerie)) {
+            JOptionPane.showMessageDialog(null, "Error: El número de serie ya está registrado en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -90,22 +101,24 @@ public class AgregarAutomovilBO implements IAgregarAutomovilBO {
             automovilDAO.AgregarAutomovil(automovil);
             JOptionPane.showMessageDialog(null, "El automóvil se ha registrado correctamente.", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
-             // En caso de error, imprimir la traza de la excepción y mostrar un mensaje de error
+            // En caso de error, imprimir la traza de la excepción y mostrar un mensaje de error
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al registrar el automóvil.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
- 
     /**
-     * Busca todos los automóviles asociados a una persona en la base de datos utilizando su RFC.
+     * Busca todos los automóviles asociados a una persona en la base de datos
+     * utilizando su RFC.
+     *
      * @param rfc RFC de la persona asociada a los automóviles a buscar.
-     * @return Lista de automóviles asociados a la persona con el RFC especificado.
-     * @throws RuntimeException Si ocurre un error durante la búsqueda de los automóviles.
+     * @return Lista de automóviles asociados a la persona con el RFC
+     * especificado.
+     * @throws RuntimeException Si ocurre un error durante la búsqueda de los
+     * automóviles.
      */
-    
     @Override
-   public List<Automovil> buscarAutomovilesPorRFC(String rfc) {
+    public List<Automovil> buscarAutomovilesPorRFC(String rfc) {
         try {
             return automovilDAO.buscarAutomovilesPorRFC(rfc);
         } catch (Exception e) {
