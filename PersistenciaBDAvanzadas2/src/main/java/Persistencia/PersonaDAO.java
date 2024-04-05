@@ -17,24 +17,28 @@ import javax.persistence.TypedQuery;
  *
  * @author INEGI
  */
-
 /**
- * Esta clase implementa la interfaz IPersonaDao y proporciona métodos para interactuar con la base de datos relacionados con personas.
+ * Esta clase implementa la interfaz IPersonaDao y proporciona métodos para
+ * interactuar con la base de datos relacionados con personas.
  */
 public class PersonaDAO implements IPersonaDao {
 
     private EntityManagerFactory emf;
-/**
-     * Constructor de la clase que inicializa la factoría de EntityManager utilizando la unidad de persistencia "ConexionPU".
+
+    /**
+     * Constructor de la clase que inicializa la factoría de EntityManager
+     * utilizando la unidad de persistencia "ConexionPU".
      */
     public PersonaDAO() {
         emf = Persistence.createEntityManagerFactory("ConexionPU");
     }
-/**
+
+    /**
      * Método para agregar una nueva persona a la base de datos.
      *
      * @param persona La persona que se va a agregar.
-     * @throws PersistenciaException Si ocurre un error durante la persistencia de la persona.
+     * @throws PersistenciaException Si ocurre un error durante la persistencia
+     * de la persona.
      */
     @Override
     public void agregarPersona(Persona persona) throws PersistenciaException {
@@ -54,18 +58,17 @@ public class PersonaDAO implements IPersonaDao {
     }
 
     /**
-     * Método para obtener una lista de todas las personas almacenadas en la base de datos.
+     * Método para obtener una lista de todas las personas almacenadas en la
+     * base de datos.
      *
      * @return Una lista de todas las personas almacenadas.
      */
-    
-    
     @Override
     public List<Persona> ListaPersonas() {
         EntityManager em = emf.createEntityManager();
         List<Persona> personas = null;
         try {
-             // Consulta para seleccionar todas las personas
+            // Consulta para seleccionar todas las personas
             TypedQuery<Persona> query = em.createQuery("SELECT p FROM Persona p", Persona.class);
             personas = query.getResultList();
         } catch (Exception e) {
@@ -75,15 +78,14 @@ public class PersonaDAO implements IPersonaDao {
         }
         return personas;
     }
-    
-    
+
     /**
      * Método para obtener una persona por su RFC.
      *
      * @param rfc El RFC de la persona que se desea obtener.
-     * @return La persona correspondiente al RFC especificado, o null si no se encuentra ninguna.
+     * @return La persona correspondiente al RFC especificado, o null si no se
+     * encuentra ninguna.
      */
-
     @Override
     public Persona obtenerPersonaPorRFC(String rfc) {
         EntityManager em = emf.createEntityManager();
@@ -104,22 +106,51 @@ public class PersonaDAO implements IPersonaDao {
         }
         return persona;
     }
-/**
-     * Método para buscar personas por su nombre.
-     *
-     * @param nombre El nombre (o parte del nombre) de la persona que se desea buscar.
-     * @return Una lista de personas cuyos nombres coinciden (parcialmente) con el nombre especificado.
-     */
+
     @Override
-    public List<Persona> buscarPersonasPorNombre(String nombre) {
+    public List<Persona> buscarPersonas(String nombre, String apellidoPaterno, String apellidoMaterno, String CURP, Integer añoNacimiento) {
         EntityManager em = emf.createEntityManager();
         List<Persona> personas = null;
 
         try {
             em.getTransaction().begin();
-            String jpql = "SELECT p FROM Persona p WHERE p.nombres LIKE CONCAT('%', :nombre, '%')";
-            TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
-            query.setParameter("nombre", nombre);
+            StringBuilder jpqlBuilder = new StringBuilder("SELECT p FROM Persona p WHERE 1 = 1");
+
+            if (nombre != null && !nombre.isEmpty()) {
+                jpqlBuilder.append(" AND p.nombres LIKE CONCAT('%', :nombre, '%')");
+            }
+            if (apellidoPaterno != null && !apellidoPaterno.isEmpty()) {
+                jpqlBuilder.append(" AND p.apellidoPaterno LIKE CONCAT('%', :apellidoPaterno, '%')");
+            }
+            if (apellidoMaterno != null && !apellidoMaterno.isEmpty()) {
+                jpqlBuilder.append(" AND p.apellidoMaterno LIKE CONCAT('%', :apellidoMaterno, '%')");
+            }
+            if (CURP != null && !CURP.isEmpty()) {
+                jpqlBuilder.append(" AND p.curp LIKE CONCAT('%', :CURP, '%')");
+            }
+            if (añoNacimiento != null) {
+                jpqlBuilder.append(" AND FUNCTION('YEAR', p.fechaNacimiento) = :añoNacimiento");
+            }
+
+            TypedQuery<Persona> query = em.createQuery(jpqlBuilder.toString(), Persona.class);
+
+            // Establecer parámetros para cada condición
+            if (nombre != null && !nombre.isEmpty()) {
+                query.setParameter("nombre", nombre);
+            }
+            if (apellidoPaterno != null && !apellidoPaterno.isEmpty()) {
+                query.setParameter("apellidoPaterno", apellidoPaterno);
+            }
+            if (apellidoMaterno != null && !apellidoMaterno.isEmpty()) {
+                query.setParameter("apellidoMaterno", apellidoMaterno);
+            }
+            if (CURP != null && !CURP.isEmpty()) {
+                query.setParameter("CURP", CURP);
+            }
+            if (añoNacimiento != null) {
+                query.setParameter("añoNacimiento", añoNacimiento);
+            }
+
             personas = query.getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -131,109 +162,4 @@ public class PersonaDAO implements IPersonaDao {
 
         return personas;
     }
-/**
-     * Método para buscar personas por su año de nacimiento.
-     *
-     * @param añoNacimiento El año de nacimiento de las personas que se desean buscar.
-     * @return Una lista de personas nacidas en el año especificado.
-     */
-    @Override
-public List<Persona> buscarPersonasPorAñoNacimiento(int añoNacimiento) {
-    EntityManager em = emf.createEntityManager();
-    List<Persona> personas = null;
-
-    try {
-        em.getTransaction().begin();
-        String jpql = "SELECT p FROM Persona p WHERE FUNCTION('YEAR', p.fechaNacimiento) = :añoNacimiento";
-        TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
-        query.setParameter("añoNacimiento", añoNacimiento);
-        personas = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
-    }
-
-    return personas;
-}
-
-    @Override
-    public List<Persona> buscarPersonasPorCURP(String curp) {
-        EntityManager em = emf.createEntityManager();
-        List<Persona> personas = null;
-
-        try {
-            em.getTransaction().begin();
-            String jpql = "SELECT p FROM Persona p WHERE p.curp = :curp";
-            TypedQuery<Persona> query = em.createQuery(jpql, Persona.class);
-            query.setParameter("curp", curp);
-            personas = query.getResultList();
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-
-        return personas;
-    }
-    
-
-public List<Persona> buscarPersonas(String nombre, String apellidoPaterno, String apellidoMaterno, String CURP, Integer añoNacimiento) {
-    EntityManager em = emf.createEntityManager();
-    List<Persona> personas = null;
-
-    try {
-        em.getTransaction().begin();
-        StringBuilder jpqlBuilder = new StringBuilder("SELECT p FROM Persona p WHERE 1 = 1");
-
-        if (nombre != null && !nombre.isEmpty()) {
-            jpqlBuilder.append(" AND p.nombres LIKE CONCAT('%', :nombre, '%')");
-        }
-        if (apellidoPaterno != null && !apellidoPaterno.isEmpty()) {
-            jpqlBuilder.append(" AND p.apellidoPaterno LIKE CONCAT('%', :apellidoPaterno, '%')");
-        }
-        if (apellidoMaterno != null && !apellidoMaterno.isEmpty()) {
-            jpqlBuilder.append(" AND p.apellidoMaterno LIKE CONCAT('%', :apellidoMaterno, '%')");
-        }
-        if (CURP != null && !CURP.isEmpty()) {
-            jpqlBuilder.append(" AND p.curp LIKE CONCAT('%', :CURP, '%')");
-        }
-        if (añoNacimiento != null) {
-            jpqlBuilder.append(" AND FUNCTION('YEAR', p.fechaNacimiento) = :añoNacimiento");
-        }
-
-        TypedQuery<Persona> query = em.createQuery(jpqlBuilder.toString(), Persona.class);
-
-        // Establecer parámetros para cada condición
-        if (nombre != null && !nombre.isEmpty()) {
-            query.setParameter("nombre", nombre);
-        }
-        if (apellidoPaterno != null && !apellidoPaterno.isEmpty()) {
-            query.setParameter("apellidoPaterno", apellidoPaterno);
-        }
-        if (apellidoMaterno != null && !apellidoMaterno.isEmpty()) {
-            query.setParameter("apellidoMaterno", apellidoMaterno);
-        }
-        if (CURP != null && !CURP.isEmpty()) {
-            query.setParameter("CURP", CURP);
-        }
-        if (añoNacimiento != null) {
-            query.setParameter("añoNacimiento", añoNacimiento);
-        }
-
-        personas = query.getResultList();
-        em.getTransaction().commit();
-    } catch (Exception e) {
-        em.getTransaction().rollback();
-        e.printStackTrace();
-    } finally {
-        em.close();
-    }
-
-    return personas;
-}
 }

@@ -20,9 +20,5 @@ public interface IPersonaDao {
     
     public Persona obtenerPersonaPorRFC(String rfc);
     
-    public List<Persona> buscarPersonasPorNombre(String nombre);
-    
-    public List<Persona> buscarPersonasPorAñoNacimiento(int añoNacimiento);
-    
-    public List<Persona> buscarPersonasPorCURP(String curp) ;
+   public List<Persona> buscarPersonas(String nombre, String apellidoPaterno, String apellidoMaterno, String CURP, Integer añoNacimiento) ;
 }

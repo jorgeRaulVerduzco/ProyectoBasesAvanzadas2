@@ -10,13 +10,9 @@ import DatosAleatorios.PersonaSeleccionada;
 import Dominio.Persona;
 import INegocio.IBuscarPersonasBO;
 import INegocio.IObtenerPersonaPorRFC;
-import INegocio.IPersonaAñoNacimientoBO;
-import INegocio.IPersonaCurpBO;
-import INegocio.IPersonaNombreBO;
+
 import Negocio.ObtenerPersonaPorRFC;
-import Negocio.PersonaAñoNacimientoBO;
-import Negocio.PersonaCurpBO;
-import Negocio.PersonaNombreBO;
+
 import Negocio.buscarPersonasBO;
 import com.mycompany.presentacionbdavanzadas2.frmInicio;
 import java.awt.Color;
@@ -35,9 +31,7 @@ public class frmHistorialTramites extends javax.swing.JFrame {
 
     IBuscarPersonasBO buscarPersonas;
     private IObtenerPersonaPorRFC personaRFC;
-    private IPersonaCurpBO personaCURP;
-    private IPersonaNombreBO personaNombre;
-    private IPersonaAñoNacimientoBO personaAnioNacimiento;
+ 
     private TramiteDTO tramite;
 
     /**
@@ -47,9 +41,7 @@ public class frmHistorialTramites extends javax.swing.JFrame {
         initComponents();
         buscarPersonas = new buscarPersonasBO();
         personaRFC = new ObtenerPersonaPorRFC();
-        personaCURP = new PersonaCurpBO();
-        personaNombre = new PersonaNombreBO();
-        personaAnioNacimiento = new PersonaAñoNacimientoBO();
+
         tramite = new TramiteDTO();
         tabla();
     }
