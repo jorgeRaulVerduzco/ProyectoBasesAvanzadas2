@@ -180,4 +180,60 @@ public List<Persona> buscarPersonasPorAñoNacimiento(int añoNacimiento) {
 
         return personas;
     }
+    
+
+public List<Persona> buscarPersonas(String nombre, String apellidoPaterno, String apellidoMaterno, String CURP, Integer añoNacimiento) {
+    EntityManager em = emf.createEntityManager();
+    List<Persona> personas = null;
+
+    try {
+        em.getTransaction().begin();
+        StringBuilder jpqlBuilder = new StringBuilder("SELECT p FROM Persona p WHERE 1 = 1");
+
+        if (nombre != null && !nombre.isEmpty()) {
+            jpqlBuilder.append(" AND p.nombres LIKE CONCAT('%', :nombre, '%')");
+        }
+        if (apellidoPaterno != null && !apellidoPaterno.isEmpty()) {
+            jpqlBuilder.append(" AND p.apellidoPaterno LIKE CONCAT('%', :apellidoPaterno, '%')");
+        }
+        if (apellidoMaterno != null && !apellidoMaterno.isEmpty()) {
+            jpqlBuilder.append(" AND p.apellidoMaterno LIKE CONCAT('%', :apellidoMaterno, '%')");
+        }
+        if (CURP != null && !CURP.isEmpty()) {
+            jpqlBuilder.append(" AND p.curp LIKE CONCAT('%', :CURP, '%')");
+        }
+        if (añoNacimiento != null) {
+            jpqlBuilder.append(" AND FUNCTION('YEAR', p.fechaNacimiento) = :añoNacimiento");
+        }
+
+        TypedQuery<Persona> query = em.createQuery(jpqlBuilder.toString(), Persona.class);
+
+        // Establecer parámetros para cada condición
+        if (nombre != null && !nombre.isEmpty()) {
+            query.setParameter("nombre", nombre);
+        }
+        if (apellidoPaterno != null && !apellidoPaterno.isEmpty()) {
+            query.setParameter("apellidoPaterno", apellidoPaterno);
+        }
+        if (apellidoMaterno != null && !apellidoMaterno.isEmpty()) {
+            query.setParameter("apellidoMaterno", apellidoMaterno);
+        }
+        if (CURP != null && !CURP.isEmpty()) {
+            query.setParameter("CURP", CURP);
+        }
+        if (añoNacimiento != null) {
+            query.setParameter("añoNacimiento", añoNacimiento);
+        }
+
+        personas = query.getResultList();
+        em.getTransaction().commit();
+    } catch (Exception e) {
+        em.getTransaction().rollback();
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+
+    return personas;
+}
 }
