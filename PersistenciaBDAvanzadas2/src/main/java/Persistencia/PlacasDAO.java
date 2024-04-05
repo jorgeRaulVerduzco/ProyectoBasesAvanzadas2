@@ -165,7 +165,7 @@ public class PlacasDAO implements IPlacasDAO {
         EntityManager entityManager = emf.createEntityManager();
 // Consulta para seleccionar el historial de placas asociadas a la persona especificada
         TypedQuery<Object[]> query = entityManager.createQuery(
-                "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia "
+                "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite "
                 + "FROM Placa p "
                 + "INNER JOIN p.persona pers "
                 + "WHERE pers.idPersona = :idPersona", Object[].class);

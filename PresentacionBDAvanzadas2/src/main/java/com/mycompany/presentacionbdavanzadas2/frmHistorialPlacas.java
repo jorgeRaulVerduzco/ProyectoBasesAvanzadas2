@@ -60,11 +60,11 @@ public class frmHistorialPlacas extends javax.swing.JFrame {
         tblPlacas.setRowHeight(40);
 
         // Definición de las columnas y sus encabezados
-        String[] encabezados = {"ID Placas", "Digitos de Placa", "Estado", "Costo", "Fecha de Trámite", "Fecha de Vigencia"};
+        String[] encabezados = {"ID Placas", "Digitos de Placa", "Estado", "Costo", "Fecha de Trámite"};
         modeloTabla.setColumnIdentifiers(encabezados);
 
         // Configuración del ancho preferido de las columnas
-        int[] anchos = {100, 100, 100, 100, 100, 100};
+        int[] anchos = {100, 100, 100, 100, 100};
         for (int i = 0; i < anchos.length; i++) {
             tblPlacas.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
