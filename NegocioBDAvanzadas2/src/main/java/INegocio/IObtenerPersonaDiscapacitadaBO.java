@@ -1,0 +1,15 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
+package INegocio;
+
+import Dominio.Persona;
+
+/**
+ *
+ * @author INEGI
+ */
+public interface IObtenerPersonaDiscapacitadaBO {
+    public Persona obtenerPersonaDiscpacitadaPorRFC(String rfc);
+}

@@ -10,6 +10,7 @@ import IPersistencia.IPersonaDao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
@@ -162,4 +163,51 @@ public class PersonaDAO implements IPersonaDao {
 
         return personas;
     }
+    
+    public Persona obtenerPersonaDiscpacitadaPorRFC(String rfc) {
+    EntityManager em = emf.createEntityManager();
+    Persona persona = null;
+    try {
+        TypedQuery<Persona> query = em.createQuery("SELECT p FROM Persona p WHERE p.rfc = :rfc AND p.discapacidad = :discapacidad", Persona.class);
+        query.setParameter("rfc", rfc);
+        query.setParameter("discapacidad", "No"); 
+        List<Persona> personas = query.getResultList();
+        if (!personas.isEmpty()) {
+            persona = personas.get(0);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+    return persona;
+}
+    
+    public void actualizarDiscapacidadPorRFC(String rfc) {
+    EntityManager em = emf.createEntityManager();
+    EntityTransaction transaction = null;
+    try {
+        transaction = em.getTransaction();
+        transaction.begin();
+
+        // Buscar la persona por su RFC
+        TypedQuery<Persona> query = em.createQuery("SELECT p FROM Persona p WHERE p.rfc = :rfc", Persona.class);
+        query.setParameter("rfc", rfc);
+        Persona persona = query.getSingleResult();
+
+        // Actualizar la discapacidad a "Sí"
+        if (persona != null) {
+            persona.setDiscapacidad("Sí");
+            em.merge(persona);
+            transaction.commit();
+        }
+    } catch (Exception e) {
+        if (transaction != null && transaction.isActive()) {
+            transaction.rollback();
+        }
+        e.printStackTrace();
+    } finally {
+        em.close();
+    }
+}
 }
