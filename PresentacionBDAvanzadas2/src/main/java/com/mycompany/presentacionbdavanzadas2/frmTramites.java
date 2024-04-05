@@ -8,7 +8,9 @@ import DTO.PersonaDTO;
 import DatosAleatorios.PersonaSeleccionada;
 import Dominio.Persona;
 import INegocio.IAgregarLicenciaBO;
+import INegocio.IverificarLicenciaNoCaducadaPorRFCBO;
 import Negocio.AgregarLicencioBO;
+import Negocio.verificarLicenciaNoCaducadaPorRFCBO;
 import com.mycompany.presentacionbdavanzadas2.frmInicio;
 import java.awt.Color;
 import java.awt.Font;
@@ -26,26 +28,27 @@ import javax.swing.table.TableColumn;
  * @author RUZZKY
  */
 public class frmTramites extends javax.swing.JFrame {
-    
+
     int row, columna;
-    
+    IverificarLicenciaNoCaducadaPorRFCBO verificarLicenciaNoCaducadaPorRFC;
     private IAgregarLicenciaBO personaNegocio;
-    
+
     public frmTramites() {
+        verificarLicenciaNoCaducadaPorRFC = new verificarLicenciaNoCaducadaPorRFCBO();
         personaNegocio = new AgregarLicencioBO();
         initComponents();
-        
+
         tabla();
         llenarTabla();
-        
+
     }
-    
+
     public void tabla() {
         tblTramites.setDefaultRenderer(Object.class, new RenderTabla());
-        
+
         DefaultTableModel modeloTabla = new DefaultTableModel();
         tblTramites.setModel(modeloTabla);
-        
+
         tblTramites.setRowHeight(40);
 
         // Definición de las columnas y sus encabezados
@@ -58,7 +61,7 @@ public class frmTramites extends javax.swing.JFrame {
             tblTramites.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
         }
     }
-    
+
     private void btnLicenciaActionPerformed(java.awt.event.ActionEvent evt) {
         // Obtener el índice de la fila seleccionada
         int selectedRow = tblTramites.getSelectedRow();
@@ -70,18 +73,18 @@ public class frmTramites extends javax.swing.JFrame {
             // Mostrar un mensaje indicando que no se ha seleccionado ninguna persona
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
-    }    
-    
+    }
+
     public void llenarTabla() {
         String rfc = txtBusqueda.getText();
         Persona persona = personaNegocio.obtenerPersonaPorRFC(rfc);
-        
+
         DefaultTableModel defa = (DefaultTableModel) tblTramites.getModel();
-        defa.setRowCount(0);        
-        
+        defa.setRowCount(0);
+
         if (persona != null) {
             Object[] datos = new Object[defa.getColumnCount()];
-            
+
             datos[0] = persona.getNombres();
             datos[1] = persona.getApellidoPaterno();
             datos[2] = persona.getApellidoMaterno();
@@ -92,10 +95,11 @@ public class frmTramites extends javax.swing.JFrame {
                     + persona.getFechaNacimiento().get(Calendar.YEAR) : "";
             datos[6] = persona.getTelefono();
             datos[7] = persona.getDiscapacidad();
-            
+
             defa.addRow(datos);
         } else {
-            System.out.println("No se encontro una persona con ese rfc");        }
+            System.out.println("No se encontro una persona con ese rfc");
+        }
     }
 
     /**
@@ -260,7 +264,7 @@ public class frmTramites extends javax.swing.JFrame {
         if (selectedRow != -1) {
             DefaultTableModel model = (DefaultTableModel) tblTramites.getModel();
             PersonaDTO personaSeleccionada = new PersonaDTO();
-            
+
             personaSeleccionada.setNombres((String) model.getValueAt(selectedRow, 0));
             personaSeleccionada.setApellidoPaterno((String) model.getValueAt(selectedRow, 1));
             personaSeleccionada.setApellidoMaterno((String) model.getValueAt(selectedRow, 2));
@@ -268,8 +272,8 @@ public class frmTramites extends javax.swing.JFrame {
             personaSeleccionada.setRfc((String) model.getValueAt(selectedRow, 4));
             personaSeleccionada.setDiscapacidad((String) model.getValueAt(selectedRow, 7));
             PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
-
-            // Mostrar el JOptionPane para elegir entre frmLicencia y frmTramite
+            String rfc = (String) model.getValueAt(selectedRow, 4);
+            boolean licenciaNoCaducada = verificarLicenciaNoCaducadaPorRFC.verificarLicenciaNoCaducadaPorRFC(rfc);
             String[] opciones = {"Licencia", "Placas"};
             int opcionSeleccionada = JOptionPane.showOptionDialog(this,
                     "¿Que tramite desea realizar?",
@@ -280,15 +284,16 @@ public class frmTramites extends javax.swing.JFrame {
                     opciones,
                     opciones[0]);
 
-            // Redirigir según la opción seleccionada
             if (opcionSeleccionada == 0) {
                 frmLicencia frmLicencia = new frmLicencia();
                 frmLicencia.setVisible(true);
                 this.dispose();
-            } else if (opcionSeleccionada == 1) {
+            } else if (licenciaNoCaducada && opcionSeleccionada == 1) {
                 frmPlaca frmTramite = new frmPlaca();
                 frmTramite.setVisible(true);
                 this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontraron licencias vigentes.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
@@ -312,12 +317,12 @@ public class frmTramites extends javax.swing.JFrame {
 
     private void txtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaKeyTyped
         int key = evt.getKeyChar();
-        
+
         boolean mayusculas = key >= 65 && key <= 90;
         boolean minusculas = key >= 97 && key <= 122;
         boolean numeros = key >= 48 && key <= 57;
         boolean espacio = key == 32;
-        
+
         if (!(minusculas || mayusculas || espacio || numeros)) {
             evt.consume();
         }

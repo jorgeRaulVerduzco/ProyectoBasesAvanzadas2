@@ -256,7 +256,6 @@ PersonaDTO personaSeleccionada;
             LicenciaDTO licenciaDTO = new LicenciaDTO(aniosVigencia, costo, fechaTramite, personaSeleccionada, fechaVigencia);
 
             licenciaBO.AgregarLicencia(licenciaDTO, rfcPersona);
-            JOptionPane.showMessageDialog(this, "Se genero la licencia de: " + personaSeleccionada.getNombres());
 
             frmInicio inicio = new frmInicio();
             inicio.setVisible(true);

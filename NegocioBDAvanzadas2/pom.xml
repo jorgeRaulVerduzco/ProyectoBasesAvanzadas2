@@ -16,6 +16,12 @@
             <artifactId>PersistenciaBDAvanzadas2</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>activemq</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>20050407</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

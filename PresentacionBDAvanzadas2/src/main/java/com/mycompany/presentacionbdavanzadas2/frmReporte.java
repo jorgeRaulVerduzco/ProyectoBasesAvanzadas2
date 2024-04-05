@@ -73,65 +73,82 @@ public class frmReporte extends javax.swing.JFrame {
 
     public void llenarTabla() {
         String nombres = txtNombres.getText();
-        String apellidoP = txtApellidoPaterno.getText();
-        String apellidoM = txtApellidoMaterno.getText();
-        String tipo = jComboBoxTramite.getSelectedItem().toString();
+    String apellidoP = txtApellidoPaterno.getText();
+    String apellidoM = txtApellidoMaterno.getText();
+    String tipo = jComboBoxTramite.getSelectedItem().toString();
 
-        LocalDate fechaInicio = datePickerFechaInicio.getDate();
-        LocalDate fechaFin = datePickerFechaFin.getDate();
+    LocalDate fechaInicio = datePickerFechaInicio.getDate();
+    LocalDate fechaFin = datePickerFechaFin.getDate();
 
-        // Verificar si ninguna de las fechas está seleccionada
-        if (fechaInicio == null && fechaFin == null) {
-            // Si ninguna fecha está seleccionada, entonces obtener todos los registros
-            List<Object[]> resultados = buscarTramiteBO.buscarTramites(tipo, null, null, nombres, apellidoP, apellidoM);
+    // Verificar si ninguna de las fechas está seleccionada
+    if (fechaInicio == null && fechaFin == null) {
+        // Si ninguna fecha está seleccionada, entonces obtener todos los registros
+        List<Object[]> resultados = buscarTramiteBO.buscarTramites(tipo, null, null, nombres, apellidoP, apellidoM);
 
-            DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
-            modeloTabla.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
+        modeloTabla.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
 
-            // Iterar sobre los resultados y agregarlos a la tabla
-            for (Object[] resultado : resultados) {
-                Object[] fila = {
-                    resultado[0], // Fecha
-                    resultado[1], // Tipo
-                    resultado[2], // Nombres
-                    resultado[3], // Apellido Paterno
-                    resultado[4], // Apellido Materno
-                    resultado[5] // Costo
-                };
-                modeloTabla.addRow(fila);
-            }
-        } else {
-            // Si al menos una fecha está seleccionada, realizar la búsqueda con las fechas especificadas
-            Calendar fechaCalendarInicio = null;
-            if (fechaInicio != null) {
-                fechaCalendarInicio = GregorianCalendar.from(fechaInicio.atStartOfDay(ZoneId.systemDefault()));
-            }
+        // Iterar sobre los resultados y agregarlos a la tabla
+        for (Object[] resultado : resultados) {
+            // Formatear la fecha
+            String fechaFormateada = formatearFecha(resultado[0]);
 
-            Calendar fechaCalendarFin = null;
-            if (fechaFin != null) {
-                fechaCalendarFin = GregorianCalendar.from(fechaFin.atStartOfDay(ZoneId.systemDefault()));
-            }
+            // Crear una nueva fila con la fecha formateada y los otros datos
+            Object[] fila = {
+                fechaFormateada, // Fecha formateada
+                resultado[1], // Tipo
+                resultado[2], // Nombres
+                resultado[3], // Apellido Paterno
+                resultado[4], // Apellido Materno
+                resultado[5] // Costo
+            };
+            modeloTabla.addRow(fila);
+        }
+    } else {
+        // Si al menos una fecha está seleccionada, realizar la búsqueda con las fechas especificadas
+        Calendar fechaCalendarInicio = null;
+        if (fechaInicio != null) {
+            fechaCalendarInicio = GregorianCalendar.from(fechaInicio.atStartOfDay(ZoneId.systemDefault()));
+        }
 
-            List<Object[]> resultados = buscarTramiteBO.buscarTramites(tipo, fechaCalendarInicio, fechaCalendarFin, nombres, apellidoP, apellidoM);
+        Calendar fechaCalendarFin = null;
+        if (fechaFin != null) {
+            fechaCalendarFin = GregorianCalendar.from(fechaFin.atStartOfDay(ZoneId.systemDefault()));
+        }
 
-            DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
-            modeloTabla.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+        List<Object[]> resultados = buscarTramiteBO.buscarTramites(tipo, fechaCalendarInicio, fechaCalendarFin, nombres, apellidoP, apellidoM);
 
-            // Iterar sobre los resultados y agregarlos a la tabla
-            for (Object[] resultado : resultados) {
-                Object[] fila = {
-                    resultado[0], // Fecha
-                    resultado[1], // Tipo
-                    resultado[2], // Nombres
-                    resultado[3], // Apellido Paterno
-                    resultado[4], // Apellido Materno
-                    resultado[5] // Costo
-                };
-                modeloTabla.addRow(fila);
-            }
+        DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
+        modeloTabla.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+
+        // Iterar sobre los resultados y agregarlos a la tabla
+        for (Object[] resultado : resultados) {
+            // Formatear la fecha
+            String fechaFormateada = formatearFecha(resultado[0]);
+
+            // Crear una nueva fila con la fecha formateada y los otros datos
+            Object[] fila = {
+                fechaFormateada, // Fecha formateada
+                resultado[1], // Tipo
+                resultado[2], // Nombres
+                resultado[3], // Apellido Paterno
+                resultado[4], // Apellido Materno
+                resultado[5] // Costo
+            };
+            modeloTabla.addRow(fila);
         }
     }
-
+    }
+private String formatearFecha(Object fecha) {
+    String fechaFormateada = "";
+    if (fecha instanceof Calendar) {
+        Calendar cal = (Calendar) fecha;
+        Date date = cal.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        fechaFormateada = dateFormat.format(date);
+    }
+    return fechaFormateada;
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -392,71 +409,55 @@ public class frmReporte extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPDFActionPerformed
-  try {
-      
-      
-      // Ruta de salida del archivo PDF
-        String outputPdfPath = "reporte.pdf";
-        // Inicialización del escritor PDF, documento PDF y documento de texto
-        PdfWriter writer = new PdfWriter(outputPdfPath);
-        PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf, PageSize.A4);
-         // Definición de la fuente y tamaño del título del documento
-         
-         
-        PdfFont fontTitle = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-        Paragraph title = new Paragraph("Reporte de Trámites").setFont(fontTitle).setFontSize(20).setFontColor(new DeviceRgb(0, 0, 255)) // Color azul
-        .setHorizontalAlignment(HorizontalAlignment.CENTER); // Centrado
-        document.add(title);// Añadir título al documento
+        try {
 
-// Obtención de la fecha actual y creación del párrafo para mostrarla en el documento
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        String currentDate = dateFormat.format(new Date());
-        Paragraph dateParagraph = new Paragraph("Fecha de generación: " + currentDate);
-        document.add(dateParagraph);// Añadir fecha al documento
-        
-// Creación del manejador de eventos para mostrar el número de página en cada página
-        PdfFont pageNumberFont = PdfFontFactory.createFont(StandardFonts.HELVETICA);
-        pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new PageNumberEventHandler(pageNumberFont));
- // Creación de la tabla con 6 columnas
-        Table table = new Table(6); 
-        
-// Encabezados de la tabla
-        String[] encabezados = {"Fecha", "Tipo", "Nombres", "Apellido Paterno", "Apellido Materno", "Costo"};
-        for (String encabezado : encabezados) {
-            table.addCell(new Cell().add(new Paragraph(encabezado)) .setFontColor(new DeviceRgb(255, 255, 255)) // Color blanco para el texto
-            .setBackgroundColor(new DeviceRgb(0, 51, 51))); // Color de fondo RGB(0, 51, 51)
-        }
-  // Obtención del modelo de la tabla de informes
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
-  // Recorrido de las filas y columnas de la tabla de informes para agregar los datos a la tabla del PDF
-   for (int i = 0; i < modeloTabla.getRowCount(); i++) {
-    for (int j = 0; j < modeloTabla.getColumnCount(); j++) {
-        Object value = modeloTabla.getValueAt(i, j);
-        String cellValue;
-        // Formateo de la fecha si es un valor de tipo GregorianCalendar
-        if (value instanceof GregorianCalendar) {
-            GregorianCalendar calendar = (GregorianCalendar) value;
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-            cellValue = dateFormatter.format(calendar.getTime());
-        } else {
-            cellValue = value == null ? "" : value.toString();
-        }
-        // Agregar el valor a la celda de la tabla del PDF
-        table.addCell(new Cell().add(new Paragraph(cellValue)) .setBackgroundColor(new DeviceRgb(242, 239, 230))); // Color de fondo RGB(242, 239, 230)
-    }
-        }
-// Agregar la tabla al documento PDF
-        document.add(table);
-// Cerrar el documento PDF
-        document.close();
-        // Mostrar un mensaje de éxito con la ruta del archivo generado
-        JOptionPane.showMessageDialog(null, "Informe generado correctamente en: " + outputPdfPath);
+            // Ruta de salida del archivo PDF
+            String outputPdfPath = "reporte.pdf";
+            PdfWriter writer = new PdfWriter(outputPdfPath);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf, PageSize.A4);
 
-    } catch (IOException ex) {
-        // Manejo de excepciones de entrada/salida
-        ex.printStackTrace();
-    }
+            PdfFont fontTitle = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+            Paragraph title = new Paragraph("Reporte de Trámites").setFont(fontTitle).setFontSize(20).setFontColor(new DeviceRgb(0, 0, 255)) // Color azul
+                    .setHorizontalAlignment(HorizontalAlignment.CENTER);
+            document.add(title);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            String currentDate = dateFormat.format(new Date());
+            Paragraph dateParagraph = new Paragraph("Fecha de generación: " + currentDate);
+            document.add(dateParagraph);
+
+            PdfFont pageNumberFont = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+            pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new PageNumberEventHandler(pageNumberFont));
+            Table table = new Table(6);
+
+            String[] encabezados = {"Fecha", "Tipo", "Nombres", "Apellido Paterno", "Apellido Materno", "Costo"};
+            for (String encabezado : encabezados) {
+                table.addCell(new Cell().add(new Paragraph(encabezado)).setFontColor(new DeviceRgb(255, 255, 255)) // Color blanco para el texto
+                        .setBackgroundColor(new DeviceRgb(0, 51, 51)));
+            }
+            DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
+            for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+                for (int j = 0; j < modeloTabla.getColumnCount(); j++) {
+                    Object value = modeloTabla.getValueAt(i, j);
+                    String cellValue;
+                    if (value instanceof GregorianCalendar) {
+                        GregorianCalendar calendar = (GregorianCalendar) value;
+                        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+                        cellValue = dateFormatter.format(calendar.getTime());
+                    } else {
+                        cellValue = value == null ? "" : value.toString();
+                    }
+                    table.addCell(new Cell().add(new Paragraph(cellValue)).setBackgroundColor(new DeviceRgb(242, 239, 230))); // Color de fondo RGB(242, 239, 230)
+                }
+            }
+            document.add(table);
+            document.close();
+            JOptionPane.showMessageDialog(null, "Informe generado correctamente en: " + outputPdfPath);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_btnGenerarPDFActionPerformed
 
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
