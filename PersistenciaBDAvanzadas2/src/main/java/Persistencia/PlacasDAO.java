@@ -7,6 +7,7 @@ package Persistencia;
 import Dominio.Automovil;
 import Dominio.Persona;
 import Dominio.Placa;
+import Dominio.Tramite;
 import IPersistencia.IPlacasDAO;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,26 +84,32 @@ public class PlacasDAO implements IPlacasDAO {
      */
     @Override
     public void desactivarPlacasActivas(Automovil automovil) {
-        EntityManager entityManager = emf.createEntityManager();
-        entityManager.getTransaction().begin();
-        try {
-            TypedQuery<Placa> query = entityManager.createQuery(
-                    "SELECT p FROM Placa p WHERE p.automovil = :automovil AND p.estado = :activo", Placa.class)
-                    .setParameter("automovil", automovil)
-                    .setParameter("activo", "activo"); // Cambiado a "activo"
-            List<Placa> placasActivas = query.getResultList();
-            for (Placa placa : placasActivas) {
-                placa.setEstado("INACTIVA");
-                entityManager.merge(placa);
-            }
-
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new RuntimeException("Error al desactivar placas activas", e);
-        } finally {
-            entityManager.close();
+       EntityManager entityManager = emf.createEntityManager();
+    entityManager.getTransaction().begin();
+    try {
+        TypedQuery<Placa> query = entityManager.createQuery(
+                "SELECT p FROM Placa p WHERE p.automovil = :automovil AND p.estado = :activo", Placa.class)
+                .setParameter("automovil", automovil)
+                .setParameter("activo", "activo");
+        List<Placa> placasActivas = query.getResultList();
+        for (Placa placa : placasActivas) {
+            placa.setEstado("INACTIVA");
+            Calendar fechaActual = Calendar.getInstance();
+            placa.setFechaVigencia(fechaActual); 
+            Tramite tramite = (Tramite) placa;
+                tramite.setFechaVigencia(fechaActual);
+                entityManager.merge(tramite);
+            
+            entityManager.merge(placa);
         }
+
+        entityManager.getTransaction().commit();
+    } catch (Exception e) {
+        entityManager.getTransaction().rollback();
+        throw new RuntimeException("Error al desactivar placas activas", e);
+    } finally {
+        entityManager.close();
+    }
     }
 
     @Override
@@ -165,7 +172,7 @@ public class PlacasDAO implements IPlacasDAO {
         EntityManager entityManager = emf.createEntityManager();
 // Consulta para seleccionar el historial de placas asociadas a la persona especificada
         TypedQuery<Object[]> query = entityManager.createQuery(
-                "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite "
+                "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite, p.fechaVigencia "
                 + "FROM Placa p "
                 + "INNER JOIN p.persona pers "
                 + "WHERE pers.idPersona = :idPersona", Object[].class);
@@ -195,7 +202,7 @@ public class PlacasDAO implements IPlacasDAO {
     public List<Object[]> obtenerHistorialPlacasPorAutomovil(String numeroSerie) {
         EntityManager entityManager = emf.createEntityManager();
         TypedQuery<Object[]> query = entityManager.createQuery(
-                "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite "
+                "SELECT p.id, p.digitosPlaca, p.estado, p.costo, p.fechaTramite , p.fechaVigencia "
                 + "FROM Placa p "
                 + "WHERE p.automovil.numeroSerie = :numeroSerie", Object[].class);
         query.setParameter("numeroSerie", numeroSerie);

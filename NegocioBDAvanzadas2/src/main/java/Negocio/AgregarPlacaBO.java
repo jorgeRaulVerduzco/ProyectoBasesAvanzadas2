@@ -50,7 +50,6 @@ public class AgregarPlacaBO implements IAgregarPlacaBO {
     placa.setEstado(placaDTO.getEstado());
     placa.setFechaTramite(placaDTO.getFechaTramite()); 
     placa.setPersona(personaDAO.obtenerPersonaPorRFC(placaDTO.getPersona().getRfc())); 
-    placa.setFechaVigencia(placaDTO.getFechaVigencia()); 
 
     placa.setAutomovil(automovil);
 

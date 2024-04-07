@@ -253,7 +253,6 @@ public class frmRegistroPlacas extends javax.swing.JFrame {
         placa.setEstado("activo");
         Calendar fechaTramite = Calendar.getInstance();
         placa.setFechaTramite(fechaTramite);
-        placa.setFechaVigencia(fechaTramite);
         placa.setPersona(personaSeleccionada);
 
         try {

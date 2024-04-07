@@ -47,7 +47,7 @@ public class Tramite implements Serializable {
     @JoinColumn(name = "idPersona")
     private Persona persona;
 
-    @Column(name = "FechaVigencia", nullable = false)
+    @Column(name = "FechaVigencia")
     @Temporal(TemporalType.DATE)
     Calendar fechaVigencia;
 
