@@ -413,12 +413,11 @@ public class frmReporte extends javax.swing.JFrame {
     private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPDFActionPerformed
         try {
            DefaultTableModel modeloTablan = (DefaultTableModel) tblReporte.getModel();
-        String nombres = modeloTablan.getValueAt(0, 2).toString(); // La columna "Nombres" es la tercera (índice 2)
-        String apellidoPaterno = modeloTablan.getValueAt(0, 3).toString(); // La columna "Apellido Paterno" es la cuarta (índice 3)
-        String apellidoMaterno = modeloTablan.getValueAt(0, 4).toString(); // La columna "Apellido Materno" es la quinta (índice 4)
-        String tipoTramite = jComboBoxTramite.getSelectedItem().toString(); // Obtener el tipo de trámite seleccionado
+        String nombres = modeloTablan.getValueAt(0, 2).toString();
+        String apellidoPaterno = modeloTablan.getValueAt(0, 3).toString(); 
+        String apellidoMaterno = modeloTablan.getValueAt(0, 4).toString();
+        String tipoTramite = jComboBoxTramite.getSelectedItem().toString(); 
 
-        // Generar un nombre único para el archivo PDF basado en los nombres, apellidos y tipo de trámite
         String outputPdfPath = "reporte_" + nombres + "_" + apellidoPaterno + "_" + apellidoMaterno + "_" + tipoTramite + ".pdf";
             PdfWriter writer = new PdfWriter(outputPdfPath);
             PdfDocument pdf = new PdfDocument(writer);
