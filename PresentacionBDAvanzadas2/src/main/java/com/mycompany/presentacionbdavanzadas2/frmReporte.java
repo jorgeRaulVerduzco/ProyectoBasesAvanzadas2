@@ -73,82 +73,84 @@ public class frmReporte extends javax.swing.JFrame {
 
     public void llenarTabla() {
         String nombres = txtNombres.getText();
-    String apellidoP = txtApellidoPaterno.getText();
-    String apellidoM = txtApellidoMaterno.getText();
-    String tipo = jComboBoxTramite.getSelectedItem().toString();
+        String apellidoP = txtApellidoPaterno.getText();
+        String apellidoM = txtApellidoMaterno.getText();
+        String tipo = jComboBoxTramite.getSelectedItem().toString();
 
-    LocalDate fechaInicio = datePickerFechaInicio.getDate();
-    LocalDate fechaFin = datePickerFechaFin.getDate();
+        LocalDate fechaInicio = datePickerFechaInicio.getDate();
+        LocalDate fechaFin = datePickerFechaFin.getDate();
 
-    // Verificar si ninguna de las fechas está seleccionada
-    if (fechaInicio == null && fechaFin == null) {
-        // Si ninguna fecha está seleccionada, entonces obtener todos los registros
-        List<Object[]> resultados = buscarTramiteBO.buscarTramites(tipo, null, null, nombres, apellidoP, apellidoM);
+        // Verificar si ninguna de las fechas está seleccionada
+        if (fechaInicio == null && fechaFin == null) {
+            // Si ninguna fecha está seleccionada, entonces obtener todos los registros
+            List<Object[]> resultados = buscarTramiteBO.buscarTramites(tipo, null, null, nombres, apellidoP, apellidoM);
 
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
-        modeloTabla.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+            DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
+            modeloTabla.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
 
-        // Iterar sobre los resultados y agregarlos a la tabla
-        for (Object[] resultado : resultados) {
-            // Formatear la fecha
-            String fechaFormateada = formatearFecha(resultado[0]);
+            // Iterar sobre los resultados y agregarlos a la tabla
+            for (Object[] resultado : resultados) {
+                // Formatear la fecha
+                String fechaFormateada = formatearFecha(resultado[0]);
 
-            // Crear una nueva fila con la fecha formateada y los otros datos
-            Object[] fila = {
-                fechaFormateada, // Fecha formateada
-                resultado[1], // Tipo
-                resultado[2], // Nombres
-                resultado[3], // Apellido Paterno
-                resultado[4], // Apellido Materno
-                resultado[5] // Costo
-            };
-            modeloTabla.addRow(fila);
-        }
-    } else {
-        // Si al menos una fecha está seleccionada, realizar la búsqueda con las fechas especificadas
-        Calendar fechaCalendarInicio = null;
-        if (fechaInicio != null) {
-            fechaCalendarInicio = GregorianCalendar.from(fechaInicio.atStartOfDay(ZoneId.systemDefault()));
-        }
+                // Crear una nueva fila con la fecha formateada y los otros datos
+                Object[] fila = {
+                    fechaFormateada, // Fecha formateada
+                    resultado[1], // Tipo
+                    resultado[2], // Nombres
+                    resultado[3], // Apellido Paterno
+                    resultado[4], // Apellido Materno
+                    resultado[5] // Costo
+                };
+                modeloTabla.addRow(fila);
+            }
+        } else {
+            // Si al menos una fecha está seleccionada, realizar la búsqueda con las fechas especificadas
+            Calendar fechaCalendarInicio = null;
+            if (fechaInicio != null) {
+                fechaCalendarInicio = GregorianCalendar.from(fechaInicio.atStartOfDay(ZoneId.systemDefault()));
+            }
 
-        Calendar fechaCalendarFin = null;
-        if (fechaFin != null) {
-            fechaCalendarFin = GregorianCalendar.from(fechaFin.atStartOfDay(ZoneId.systemDefault()));
-        }
+            Calendar fechaCalendarFin = null;
+            if (fechaFin != null) {
+                fechaCalendarFin = GregorianCalendar.from(fechaFin.atStartOfDay(ZoneId.systemDefault()));
+            }
 
-        List<Object[]> resultados = buscarTramiteBO.buscarTramites(tipo, fechaCalendarInicio, fechaCalendarFin, nombres, apellidoP, apellidoM);
+            List<Object[]> resultados = buscarTramiteBO.buscarTramites(tipo, fechaCalendarInicio, fechaCalendarFin, nombres, apellidoP, apellidoM);
 
-        DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
-        modeloTabla.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+            DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
+            modeloTabla.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
 
-        // Iterar sobre los resultados y agregarlos a la tabla
-        for (Object[] resultado : resultados) {
-            // Formatear la fecha
-            String fechaFormateada = formatearFecha(resultado[0]);
+            // Iterar sobre los resultados y agregarlos a la tabla
+            for (Object[] resultado : resultados) {
+                // Formatear la fecha
+                String fechaFormateada = formatearFecha(resultado[0]);
 
-            // Crear una nueva fila con la fecha formateada y los otros datos
-            Object[] fila = {
-                fechaFormateada, // Fecha formateada
-                resultado[1], // Tipo
-                resultado[2], // Nombres
-                resultado[3], // Apellido Paterno
-                resultado[4], // Apellido Materno
-                resultado[5] // Costo
-            };
-            modeloTabla.addRow(fila);
+                // Crear una nueva fila con la fecha formateada y los otros datos
+                Object[] fila = {
+                    fechaFormateada, // Fecha formateada
+                    resultado[1], // Tipo
+                    resultado[2], // Nombres
+                    resultado[3], // Apellido Paterno
+                    resultado[4], // Apellido Materno
+                    resultado[5] // Costo
+                };
+                modeloTabla.addRow(fila);
+            }
         }
     }
+
+    private String formatearFecha(Object fecha) {
+        String fechaFormateada = "";
+        if (fecha instanceof Calendar) {
+            Calendar cal = (Calendar) fecha;
+            Date date = cal.getTime();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            fechaFormateada = dateFormat.format(date);
+        }
+        return fechaFormateada;
     }
-private String formatearFecha(Object fecha) {
-    String fechaFormateada = "";
-    if (fecha instanceof Calendar) {
-        Calendar cal = (Calendar) fecha;
-        Date date = cal.getTime();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        fechaFormateada = dateFormat.format(date);
-    }
-    return fechaFormateada;
-}
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -410,9 +412,14 @@ private String formatearFecha(Object fecha) {
 
     private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPDFActionPerformed
         try {
+           DefaultTableModel modeloTablan = (DefaultTableModel) tblReporte.getModel();
+        String nombres = modeloTablan.getValueAt(0, 2).toString(); // La columna "Nombres" es la tercera (índice 2)
+        String apellidoPaterno = modeloTablan.getValueAt(0, 3).toString(); // La columna "Apellido Paterno" es la cuarta (índice 3)
+        String apellidoMaterno = modeloTablan.getValueAt(0, 4).toString(); // La columna "Apellido Materno" es la quinta (índice 4)
+        String tipoTramite = jComboBoxTramite.getSelectedItem().toString(); // Obtener el tipo de trámite seleccionado
 
-            // Ruta de salida del archivo PDF
-            String outputPdfPath = "reporte.pdf";
+        // Generar un nombre único para el archivo PDF basado en los nombres, apellidos y tipo de trámite
+        String outputPdfPath = "reporte_" + nombres + "_" + apellidoPaterno + "_" + apellidoMaterno + "_" + tipoTramite + ".pdf";
             PdfWriter writer = new PdfWriter(outputPdfPath);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf, PageSize.A4);
