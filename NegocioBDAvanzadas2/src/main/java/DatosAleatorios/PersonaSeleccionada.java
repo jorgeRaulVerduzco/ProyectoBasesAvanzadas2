@@ -10,6 +10,9 @@ import DTO.PersonaDTO;
  *
  * @author INEGI
  */
+
+// Esta es una clase que parece ser una clase utilitaria o de contenedor para almacenar una persona seleccionada.
+
 public class PersonaSeleccionada {
     private static PersonaDTO personaSeleccionada;
 

@@ -25,6 +25,7 @@ import javax.persistence.TemporalType;
  *
  * @author INEGI
  */
+//mapeo
 @Entity
 @Table(name = "Licencia")
 @DiscriminatorValue(value = "licencia")

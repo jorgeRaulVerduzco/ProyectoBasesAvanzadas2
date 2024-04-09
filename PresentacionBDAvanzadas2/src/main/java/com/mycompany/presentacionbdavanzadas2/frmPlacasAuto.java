@@ -94,7 +94,7 @@ IPlacasNumeroSerieBO placasNumeroSerieBO;
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(242, 239, 230));
 
         jPanel3.setBackground(new java.awt.Color(0, 51, 51));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -148,6 +148,7 @@ IPlacasNumeroSerieBO placasNumeroSerieBO;
         tblPlacas.getTableHeader().setBackground(new Color(102,89,222));
         tblPlacas.getTableHeader().setForeground(new Color(255,255,255));
 
+        btnRegresar.setBackground(new java.awt.Color(255, 102, 102));
         btnRegresar.setText("REGRESAR");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

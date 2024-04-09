@@ -27,6 +27,7 @@ import javax.persistence.TemporalType;
 @Table(name = "Persona")
 public class Persona implements Serializable {
 
+    //mapeo 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPersona;

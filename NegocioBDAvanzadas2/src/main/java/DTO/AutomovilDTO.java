@@ -12,6 +12,9 @@ import java.util.List;
  *
  * @author INEGI
  */
+//se entiende lo que hay aqui, simple mapeo
+
+// Atributos privados de la clase
 public class AutomovilDTO {
         private Long idAutomovil;
     private String numeroSerie;
@@ -26,6 +29,7 @@ public class AutomovilDTO {
     }
 
     
+     // Constructor con parámetros para inicializar los atributos
     
        public AutomovilDTO(String numeroSerie, String marca, String linea, String color, String modelo, PersonaDTO persona) {
         this.numeroSerie = numeroSerie;
@@ -38,6 +42,8 @@ public class AutomovilDTO {
         this.placas = new ArrayList<>();
     }
 
+       // Métodos getter y setter para acceder y modificar los atributos privados
+       
     public Long getIdAutomovil() {
         return idAutomovil;
     }

@@ -25,6 +25,7 @@ import javax.persistence.TemporalType;
  *
  * @author INEGI
  */
+//mapeo
 @Entity
 @Table(name = "Tramite")
 @DiscriminatorColumn(name = "tipoTramite", length = 50)

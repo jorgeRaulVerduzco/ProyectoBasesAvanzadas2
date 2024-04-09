@@ -11,13 +11,17 @@ import java.util.Calendar;
  *
  * @author INEGI
  */
+
+// Atributos privados de la clase
 public class LicenciaDTO extends TramiteDTO{
       private int añosVigencia;
  public LicenciaDTO() {
     }
   
  
-
+// Constructor con parámetros para inicializar los atributos
+ // Llama al constructor de la clase TramiteDTO pasando los parámetros necesarios
+ 
     public LicenciaDTO(int añosVigencia, float costo, Calendar fechaTramite, PersonaDTO persona, Calendar fechaVigencia) {
         super(costo, fechaTramite, persona, fechaVigencia);
         this.añosVigencia = añosVigencia;
