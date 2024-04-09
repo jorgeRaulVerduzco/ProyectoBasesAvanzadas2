@@ -260,20 +260,40 @@ public class frmTramites extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblTramitesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTramitesMouseClicked
-        int selectedRow = tblTramites.getSelectedRow();
-        if (selectedRow != -1) {
-            DefaultTableModel model = (DefaultTableModel) tblTramites.getModel();
-            PersonaDTO personaSeleccionada = new PersonaDTO();
+        
+        // Este bloque de código Java se ejecuta cuando se selecciona una fila en una tabla (tblTramites). 
+        
+        // Obtiene los datos de la fila seleccionada y crea un objeto PersonaDTO con esos datos.
+        
+        // Luego, pregunta al usuario qué trámite desea realizar: licencia o placas.
+        
+        // Dependiendo de la opción seleccionada por el usuario y si la licencia no está caducada, se abre el formulario correspondiente.
+        
+        // Si no se selecciona ninguna fila en la tabla, se muestra un mensaje de advertencia.
 
+        
+        int selectedRow = tblTramites.getSelectedRow();
+        // Si hay una fila seleccionada en la tabla
+        if (selectedRow != -1) { 
+            // Obtiene el modelo de la tabla
+            DefaultTableModel model = (DefaultTableModel) tblTramites.getModel();
+            // Crea un nuevo objeto PersonaDTO
+            PersonaDTO personaSeleccionada = new PersonaDTO();
+            
+            // Obtiene los datos de la fila seleccionada y los asigna al objeto PersonaDTO
             personaSeleccionada.setNombres((String) model.getValueAt(selectedRow, 0));
             personaSeleccionada.setApellidoPaterno((String) model.getValueAt(selectedRow, 1));
             personaSeleccionada.setApellidoMaterno((String) model.getValueAt(selectedRow, 2));
             personaSeleccionada.setCurp((String) model.getValueAt(selectedRow, 3));
             personaSeleccionada.setRfc((String) model.getValueAt(selectedRow, 4));
             personaSeleccionada.setDiscapacidad((String) model.getValueAt(selectedRow, 7));
+            
+            // Establece la persona seleccionada utilizando el método estático setPersonaSeleccionada de la clase PersonaSeleccionada
             PersonaSeleccionada.setPersonaSeleccionada(personaSeleccionada);
             String rfc = (String) model.getValueAt(selectedRow, 4);
+            // Verifica si hay una licencia no caducada para la persona seleccionada
             boolean licenciaNoCaducada = verificarLicenciaNoCaducadaPorRFC.verificarLicenciaNoCaducadaPorRFC(rfc);
+             // Muestra un cuadro de diálogo para que el usuario elija el trámite a realizar: licencia o placas
             String[] opciones = {"Licencia", "Placas"};
             int opcionSeleccionada = JOptionPane.showOptionDialog(this,
                     "¿Que tramite desea realizar?",
@@ -283,19 +303,31 @@ public class frmTramites extends javax.swing.JFrame {
                     null,
                     opciones,
                     opciones[0]);
+            // Dependiendo de la opción seleccionada por el usuario 
+//            y si hay una licencia no caducada, 
+//                se abre el formulario correspondiente
 
             if (opcionSeleccionada == 0) {
+                // Crea una instancia del formulario de licencia
                 frmLicencia frmLicencia = new frmLicencia();
+                // Muestra el formulario de licencia
                 frmLicencia.setVisible(true);
+                // Cierra el formulario actual
                 this.dispose();
             } else if (licenciaNoCaducada && opcionSeleccionada == 1) {
+                // Crea una instancia del formulario de placas
                 frmPlaca frmTramite = new frmPlaca();
+                // Muestra el formulario de placas
                 frmTramite.setVisible(true);
+                // Cierra el formulario actual
                 this.dispose();
             } else {
+                // Si no se cumplen las condiciones anteriores, se muestra un mensaje de información indicando que no hay licencias vigentes
+       
                 JOptionPane.showMessageDialog(this, "No se encontraron licencias vigentes.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
             }
         } else {
+                // Si no hay una fila seleccionada en la tabla, se muestra un mensaje de advertencia
             JOptionPane.showMessageDialog(this, "Por favor, seleccione una persona de la tabla.", "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_tblTramitesMouseClicked

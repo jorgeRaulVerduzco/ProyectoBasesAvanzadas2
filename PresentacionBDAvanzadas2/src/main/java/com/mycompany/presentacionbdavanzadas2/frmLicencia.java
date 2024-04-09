@@ -59,9 +59,9 @@ PersonaDTO personaSeleccionada;
         jPanel3.setBackground(new java.awt.Color(0, 51, 51));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jLabel1.setText("LICENCIAS");
         jLabel1.setFont(new java.awt.Font("SimSun", 0, 60)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("LICENCIAS");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -80,8 +80,8 @@ PersonaDTO personaSeleccionada;
                 .addContainerGap())
         );
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel3.setText("Fecha Vigencia:");
+        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
         txtCosto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,8 +89,8 @@ PersonaDTO personaSeleccionada;
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel4.setText("COSTO:");
+        jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 año", "2 años", "3 años", " " }));
 
@@ -104,7 +104,7 @@ PersonaDTO personaSeleccionada;
             }
         });
 
-        btnGenerar.setBackground(new java.awt.Color(255, 102, 102));
+        btnGenerar.setBackground(new java.awt.Color(0, 204, 51));
         btnGenerar.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         btnGenerar.setText("Generar");
         btnGenerar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));

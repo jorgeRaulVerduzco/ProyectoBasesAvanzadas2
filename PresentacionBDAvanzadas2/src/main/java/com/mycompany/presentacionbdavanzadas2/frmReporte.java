@@ -411,42 +411,55 @@ public class frmReporte extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnGenerarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPDFActionPerformed
+       
+        // Este bloque de código se encarga de generar un informe en formato PDF basado en los datos de una tabla de reporte.
+
         try {
+            // Obtiene el modelo de la tabla
            DefaultTableModel modeloTablan = (DefaultTableModel) tblReporte.getModel();
+           // Obtiene los valores de la primera fila de la tabla
         String nombres = modeloTablan.getValueAt(0, 2).toString();
         String apellidoPaterno = modeloTablan.getValueAt(0, 3).toString(); 
         String apellidoMaterno = modeloTablan.getValueAt(0, 4).toString();
-        String tipoTramite = jComboBoxTramite.getSelectedItem().toString(); 
-
+        String tipoTramite = jComboBoxTramite.getSelectedItem().toString();// Obtiene el tipo de trámite seleccionado 
+        
+ // Genera el nombre del archivo PDF de salida basado en los datos obtenidos de la tabla
         String outputPdfPath = "reporte_" + nombres + "_" + apellidoPaterno + "_" + apellidoMaterno + "_" + tipoTramite + ".pdf";
+        // Crea un escritor PDF y un documento PDF
             PdfWriter writer = new PdfWriter(outputPdfPath);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf, PageSize.A4);
-
+            
+ // Agrega un título al documento PDF
             PdfFont fontTitle = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
             Paragraph title = new Paragraph("Reporte de Trámites").setFont(fontTitle).setFontSize(20).setFontColor(new DeviceRgb(0, 0, 255)) // Color azul
                     .setHorizontalAlignment(HorizontalAlignment.CENTER);
             document.add(title);
-
+            
+            // Agrega la fecha de generación del informe al documento PDF
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             String currentDate = dateFormat.format(new Date());
             Paragraph dateParagraph = new Paragraph("Fecha de generación: " + currentDate);
             document.add(dateParagraph);
-
+            
+ // Agrega un manejador de eventos para numerar las páginas del PDF
             PdfFont pageNumberFont = PdfFontFactory.createFont(StandardFonts.HELVETICA);
             pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new PageNumberEventHandler(pageNumberFont));
             Table table = new Table(6);
 
+            // Crea una tabla en el documento PDF con encabezados personalizados
             String[] encabezados = {"Fecha", "Tipo", "Nombres", "Apellido Paterno", "Apellido Materno", "Costo"};
             for (String encabezado : encabezados) {
                 table.addCell(new Cell().add(new Paragraph(encabezado)).setFontColor(new DeviceRgb(255, 255, 255)) // Color blanco para el texto
                         .setBackgroundColor(new DeviceRgb(0, 51, 51)));
             }
+            // Agrega los datos de la tabla al documento PDF
             DefaultTableModel modeloTabla = (DefaultTableModel) tblReporte.getModel();
             for (int i = 0; i < modeloTabla.getRowCount(); i++) {
                 for (int j = 0; j < modeloTabla.getColumnCount(); j++) {
                     Object value = modeloTabla.getValueAt(i, j);
                     String cellValue;
+                    // Formatea las fechas si son instancias de GregorianCalendar
                     if (value instanceof GregorianCalendar) {
                         GregorianCalendar calendar = (GregorianCalendar) value;
                         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -454,13 +467,17 @@ public class frmReporte extends javax.swing.JFrame {
                     } else {
                         cellValue = value == null ? "" : value.toString();
                     }
+                    // Agrega cada celda de la tabla al documento PDF
                     table.addCell(new Cell().add(new Paragraph(cellValue)).setBackgroundColor(new DeviceRgb(242, 239, 230))); // Color de fondo RGB(242, 239, 230)
                 }
             }
+            // Agrega la tabla al documento PDF y cierra el documento
             document.add(table);
             document.close();
+            // Muestra un mensaje de éxito con la ubicación del informe generado
             JOptionPane.showMessageDialog(null, "Informe generado correctamente en: " + outputPdfPath);
 
+            // Maneja cualquier excepción de E/S (entrada/salida) imprimiendo la traza del error
         } catch (IOException ex) {
             ex.printStackTrace();
         }

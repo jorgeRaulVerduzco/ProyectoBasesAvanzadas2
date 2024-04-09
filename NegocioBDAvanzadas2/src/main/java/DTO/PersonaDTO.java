@@ -14,21 +14,24 @@ import java.util.List;
  */
 public class PersonaDTO {
 
-    private Long idPersona;
-    private String nombres;
-    private String apellidoPaterno;
-    private String apellidoMaterno;
-    private String curp;
-    private String rfc;
+    // Atributos privados de la clase
+    private Long idPersona; // Identificador único de la persona
+    private String nombres;// Nombres de la persona
+    private String apellidoPaterno;// Apellido paterno de la persona
+    private String apellidoMaterno;// Apellido materno de la persona
+    private String curp;// CURP  de la persona
+    private String rfc;//RFC de la person
     private String telefono;
     private Calendar fechaNacimiento;
-    private String discapacidad;
-    private List<AutomovilDTO> automoviles;
-    private List<TramiteDTO> tramites;
+    private String discapacidad;// Información sobre discapacidad de la persona
+    private List<AutomovilDTO> automoviles;// Lista de automóviles asociados a la persona
+    private List<TramiteDTO> tramites;// Lista de trámites asociados a la persona
+    
 
     public PersonaDTO() {
     }
-
+// Constructor con parámetros para inicializar los atributos
+    
     public PersonaDTO(String nombres, String apellidoPaterno, String apellidoMaterno, String curp, String rfc, String telefono, Calendar fechaNacimiento,String discapacidad) {
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
@@ -43,6 +46,7 @@ public class PersonaDTO {
 
     }
 
+    // Métodos getter y setter para acceder y modificar los atributos privados
     public Long getIdPersona() {
         return idPersona;
     }
@@ -122,10 +126,12 @@ public class PersonaDTO {
     public void setTramites(List<TramiteDTO> tramites) {
         this.tramites = tramites;
     }
+    // Método para agregar un trámite a la lista de trámites de la persona
   public void agregarTramites(TramiteDTO tramite) {
         this.tramites.add(tramite);
     }
-
+ // Método para agregar un automóvil a la lista de automóviles de la persona
+  
     public void agregarAutoMovil(AutomovilDTO automovil) {
         this.automoviles.add(automovil);
     }
