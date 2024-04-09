@@ -12,15 +12,15 @@
             <version>8.3.0</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>PersistenciaBDAvanzadas2</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>activemq</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>20050407</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>PersistenciaBDAvanzadas2</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <properties>

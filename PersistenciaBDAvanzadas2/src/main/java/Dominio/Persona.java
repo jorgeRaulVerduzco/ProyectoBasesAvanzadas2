@@ -4,6 +4,7 @@
  */
 package Dominio;
 
+import Excepciones.EncriptadorTelefono;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,8 +46,7 @@ public class Persona implements Serializable {
 
     @Column(name = "rfc", nullable = false, length = 13)
     private String rfc;
-
-    @Column(name = "telefono", nullable = false, length = 10)
+    @Column(name = "telefono", nullable = false, length = 255)
     private String telefono;
 
     @Column(name = "FechaNacimiento", nullable = false)
@@ -125,13 +125,21 @@ private String discapacidad;
     public void setRfc(String rfc) {
         this.rfc = rfc;
     }
-
-    public String getTelefono() {
-        return telefono;
+     public String getTelefono() {
+       try {
+        return EncriptadorTelefono.desencriptar(telefono);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
     }
 
     public void setTelefono(String telefono) {
-        this.telefono = telefono;
+        try {
+            this.telefono = EncriptadorTelefono.encriptar(telefono);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Calendar getFechaNacimiento() {

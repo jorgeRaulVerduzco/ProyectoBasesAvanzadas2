@@ -105,7 +105,6 @@ public class frmCrudPersona extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRegistrosPersonas = new javax.swing.JTable();
         txtBuscar = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
         btnatras = new javax.swing.JButton();
         BtnRegistar20Personas = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -186,16 +185,6 @@ public class frmCrudPersona extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 0));
-        jButton1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Registrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         btnatras.setBackground(new java.awt.Color(255, 102, 102));
         btnatras.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         btnatras.setForeground(new java.awt.Color(2, 2, 2));
@@ -250,8 +239,7 @@ public class frmCrudPersona extends javax.swing.JFrame {
                         .addComponent(btnatras, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(95, 95, 95)
                         .addComponent(BtnRegistar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(67, 67, 67)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(204, 204, 204)))
                 .addContainerGap(28, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -272,7 +260,6 @@ public class frmCrudPersona extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnatras, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BtnRegistar20Personas, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(58, Short.MAX_VALUE))
         );
@@ -351,12 +338,6 @@ public class frmCrudPersona extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtBuscarKeyReleased
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        frmRegistroPersona registrarPersona = new frmRegistroPersona();
-        registrarPersona.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
 
     }//GEN-LAST:event_txtBuscarKeyTyped
@@ -383,7 +364,6 @@ public class frmCrudPersona extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnRegistar20Personas;
     private javax.swing.JButton btnatras;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

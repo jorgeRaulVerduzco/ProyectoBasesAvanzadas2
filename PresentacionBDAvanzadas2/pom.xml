@@ -11,19 +11,9 @@
     <dependencies>
         <!-- Tus otras dependencias... -->
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>PersistenciaBDAvanzadas2</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.lgooddatepicker</groupId>
             <artifactId>LGoodDatePicker</artifactId>
             <version>11.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>NegocioBDAvanzadas2</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
@@ -54,6 +44,16 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.32</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>NegocioBDAvanzadas2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>PersistenciaBDAvanzadas2</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
